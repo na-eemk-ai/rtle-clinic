@@ -547,6 +547,107 @@ async function computeResult() {
   renderAssess(); 
 }
 
+// ==========================================
+// 4.5 การวิเคราะห์กลุ่มอาการที่ควรเฝ้าระวัง (ธาตุสมุฏฐาน แพทย์แผนไทย)
+//     * เทียบเคียงตามทฤษฎีเพื่อการเฝ้าระวัง/ส่งเสริมสุขภาพ — ไม่ใช่การวินิจฉัยโรค *
+// ==========================================
+const TTM_RISK = {
+  earth: {
+    name: 'ดิน', color: 'var(--earth)', badge: 'badge-earth',
+    system: 'โครงสร้างร่างกาย กล้ามเนื้อ กระดูก เนื้อเยื่อ และภูมิต้านทาน',
+    up:   { label: 'กำเริบ (Aggravated)',
+      symptoms: ['รู้สึกตัวหนัก อึดอัด แน่นท้อง', 'ระบบเผาผลาญช้า น้ำหนักขึ้นง่าย', 'มีก้อน/บวมแข็งตามร่างกาย'],
+      advice: 'ปรับอาหารให้ย่อยง่าย เพิ่มการเคลื่อนไหว ลดของหนักท้องและของมัน' },
+    down: { label: 'หย่อน/พร่อง (Depleted)',
+      symptoms: ['อ่อนเพลีย เรี่ยวแรงน้อย', 'กล้ามเนื้อลีบ ผอมแห้ง โครงสร้างอ่อนแอ', 'ภูมิต้านทานต่ำ ป่วยง่าย ข้อ/กระดูกเสื่อม'],
+      advice: 'บำรุงกำลังด้วยอาหารครบหมู่ โปรตีนเพียงพอ รสฝาด/มัน/หวานเล็กน้อย และพักผ่อนให้พอ' }
+  },
+  water: {
+    name: 'น้ำ', color: 'var(--water)', badge: 'badge-water',
+    system: 'ระบบสารน้ำ เลือดลม การหล่อลื่น เสมหะ และของเหลวในร่างกาย',
+    up:   { label: 'กำเริบ (Aggravated)',
+      symptoms: ['เสมหะมาก คัดจมูก น้ำมูกไหล', 'บวมน้ำ ตัวเย็นชื้น', 'ท้องเสีย ขับถ่ายเหลว'],
+      advice: 'ลดของเย็น ของหวาน ของมัน เพิ่มรสเปรี้ยว/เผ็ดร้อนเล็กน้อยเพื่อขับเสมหะ' },
+    down: { label: 'หย่อน/พร่อง (Depleted)',
+      symptoms: ['ปากคอแห้ง ผิวแห้ง ขาดความชุ่มชื้น', 'ท้องผูก', 'ปัสสาวะน้อย ร่างกายขาดน้ำหล่อลื่น'],
+      advice: 'ดื่มน้ำให้เพียงพอ เพิ่มผัก-ผลไม้ที่มีน้ำมาก รสเปรี้ยว/หวานชุ่ม' }
+  },
+  wind: {
+    name: 'ลม', color: 'var(--wind)', badge: 'badge-wind',
+    system: 'ระบบการเคลื่อนไหว ลมปราณ ระบบประสาท และการไหลเวียน',
+    up:   { label: 'กำเริบ (Aggravated)',
+      symptoms: ['ท้องอืด ท้องเฟ้อ ลมในท้องมาก', 'ปวดเมื่อยตามตัว ปวดข้อ ชา เหน็บชา', 'วิงเวียน หน้ามืด ใจสั่น นอนไม่หลับ'],
+      advice: 'อาหารอุ่นย่อยง่าย รสเผ็ดร้อนพอดีเพื่อขับลม (ขิง ข่า พริกไทย) ยืดเหยียดผ่อนคลาย' },
+    down: { label: 'หย่อน/พร่อง (Depleted)',
+      symptoms: ['อ่อนแรง เคลื่อนไหวเชื่องช้า', 'เหนื่อยง่าย ไม่กระฉับกระเฉง'],
+      advice: 'ค่อย ๆ เพิ่มการเคลื่อนไหว/บริหารร่างกาย และฝึกการหายใจลึก' }
+  },
+  fire: {
+    name: 'ไฟ', color: 'var(--fire)', badge: 'badge-fire',
+    system: 'ระบบเผาผลาญ ความร้อน การย่อยอาหาร และอุณหภูมิร่างกาย',
+    up:   { label: 'กำเริบ (Aggravated)',
+      symptoms: ['ร้อนใน ตัวร้อน กระหายน้ำ', 'แสบร้อนกลางอก กรดไหลย้อน', 'หงุดหงิด อารมณ์ร้อน นอนไม่หลับ ผื่นร้อน'],
+      advice: 'พักผ่อนให้พอ ลดความเครียด หลีกเลี่ยงรสเผ็ดร้อนจัด เพิ่มรสขม/จืด/เย็น' },
+    down: { label: 'หย่อน/พร่อง (Depleted)',
+      symptoms: ['ย่อยอาหารไม่ดี ท้องอืดหลังกิน', 'มือเท้าเย็น ระบบเผาผลาญต่ำ', 'เบื่ออาหาร อ่อนเพลีย'],
+      advice: 'กระตุ้นธาตุไฟด้วยรสเผ็ดร้อน (ขิง ข่า พริกไทย) กินอาหารอุ่น เคลื่อนไหวสม่ำเสมอ' }
+  }
+};
+
+function ttmDeviations(C, C0) {
+  return [
+    { key: 'earth', dev: C.earth - C0.earth },
+    { key: 'water', dev: C.water - C0.water },
+    { key: 'wind',  dev: C.wind  - C0.wind  },
+    { key: 'fire',  dev: C.fire  - C0.fire  }
+  ].map(x => ({ ...x, abs: Math.abs(x.dev), dir: x.dev >= 0 ? 'up' : 'down' }))
+   .sort((a, b) => b.abs - a.abs);
+}
+
+function renderTTMRisk(C, C0) {
+  const THRESHOLD = 0.03;                 // ต่ำกว่านี้ถือว่าสมดุล
+  const devs = ttmDeviations(C, C0).filter(d => d.abs >= THRESHOLD);
+
+  let inner;
+  if (devs.length === 0) {
+    inner = `<div style="text-align:center; padding:20px; color:var(--ok); font-weight:600;">
+      ระบบธาตุอยู่ในภาวะสมดุล ไม่พบธาตุที่กำเริบหรือหย่อนอย่างมีนัยสำคัญ — แนะนำให้รักษาแนวทางการดูแลสุขภาพเดิม</div>`;
+  } else {
+    inner = devs.slice(0, 2).map(d => {
+      const t = TTM_RISK[d.key], info = t[d.dir];
+      const cVal = C[d.key], c0Val = C0[d.key];
+      return `
+      <div style="border:1px solid var(--line); border-left:4px solid ${t.color}; border-radius:var(--radius-sm); padding:16px 18px; margin-bottom:14px; background:var(--surface2);">
+        <div style="display:flex; align-items:center; gap:10px; flex-wrap:wrap; margin-bottom:10px;">
+          <span class="badge ${t.badge}">ธาตุ${t.name}</span>
+          <span style="font-weight:700; color:var(--brand-ink);">ภาวะ${info.label}</span>
+          <span style="margin-left:auto; font-family:monospace; font-size:12px; color:var(--muted);">C=${cVal.toFixed(3)} · C&#8320;=${c0Val.toFixed(2)} · &#916;=${(d.dev>=0?'+':'')}${d.dev.toFixed(3)}</span>
+        </div>
+        <div style="font-size:13px; color:var(--muted); margin-bottom:10px;">ระบบที่เกี่ยวข้อง: ${t.system}</div>
+        <div style="font-weight:600; font-size:13.5px; color:var(--brand-ink); margin-bottom:6px;">กลุ่มอาการที่ควรเฝ้าระวัง</div>
+        <ul style="margin:0 0 12px 18px; font-size:13.5px; color:var(--ink); line-height:1.7;">
+          ${info.symptoms.map(s => `<li>${s}</li>`).join('')}
+        </ul>
+        <div style="font-size:13px; background:var(--brand-tint); border-radius:6px; padding:10px 12px; color:var(--brand-ink);">
+          <b>คำแนะนำเบื้องต้น (ตามหลักรสยา):</b> ${info.advice}
+        </div>
+      </div>`;
+    }).join('');
+  }
+
+  return `
+    <div style="margin:28px 0; background:var(--surface); padding:20px; border-radius:var(--radius); border:1px solid var(--line2);">
+      <h4 style="color:var(--brand-ink); margin-bottom:16px; font-size:15px; border-left:4px solid var(--brand); padding-left:8px;">
+        การวิเคราะห์กลุ่มอาการที่ควรเฝ้าระวัง (ตามทฤษฎีธาตุสมุฏฐาน แพทย์แผนไทย)
+      </h4>
+      ${inner}
+      <div style="display:flex; gap:10px; align-items:flex-start; background:var(--danger-bg); border:1px solid #F0C9C9; border-radius:var(--radius-sm); padding:12px 14px; font-size:12.5px; color:#8a3232; margin-top:6px;">
+        <span style="font-size:16px; line-height:1;">&#9888;</span>
+        <div>ข้อมูลนี้เป็นการ<b>เทียบเคียงตามทฤษฎีแพทย์แผนไทยเพื่อการเฝ้าระวังและส่งเสริมสุขภาพ</b> ไม่ใช่การวินิจฉัยโรค ควรพบแพทย์แผนไทยหรือแพทย์เพื่อการตรวจประเมินและวินิจฉัยที่ถูกต้อง</div>
+      </div>
+    </div>`;
+}
+
 function renderAssessStep3() {
   const res = LAST_RESULT; if(!res) return;
   const d = res.data;
@@ -611,6 +712,8 @@ function renderAssessStep3() {
           </div>
         </div>
       </div>
+
+      ${renderTTMRisk(d.C, d.C0)}
       
       <button class="btn" style="width:100%; padding:14px;" onclick="ASSESS_STEP=1;CURRENT_PATIENT=null;go('dashboard')">เสร็จสิ้น บันทึกประวัติและกลับสู่หน้าหลัก</button>
     </div>
