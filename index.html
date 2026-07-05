@@ -8,7 +8,6 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
-/* 1. BRANDING & THEME SETTINGS */
 :root {
   --brand: #124D45;
   --brand2: #0E5C63;
@@ -33,14 +32,11 @@
   --radius-sm: 8px;
   --shadow: 0 8px 24px rgba(18,77,69,0.06);
 }
-
-/* 2. BASE RESET */
 * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Sarabun', sans-serif; -webkit-font-smoothing: antialiased; }
 body { background: var(--bg); color: var(--ink); font-size: 15px; line-height: 1.6; display: flex; flex-direction: column; height: 100vh; overflow: hidden; }
 a { color: inherit; text-decoration: none; cursor: pointer; }
 button, input, select, textarea { font-family: inherit; font-size: inherit; color: inherit; outline: none; }
 
-/* 3. LAYOUT COMPONENTS */
 #app-bar { background: var(--surface); color: var(--brand-ink); height: 64px; padding: 0 24px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--line); z-index: 10; }
 .brand-title { display: flex; align-items: center; gap: 12px; font-size: 18px; font-weight: 700; cursor: pointer; }
 .brand-title img { height: 40px; width: auto; object-fit: contain; }
@@ -60,13 +56,14 @@ button, input, select, textarea { font-family: inherit; font-size: inherit; colo
 #nav-bar a:hover { background: var(--bg); color: var(--brand); }
 #nav-bar a.active { background: var(--brand-tint); color: var(--brand); font-weight: 600; }
 #nav-bar a svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 2; }
+.nav-footer { margin-top: auto; padding: 0 20px; font-size: 12px; color: var(--muted); opacity: 0.7; }
 
 #view { flex: 1; padding: 40px; overflow-y: auto; overflow-x: hidden; background: var(--bg); position: relative; }
+
 .page-head { margin-bottom: 32px; display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 16px; }
 .page-head h1 { font-size: 24px; font-weight: 700; color: var(--brand-ink); }
 .page-head p { color: var(--muted); font-size: 14px; margin-top: 6px; }
 
-/* 4. UI ELEMENTS */
 .card { background: var(--surface); border-radius: var(--radius); padding: 32px; box-shadow: var(--shadow); margin-bottom: 24px; border: 1px solid var(--line2); }
 .btn { background: var(--brand); color: #FFF; border: 0; padding: 12px 24px; border-radius: var(--radius-sm); font-weight: 600; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; gap: 8px; transition: all 0.2s; }
 .btn:hover { background: var(--brand2); transform: translateY(-1px); }
@@ -78,15 +75,17 @@ button, input, select, textarea { font-family: inherit; font-size: inherit; colo
 input[type="text"], input[type="password"], input[type="date"], select, textarea { width: 100%; padding: 12px 16px; border: 1px solid var(--line); border-radius: var(--radius-sm); background: var(--surface2); color: var(--ink); transition: all 0.2s; }
 input:focus, select:focus { border-color: var(--brand); background: #FFF; box-shadow: 0 0 0 3px var(--brand-tint); }
 
-/* Range Slider */
+/* Range Slider Custom Styling */
 input[type="range"] { -webkit-appearance: none; width: 100%; height: 6px; background: var(--line); border-radius: 3px; outline: none; margin: 10px 0; }
-input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; width: 18px; height: 18px; background: var(--brand); border-radius: 50%; cursor: pointer; }
+input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; width: 18px; height: 18px; background: var(--brand); border-radius: 50%; cursor: pointer; transition: transform 0.1s; }
+input[type="range"]::-webkit-slider-thumb:hover { transform: scale(1.2); }
 .slider-container { margin-bottom: 18px; }
 .slider-label { display: flex; justify-content: space-between; font-size: 13px; color: var(--ink); font-weight: 500; }
 
 table { width: 100%; border-collapse: collapse; text-align: left; }
-th { background: var(--surface2); color: var(--brand-ink); font-weight: 600; padding: 16px 24px; border-bottom: 1px solid var(--line); font-size: 14px; }
-td { padding: 16px 24px; border-bottom: 1px solid var(--line2); color: var(--ink); font-size: 14px; }
+th { background: var(--surface2); color: var(--brand-ink); font-weight: 600; padding: 16px 24px; border-bottom: 1px solid var(--line); font-size: 14px; white-space: nowrap; }
+td { padding: 16px 24px; border-bottom: 1px solid var(--line2); color: var(--ink); font-size: 14px; white-space: nowrap; }
+tr:hover td { background: var(--surface2); }
 .table-wrapper { width: 100%; overflow-x: auto; background: var(--surface); border-radius: var(--radius); box-shadow: var(--shadow); border: 1px solid var(--line2); }
 
 .badge { display: inline-flex; align-items: center; padding: 4px 10px; border-radius: 20px; font-size: 12px; font-weight: 600; }
@@ -98,34 +97,43 @@ td { padding: 16px 24px; border-bottom: 1px solid var(--line2); color: var(--ink
 .dash-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
 .stat-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; margin-bottom: 32px; }
 .stat-card { background: var(--surface); padding: 24px; border-radius: var(--radius); box-shadow: var(--shadow); border: 1px solid var(--line2); }
-.stat-val { font-size: 32px; font-weight: 700; color: var(--brand); }
+.stat-val { font-size: 32px; font-weight: 700; color: var(--brand); line-height: 1.2; }
 .stat-lbl { font-size: 14px; color: var(--muted); margin-top: 8px; }
 
-/* 5. LOGIN/REGISTER SYSTEM */
+.patient-layout { display: grid; grid-template-columns: 340px 1fr; gap: 24px; align-items: flex-start; }
+
 #login-screen { position: fixed; inset: 0; background: var(--brand-ink); display: flex; align-items: center; justify-content: center; z-index: 999; padding: 20px; }
-.login-box { background: #FFF; width: 100%; max-width: 420px; padding: 40px; border-radius: 24px; box-shadow: 0 20px 40px rgba(0,0,0,0.4); }
-.auth-tabs { display: flex; margin-bottom: 24px; border-bottom: 1px solid var(--line); }
-.auth-tab { flex: 1; padding: 12px; border: none; background: none; cursor: pointer; color: var(--muted); font-weight: 600; border-bottom: 3px solid transparent; }
-.auth-tab.active { color: var(--brand); border-bottom-color: var(--brand); }
+.login-box { background: #FFF; width: 100%; max-width: 420px; padding: 48px; border-radius: 24px; box-shadow: 0 20px 40px rgba(0,0,0,0.4); }
 
 /* =========================================================================
-   📱 RESPONSIVE (MOBILE & IPAD)
+   📱 โค้ด Responsive (มือถือ & iPad)
    ========================================================================= */
 @media (max-width: 1024px) {
   .stat-row { grid-template-columns: repeat(2, 1fr); }
   .dash-grid, .patient-layout { grid-template-columns: 1fr; }
   #nav-bar { width: 220px; }
+  #view { padding: 24px; }
 }
 @media (max-width: 768px) {
-  #app-bar { flex-direction: column; height: auto; padding: 15px; gap: 10px; text-align: center; }
-  .brand-title { flex-direction: column; }
+  body { font-size: 14px; }
+  #app-bar { flex-direction: column; height: auto; padding: 12px 16px; gap: 12px; align-items: center; text-align: center; }
+  .brand-title { font-size: 16px; flex-direction: column; gap: 8px; }
   .user-badge { width: 100%; justify-content: center; flex-wrap: wrap; }
-  #main-container { flex-direction: column; padding-bottom: 80px; } 
-  #nav-bar { position: fixed; bottom: 0; left: 0; width: 100%; height: auto; flex-direction: row; padding: 10px; border-right: none; border-top: 1px solid var(--line); z-index: 999; }
-  #nav-bar a { flex-direction: column; padding: 8px; font-size: 10px; flex: 1; gap: 5px; }
-  #view { padding: 15px; }
-  .stat-row { grid-template-columns: 1fr; }
+  #main-container { flex-direction: column; padding-bottom: 70px; } 
+  #nav-bar {
+    position: fixed; bottom: 0; left: 0; width: 100%; height: auto;
+    flex-direction: row; justify-content: space-between; padding: 8px 5px;
+    border-right: none; border-top: 1px solid var(--line);
+    background: var(--surface); z-index: 999; box-shadow: 0 -2px 10px rgba(0,0,0,0.05);
+  }
+  #nav-bar a { flex-direction: column; padding: 6px; margin: 0; gap: 4px; font-size: 10px; flex: 1; text-align: center; justify-content: center; }
+  #nav-bar a svg { margin: 0 auto; width: 22px; height: 22px; }
+  .nav-footer { display: none; }
+  #view { padding: 16px; }
   .page-head h1 { font-size: 20px; }
+  .card { padding: 20px 16px; }
+  .login-box { padding: 32px 24px; }
+  .btn { width: 100%; }
 }
 </style>
 </head>
@@ -142,7 +150,7 @@ td { padding: 16px 24px; border-bottom: 1px solid var(--line2); color: var(--ink
 
 <script>
 // ==========================================
-// 1. CORE STATE & DATA ISOLATION (FIXED)
+// 1. Core State & DB Functions (RTLE Model)
 // ==========================================
 const store = {
   get(k, d) { try { const v=localStorage.getItem(k); return v?JSON.parse(v):d; } catch(e){ return d; } },
@@ -150,91 +158,81 @@ const store = {
 };
 
 const DB = {
-  session() { return store.get('rtle_session', null); },
-  saveSession(s) { store.set('rtle_session', s); },
-  
-  // 🔥 แยกข้อมูลตาม User
+  // ฟังก์ชันดึงรายชื่อผู้ป่วย (แยกตามบัญชี)
   async patients() {
-    const user = this.session()?.user || 'guest';
-    if (IS_ONLINE) { try { const { data } = await sb.from('patients').select('*').order('hn', { ascending: true }); if (data) return data; } catch(e) {} }
-    return store.get(`rtle_patients_${user}`, []);
+    const session = this.session();
+    const currentUser = session ? session.user : 'guest';
+    
+    if (IS_ONLINE) { try { const { data, error } = await sb.from('patients').select('*').order('hn', { ascending: true }); if (!error && data) return data; } catch(e) {} }
+    // เปลี่ยนมาดึงจากกล่องเฉพาะของยูสเซอร์ที่ล็อกอินอยู่
+    return store.get(`rtle_patients_${currentUser}`, []);
   },
+  
+  // ฟังก์ชันบันทึกรายชื่อผู้ป่วย (แยกตามบัญชี)
   async savePatients(pList) {
-    const user = this.session()?.user || 'guest';
-    store.set(`rtle_patients_${user}`, pList);
-    if (IS_ONLINE) { try { for(let p of pList) { await sb.from('patients').upsert(p); } } catch(e) {} }
+    const session = this.session();
+    const currentUser = session ? session.user : 'guest';
+    
+    // บันทึกแยกคีย์ตามชื่อยูสเซอร์ปัจจุบัน
+    store.set(`rtle_patients_${currentUser}`, pList);
+    if (IS_ONLINE) { try { for(let p of pList) { await sb.from('patients').upsert({ id: p.id, hn: p.hn, name: p.name, sex: p.sex, birth: p.birth, constitution: p.constitution }); } } catch(e) {} }
   },
+  
+  // ฟังก์ชันดึงประวัติการตรวจ RSI (แยกตามบัญชี)
   async assessments() {
-    const user = this.session()?.user || 'guest';
-    if (IS_ONLINE) { try { const { data } = await sb.from('assessments').select('*').order('created_at', { ascending: false }); if (data) return data.map(r => ({ ...r.data, id: r.id })); } catch(e) {} }
-    return store.get(`rtle_assessments_${user}`, []);
+    const session = this.session();
+    const currentUser = session ? session.user : 'guest';
+    
+    if (IS_ONLINE) { try { const { data, error } = await sb.from('assessments').select('*').order('created_at', { ascending: false }); if (!error && data) { return data.map(r => ({ ...r.data, id: r.id, hn: r.hn, name: r.name, rsi: r.rsi })); } } catch(e) {} }
+    // เปลี่ยนมาดึงประวัติการประเมินแยกตามยูสเซอร์
+    return store.get(`rtle_assessments_${currentUser}`, []);
   },
+  
+  // ฟังก์ชันบันทึกประวัติการตรวจ RSI (แยกตามบัญชี)
   async saveAssessments(updatedList) {
-    const user = this.session()?.user || 'guest';
-    store.set(`rtle_assessments_${user}`, updatedList);
+    const session = this.session();
+    const currentUser = session ? session.user : 'guest';
+    
+    // บันทึกประวัติการประเมินแยกตามยูสเซอร์
+    store.set(`rtle_assessments_${currentUser}`, updatedList);
     const latest = updatedList[0];
-    if (IS_ONLINE && latest) { try { await sb.from('assessments').insert({ id: latest.id, hn: latest.hn, name: latest.name, rsi: latest.rsi, data: latest }); } catch(e) {} }
-  }
-};
-
-// RTLE CONSTANTS (MATHEMATICAL MODEL)
-const C0 = { earth: 0.60, water: 0.60, wind: 0.55, fire: 0.50 };
-const M = {
-  earth: { s: 0.30,  e: -0.10, f: 0.40,  a: -0.30 },
-  water: { s: 0.20,  e: -0.10, f: 0.30,  a: -0.30 },
-  wind:  { s: -0.30, e: 0.50,  f: -0.10, a: 0.40 },
-  fire:  { s: -0.40, e: 0.30,  f: 0.20,  a: 0.60 }
+    if (!latest) return;
+    if (IS_ONLINE) { try { await sb.from('assessments').insert({ id: latest.id, hn: latest.hn, name: latest.name, rsi: latest.rsi, data: latest }); } catch(e) {} }
+  },
+  
+  session() { return store.get('rtle_session', null); },
+  saveSession(s) { store.set('rtle_session', s); }
 };
 
 let CURRENT_ROUTE = 'dashboard';
 let CURRENT_PATIENT = null;
 let ASSESS_STEP = 1;
 let LAST_RESULT = null;
-let AUTH_MODE = 'login';
 
 const $ = (sel) => document.querySelector(sel);
 function getElKey(s) { return s?s.includes('ดิน')?'earth':s.includes('น้ำ')?'water':s.includes('ลม')?'wind':s.includes('ไฟ')?'fire':'earth':'earth'; }
 function uid(p='') { return p + Math.random().toString(36).substring(2,9); }
 
-// ==========================================
-// 2. AUTHENTICATION (REGISTER & LOGIN)
-// ==========================================
-function setAuthMode(mode) {
-  AUTH_MODE = mode;
-  document.querySelectorAll('.auth-tab').forEach(t => t.classList.remove('active'));
-  $(`#tab-${mode}`).classList.add('active');
-  $('#btn-auth').textContent = mode === 'login' ? 'เข้าสู่ระบบ' : 'ลงทะเบียนและเข้าใช้';
-}
-
-function handleAuth(e) {
-  e.preventDefault();
-  const u = $('#login-user').value.trim();
-  const p = $('#login-pass').value.trim();
-  let users = store.get('rtle_users', { 'admin': '1234' });
-
-  if (AUTH_MODE === 'register') {
-    if (users[u]) return alert('ชื่อนี้มีคนใช้แล้ว');
-    users[u] = p;
-    store.set('rtle_users', users);
-    alert('ลงทะเบียนสำเร็จ');
-  } else {
-    if (users[u] !== p) return alert('รหัสผ่านไม่ถูกต้อง');
+async function checkConnection() {
+  if(!sb) return false;
+  try { const { error } = await sb.from('patients').select('id').limit(1); if(!error) IS_ONLINE = true; } catch(e) { IS_ONLINE = false; }
+  const el = document.getElementById('connection-status');
+  if(el) {
+    if(IS_ONLINE) { el.className = 'status-pill online'; el.innerHTML = '<div class="status-dot"></div> ออนไลน์'; } 
+    else { el.className = 'status-pill offline'; el.innerHTML = '<div class="status-dot"></div> ออฟไลน์'; }
   }
-  
-  DB.saveSession({ user: u });
-  initApp();
+  return IS_ONLINE;
 }
 
-function handleLogout() { DB.saveSession(null); initApp(); }
-
 // ==========================================
-// 3. NAVIGATION & VIEW RENDERING
+// 2. Navigation & Rendering
 // ==========================================
 async function go(route) {
   CURRENT_ROUTE = route;
-  document.querySelectorAll('#nav-bar a').forEach(a => a.classList.toggle('active', a.dataset.route === route));
-  const views = { dashboard: renderDashboard, patients: renderPatients, assess: renderAssess, records: renderRecords };
-  if (views[route]) await views[route]();
+  document.querySelectorAll('#nav-bar a').forEach(a => { a.classList.toggle('active', a.getAttribute('onclick').includes('${route}')); });
+  const renderMap = { dashboard: renderDashboard, patients: renderPatients, assess: renderAssess, records: renderRecords };
+  if (renderMap[route]) await renderMap[route]();
+  document.getElementById('view').scrollTop = 0;
 }
 
 async function renderDashboard() {
@@ -244,54 +242,79 @@ async function renderDashboard() {
 
   $('#view').innerHTML = `
     <div class="page-head">
-      <div><h1>แดชบอร์ดสุขภาพ</h1><p>Resonance of Thai Life Elements Analysis</p></div>
-      <button class="btn" onclick="ASSESS_STEP=1;go('assess')">เริ่มเคสใหม่</button>
+      <div>
+        <h1>ระบบสารสนเทศแพทย์แผนไทยบริการต้นแบบ (RTLE-HIS)</h1>
+        <p>ยินดีต้อนรับเข้าสู่ระบบคำนวณดัชนีชี้วัดสภาวะความสมดุลธาตุเชิงปริมาณ</p>
+      </div>
+      <button class="btn" onclick="ASSESS_STEP=1;go('assess')">เริ่มจำลองพฤติกรรม</button>
     </div>
     <div class="stat-row">
-      <div class="stat-card"><div class="stat-val">${P.length}</div><div class="stat-lbl">ผู้ป่วยรวม</div></div>
+      <div class="stat-card"><div class="stat-val">${P.length}</div><div class="stat-lbl">ผู้ป่วยในระบบ</div></div>
       <div class="stat-card"><div class="stat-val">${A.length}</div><div class="stat-lbl">ประวัติการตรวจ</div></div>
-      <div class="stat-card"><div class="stat-val">${todayCount}</div><div class="stat-lbl">ประเมินวันนี้</div></div>
-      <div class="stat-card"><div class="stat-val" style="color:var(--brand2)">${avgRSI.toFixed(1)}%</div><div class="stat-lbl">RSI เฉลี่ย</div></div>
+      <div class="stat-card"><div class="stat-val">${todayCount}</div><div class="stat-lbl">คัดกรองวันนี้</div></div>
+      <div class="stat-card"><div class="stat-val" style="color:var(--brand2)">${avgRSI.toFixed(1)}%</div><div class="stat-lbl">RSI เฉลี่ยรวม</div></div>
     </div>
     <div class="dash-grid">
-      <div class="card" style="padding:0;"><h3 style="margin:20px;">ผู้ป่วยล่าสุด</h3>
-        <div class="table-wrapper" style="border:0;">
-          <table><thead><tr><th>HN</th><th>ชื่อ</th><th>ธาตุเกิด</th></tr></thead>
-          <tbody>${P.slice(-3).reverse().map(p => `<tr><td>${p.hn}</td><td>${p.name}</td><td><span class="badge badge-${getElKey(p.constitution)}">${p.constitution}</span></td></tr>`).join('')}</tbody></table>
+      <div class="card" style="padding:0;">
+        <h3 style="margin:20px; color:var(--brand-ink)">ผู้ป่วยล่าสุด</h3>
+        <div class="table-wrapper" style="border:0; box-shadow:none;">
+          <table>
+            <thead><tr><th>HN</th><th>ชื่อ-สกุล</th><th>ธาตุเกิด</th></tr></thead>
+            <tbody>
+              ${P.slice(-4).reverse().map(p => <tr><td><code style="font-family:monospace">${p.hn}</code></td><td style="font-weight:600">${p.name}</td><td><span class="badge badge-${getElKey(p.constitution)}">${p.constitution}</span></td></tr>).join('')}
+            </tbody>
+          </table>
         </div>
       </div>
-      <div class="card" style="padding:0;"><h3 style="margin:20px;">ผลประเมินล่าสุด</h3>
-        <div class="table-wrapper" style="border:0;">
-          <table><thead><tr><th>ชื่อ</th><th>RSI</th><th>สถานะ</th></tr></thead>
-          <tbody>${A.slice(0,3).map(a => `<tr><td>${a.name}</td><td>${a.rsi.toFixed(1)}%</td><td>${a.dominantTh}</td></tr>`).join('')}</tbody></table>
+      <div class="card" style="padding:0;">
+        <h3 style="margin:20px; color:var(--brand-ink)">ผลประเมินล่าสุด</h3>
+        <div class="table-wrapper" style="border:0; box-shadow:none;">
+          <table>
+            <thead><tr><th>ชื่อ-สกุล</th><th>RSI</th><th>สถานะวิกฤต</th></tr></thead>
+            <tbody>
+              ${A.slice(0,3).map(a => <tr><td>${a.name}</td><td><code style="font-weight:600;color:var(--brand2)">${(a.rsi || 0).toFixed(1)}%</code></td><td><span class="badge badge-${getElKey(a.dominantTh)}">${a.dominantTh}</span></td></tr>).join('')}
+            </tbody>
+          </table>
         </div>
       </div>
     </div>
   `;
 }
 
+// ==========================================
+// 3. Patients Module
+// ==========================================
 async function renderPatients() {
   const P = await DB.patients();
   $('#view').innerHTML = `
-    <div class="page-head"><h1>ทะเบียนผู้ป่วย</h1></div>
-    <div class="dash-grid">
-      <div class="card"><h3>ลงทะเบียนใหม่</h3>
-        <form onsubmit="savePatient(event)">
+    <div class="page-head"><div><h1>ทะเบียนประวัติผู้ป่วย</h1></div></div>
+    <div class="patient-layout">
+      <div class="card">
+        <h3 style="margin-bottom:20px;color:var(--brand-ink)">ลงทะเบียนใหม่</h3>
+        <form id="form-patient" onsubmit="savePatient(event)">
+          <input type="hidden" id="p-id">
           <div class="form-group"><label>HN</label><input type="text" id="p-hn" required></div>
-          <div class="form-group"><label>ชื่อ-นามสกุล</label><input type="text" id="p-name" required></div>
+          <div class="form-group"><label>ชื่อ - นามสกุล</label><input type="text" id="p-name" required></div>
           <div class="form-group"><label>วันเกิด</label><input type="date" id="p-birth" required onchange="autoCalcConstitution()"></div>
-          <div class="form-group"><label>ธาตุเจ้าเรือน</label>
+          <div class="form-group"><label>ธาตุเกิด</label>
             <select id="p-constitution">
-              <option value="ดิน">ดิน</option><option value="น้ำ">น้ำ</option><option value="ลม">ลม</option><option value="ไฟ">ไฟ</option>
+              <option value="ดิน">ดิน (มี.ค.-พ.ค.)</option><option value="น้ำ">น้ำ (มิ.ย.-ส.ค.)</option>
+              <option value="ลม">ลม (ก.ย.-พ.ย.)</option><option value="ไฟ">ไฟ (ธ.ค.-ก.พ.)</option>
             </select>
           </div>
-          <button class="btn" style="width:100%">บันทึกประวัติ</button>
+          <div style="display:flex;gap:12px;margin-top:20px"><button type="submit" class="btn" style="flex:1">บันทึก</button><button type="button" class="btn btn-sec" onclick="resetPatientForm()">เคลียร์</button></div>
         </form>
       </div>
       <div class="card" style="padding:0;">
-        <div class="table-wrapper" style="border:0;">
-          <table><thead><tr><th>HN</th><th>ชื่อ</th><th>จัดการ</th></tr></thead>
-          <tbody>${P.map(p => `<tr><td>${p.hn}</td><td>${p.name}</td><td><button class="btn btn-sec" onclick="startAssess('${p.id}')">ตรวจธาตุ</button></td></tr>`).join('')}</tbody></table>
+        <div class="table-wrapper" style="border:0; box-shadow:none;">
+          <table>
+            <thead><tr><th>HN</th><th>ชื่อ-สกุล</th><th>ธาตุเกิด</th><th>จัดการ</th></tr></thead>
+            <tbody>
+              ${P.map(p => `<tr><td>${p.hn}</td><td style="font-weight:600">${p.name}</td><td><span class="badge badge-${getElKey(p.constitution)}">${p.constitution}</span></td><td>
+                <button class="btn btn-sec" style="padding:4px 8px;font-size:12px" onclick="startAssessFor('${p.id}')">ประเมิน</button>
+              </td></tr>`).join('')}
+            </tbody>
+          </table>
         </div>
       </div>
     </div>
@@ -300,190 +323,443 @@ async function renderPatients() {
 
 function autoCalcConstitution() {
   const m = new Date($('#p-birth').value).getMonth() + 1;
-  $('#p-constitution').value = [6,7,8].includes(m)?'น้ำ':[9,10,11].includes(m)?'ลม':[12,1,2].includes(m)?'ไฟ':'ดิน';
+  $('#p-constitution').value = [6,7,8].includes(m) ? 'น้ำ' : [9,10,11].includes(m) ? 'ลม' : [12,1,2].includes(m) ? 'ไฟ' : 'ดิน';
 }
 
 async function savePatient(e) {
   e.preventDefault();
-  let P = await DB.patients();
-  P.push({ id: uid('p_'), hn:$('#p-hn').value, name:$('#p-name').value, birth:$('#p-birth').value, constitution:$('#p-constitution').value });
+  const P = await DB.patients();
+  const p = { id:$('#p-id').value||uid('p_'), hn:$('#p-hn').value, name:$('#p-name').value, birth:$('#p-birth').value, constitution:$('#p-constitution').value };
+  const idx = P.findIndex(x=>x.id===p.id);
+  if(idx > -1) P[idx] = p; else P.push(p);
   await DB.savePatients(P);
-  renderPatients();
+  resetPatientForm();
+  await renderPatients();
 }
 
+function resetPatientForm() { $('#p-id').value = ''; $('#form-patient').reset(); }
+
 // ==========================================
-// 4. ASSESSMENT & MATH (RTLE MODEL)
+// 4. Assessment Module (100% Math-Theory Matching)
 // ==========================================
 async function renderAssess() {
-  $('#view').innerHTML = `<div class="page-head"><h1>จำลองสภาวะสมดุลธาตุ</h1></div><div id="assess-content"></div>`;
-  if(ASSESS_STEP === 1) renderStep1();
-  else if(ASSESS_STEP === 2) renderStep2();
-  else renderStep3();
+  $('#view').innerHTML = <div class="page-head"><div><h1>จำลองแบบจำลองเชิงปริมาณ (RTLE Model)</h1></div></div><div id="assess-content"></div>;
+  if(ASSESS_STEP === 1) await renderAssessStep1();
+  else if(ASSESS_STEP === 2) renderAssessStep2();
+  else if(ASSESS_STEP === 3) renderAssessStep3();
 }
 
-async function renderStep1() {
+function startAssessFor(id) { DB.patients().then(l => { CURRENT_PATIENT = l.find(x=>x.id===id); ASSESS_STEP = 2; go('assess'); }); }
+function selectPatientForAssess(id) { if(!id){CURRENT_PATIENT=null;return;} DB.patients().then(l => CURRENT_PATIENT = l.find(x=>x.id===id)); }
+
+async function renderAssessStep1() {
   const P = await DB.patients();
   $('#assess-content').innerHTML = `
-    <div class="card" style="max-width:500px; margin:auto;">
-      <h3 style="text-align:center; margin-bottom:20px;">เลือกผู้ป่วย</h3>
-      <select id="sel-p" style="margin-bottom:20px;">
-        <option value="">-- ตรวจด่วน (ระบุชื่อด้านล่าง) --</option>
-        ${P.map(p => `<option value="${p.id}">${p.hn} - ${p.name}</option>`).join('')}
-      </select>
-      <input type="text" id="quick-name" placeholder="ชื่อผู้รับการตรวจ (กรณีตรวจด่วน)" style="margin-bottom:20px;">
-      <button class="btn" style="width:100%" onclick="submitStep1()">ถัดไป</button>
+    <div class="card" style="max-width:560px;margin:0 auto">
+      <h3 style="margin-bottom:20px;text-align:center;color:var(--brand-ink);">1. ค้นหาผู้ป่วยจากระบบ</h3>
+      <div class="form-group">
+        <select id="select-assess-p" onchange="selectPatientForAssess(this.value)">
+          <option value="">-- เลือกประวัติผู้ป่วย --</option>
+          ${P.map(p => <option value="${p.id}" ${CURRENT_PATIENT&&CURRENT_PATIENT.id===p.id?'selected':''}>${p.hn} — ${p.name} (${p.constitution})</option>).join('')}
+        </select>
+      </div>
+      
+      <div style="text-align:center; margin:32px 0; position:relative;">
+        <hr style="border:0; border-top:1px dashed var(--line); position:absolute; top:50%; width:100%; z-index:1;">
+        <span style="background:var(--surface); padding:0 16px; position:relative; z-index:2; color:var(--muted); font-size:14px; font-weight:600;">หรือ ตรวจด่วน (ไม่เซฟลงทะเบียน)</span>
+      </div>
+
+      <div style="background:var(--surface2); padding:24px; border-radius:var(--radius-sm); border:1px solid var(--line);">
+        <div class="form-group"><label>รหัสคนไข้ (HN) - ถ้ามี</label><input type="text" id="raw-hn" placeholder="เช่น HN-9999 หรือเว้นว่างไว้"></div>
+        <div class="form-group"><label>ชื่อ-นามสกุล *</label><input type="text" id="raw-name" placeholder="ระบุชื่อผู้รับการตรวจ"></div>
+        <div class="form-group"><label>วันเดือนปีเกิด (เพื่อคำนวณธาตุ) *</label><input type="date" id="raw-birth" onchange="autoCalcRawConstitution()"></div>
+        <div class="form-group" style="margin-bottom:0;"><label>ธาตุเจ้าเรือนเกิด *</label>
+          <select id="raw-constitution">
+            <option value="ไม่ได้ระบุ">-- เลือกระบุธาตุ (หรือใส่วันเกิดด้านบน) --</option>
+            <option value="ดิน">ดิน (เกิด มี.ค. - พ.ค.)</option><option value="น้ำ">น้ำ (เกิด มิ.ย. - ส.ค.)</option>
+            <option value="ลม">ลม (เกิด ก.ย. - พ.ย.)</option><option value="ไฟ">ไฟ (เกิด ธ.ค. - ก.พ.)</option>
+          </select>
+        </div>
+      </div>
+      <button class="btn" style="width:100%;margin-top:24px;padding:14px;" onclick="submitStep1()">ถัดไป: ป้อนเวกเตอร์พฤติกรรม</button>
     </div>
   `;
 }
 
-async function startAssess(id) {
-  const P = await DB.patients();
-  CURRENT_PATIENT = P.find(x => x.id === id);
-  ASSESS_STEP = 2; go('assess');
+function autoCalcRawConstitution() {
+  const bVal = $('#raw-birth').value; if(!bVal) return;
+  const m = new Date(bVal).getMonth() + 1;
+  $('#raw-constitution').value = [6,7,8].includes(m) ? 'น้ำ' : [9,10,11].includes(m) ? 'ลม' : [12,1,2].includes(m) ? 'ไฟ' : 'ดิน';
 }
 
 function submitStep1() {
-  const id = $('#sel-p').value;
-  if(id) {
-    DB.patients().then(P => {
-      CURRENT_PATIENT = P.find(x => x.id === id);
-      ASSESS_STEP = 2; renderAssess();
-    });
-  } else {
-    if(!$('#quick-name').value) return alert('กรุณาเลือกชื่อ');
-    CURRENT_PATIENT = { id:'raw', name:$('#quick-name').value, constitution:'ดิน', hn:'-' };
-    ASSESS_STEP = 2; renderAssess();
+  if(!CURRENT_PATIENT) {
+    const name = $('#raw-name').value; const hn = $('#raw-hn').value || 'ไม่มี HN'; const constitution = $('#raw-constitution').value;
+    if(!name) { alert('กรุณาระบุชื่อผู้รับการตรวจด้วยครับ'); return; }
+    if(constitution === 'ไม่ได้ระบุ') { alert('กรุณาระบุ "วันเกิด" หรือเลือก "ธาตุเจ้าเรือนเกิด" ครับ'); return; }
+    CURRENT_PATIENT = { id: uid('raw_'), hn: hn, name: name, constitution: constitution };
   }
+  ASSESS_STEP = 2; renderAssess();
 }
 
-function renderStep2() {
+function renderAssessStep2() {
   $('#assess-content').innerHTML = `
-    <div class="card" style="background:var(--brand-tint); border:1px solid var(--brand); margin-bottom:15px;">
-      <b>กำลังตรวจ:</b> ${CURRENT_PATIENT.name} (ธาตุเจ้าเรือน: ${CURRENT_PATIENT.constitution})
+    <div class="card" style="padding:16px 20px; background:var(--brand-tint); margin-bottom:16px; border:1px solid var(--brand); display:flex; justify-content:space-between; align-items:center;">
+      <div><b>ผู้รับการตรวจ:</b> ${CURRENT_PATIENT.name}</div>
+      <div><span class="badge badge-${getElKey(CURRENT_PATIENT.constitution)}">พื้นฐานธาตุ${CURRENT_PATIENT.constitution}</span></div>
     </div>
+    
     <div class="card">
-      <h4 style="margin-bottom:20px;">ป้อนค่าเวกเตอร์พฤติกรรม (0.0 - 1.0)</h4>
-      <div class="slider-container"><label>S (Sleep) - การนอน: <b id="vs">0.50</b></label><input type="range" id="b-s" min="0" max="1" step="0.01" value="0.5" oninput="$('#vs').textContent=this.value"></div>
-      <div class="slider-container"><label>E (Exercise) - การเคลื่อนไหว: <b id="ve">0.50</b></label><input type="range" id="b-e" min="0" max="1" step="0.01" value="0.5" oninput="$('#ve').textContent=this.value"></div>
-      <div class="slider-container"><label>F (Food) - อาหาร: <b id="vf">0.50</b></label><input type="range" id="b-f" min="0" max="1" step="0.01" value="0.5" oninput="$('#vf').textContent=this.value"></div>
-      <div class="slider-container"><label>A (Activity) - ความเครียด: <b id="va">0.50</b></label><input type="range" id="b-a" min="0" max="1" step="0.01" value="0.5" oninput="$('#va').textContent=this.value"></div>
-      <button class="btn" style="width:100%; margin-top:20px;" onclick="calculateRTLE()">ประมวลผลโมเดลคณิตศาสตร์</button>
+      <h3 style="color:var(--brand-ink); margin-bottom:20px; border-bottom:1px solid var(--line); padding-bottom:10px;">ป้อนค่าเวกเตอร์พฤติกรรม $B$ และรูทีนในอุดมคติ $B_{ideal}$ [ช่วง 0.00 - 1.00]</h3>
+      
+      <div style="background:var(--surface2); padding:16px; border-radius:var(--radius-sm); border:1px solid var(--line); margin-bottom:16px;">
+        <div style="font-weight:600; color:var(--brand-ink); margin-bottom:12px;">S (Sleep) — พฤติกรรมการนอนหลับพักผ่อน</div>
+        <div class="slider-container">
+          <div class="slider-label"><span>พฤติกรรมปัจจุบัน (Current S)</span><span id="v-s" style="font-family:monospace;font-weight:bold;">0.50</span></div>
+          <input type="range" id="b-s" min="0" max="1" step="0.01" value="0.50" oninput="$('#v-s').textContent=Number(this.value).toFixed(2)">
+        </div>
+        <div class="slider-container" style="margin-bottom:0;">
+          <div class="slider-label"><span>พฤติกรรมในอุดมคติ (Ideal S)</span><span id="vi-s" style="font-family:monospace;font-weight:bold;color:var(--brand)">0.80</span></div>
+          <input type="range" id="bi-s" min="0" max="1" step="0.01" value="0.80" oninput="$('#vi-s').textContent=Number(this.value).toFixed(2)">
+        </div>
+      </div>
+
+      <div style="background:var(--surface2); padding:16px; border-radius:var(--radius-sm); border:1px solid var(--line); margin-bottom:16px;">
+        <div style="font-weight:600; color:var(--brand-ink); margin-bottom:12px;">E (Exercise) — การออกกำลังกายและการขยับกาย</div>
+        <div class="slider-container">
+          <div class="slider-label"><span>พฤติกรรมปัจจุบัน (Current E)</span><span id="v-e" style="font-family:monospace;font-weight:bold;">0.30</span></div>
+          <input type="range" id="b-e" min="0" max="1" step="0.01" value="0.30" oninput="$('#v-e').textContent=Number(this.value).toFixed(2)">
+        </div>
+        <div class="slider-container" style="margin-bottom:0;">
+          <div class="slider-label"><span>พฤติกรรมในอุดมคติ (Ideal E)</span><span id="vi-e" style="font-family:monospace;font-weight:bold;color:var(--brand)">0.50</span></div>
+          <input type="range" id="bi-e" min="0" max="1" step="0.01" value="0.50" oninput="$('#vi-e').textContent=Number(this.value).toFixed(2)">
+        </div>
+      </div>
+
+      <div style="background:var(--surface2); padding:16px; border-radius:var(--radius-sm); border:1px solid var(--line); margin-bottom:16px;">
+        <div style="font-weight:600; color:var(--brand-ink); margin-bottom:12px;">F (Food) — อาหารและสมุนไพรตามหลักรสยา</div>
+        <div class="slider-container">
+          <div class="slider-label"><span>พฤติกรรมปัจจุบัน (Current F)</span><span id="v-f" style="font-family:monospace;font-weight:bold;">0.60</span></div>
+          <input type="range" id="b-f" min="0" max="1" step="0.01" value="0.60" oninput="$('#v-f').textContent=Number(this.value).toFixed(2)">
+        </div>
+        <div class="slider-container" style="margin-bottom:0;">
+          <div class="slider-label"><span>พฤติกรรมในอุดมคติ (Ideal F)</span><span id="vi-f" style="font-family:monospace;font-weight:bold;color:var(--brand)">0.70</span></div>
+          <input type="range" id="bi-f" min="0" max="1" step="0.01" value="0.70" oninput="$('#vi-f').textContent=Number(this.value).toFixed(2)">
+        </div>
+      </div>
+
+      <div style="background:var(--surface2); padding:16px; border-radius:var(--radius-sm); border:1px solid var(--line); margin-bottom:0;">
+        <div style="font-weight:600; color:var(--brand-ink); margin-bottom:12px;">A (Activity / Stress) — ภาระงานและความเครียด</div>
+        <div class="slider-container">
+          <div class="slider-label"><span>พฤติกรรมปัจจุบัน (Current A)</span><span id="v-a" style="font-family:monospace;font-weight:bold;">0.40</span></div>
+          <input type="range" id="b-a" min="0" max="1" step="0.01" value="0.40" oninput="$('#v-a').textContent=Number(this.value).toFixed(2)">
+        </div>
+        <div class="slider-container" style="margin-bottom:0;">
+          <div class="slider-label"><span>พฤติกรรมในอุดมคติ (Ideal A)</span><span id="vi-a" style="font-family:monospace;font-weight:bold;color:var(--brand)">0.20</span></div>
+          <input type="range" id="bi-a" min="0" max="1" step="0.01" value="0.20" oninput="$('#vi-a').textContent=Number(this.value).toFixed(2)">
+        </div>
+      </div>
+
+    </div>
+    
+    <div style="display:flex;gap:10px;margin-top:20px;margin-bottom:40px;">
+      <button class="btn btn-sec" style="flex:1" onclick="ASSESS_STEP=1;renderAssess()">กลับ</button>
+      <button class="btn" style="flex:2" onclick="computeResult()">ประมวลผลดัชนีผ่านสมการ RTLE</button>
     </div>
   `;
 }
 
-async function calculateRTLE() {
-  const B = { s: +$('#b-s').value, e: +$('#b-e').value, f: +$('#b-f').value, a: +$('#b-a').value };
-  const B_ideal = { s: 0.85, e: 0.80, f: 0.85, a: 0.45 }; // Baseline ตามเปเปอร์
-  
-  const d = { s: B.s-B_ideal.s, e: B.e-B_ideal.e, f: B.f-B_ideal.f, a: B.a-B_ideal.a };
-  const clip = v => Math.min(Math.max(v, 0), 1);
-
-  const C = {
-    earth: clip(C0.earth + (M.earth.s*d.s + M.earth.e*d.e + M.earth.f*d.f + M.earth.a*d.a)),
-    water: clip(C0.water + (M.water.s*d.s + M.water.e*d.e + M.water.f*d.f + M.water.a*d.a)),
-    wind:  clip(C0.wind  + (M.wind.s*d.s  + M.wind.e*d.e  + M.wind.f*d.f  + M.wind.a*d.a)),
-    fire:  clip(C0.fire  + (M.fire.s*d.s  + M.fire.e*d.e  + M.fire.f*d.f  + M.fire.a*d.a))
+async function computeResult() { 
+  // 1. ดึงค่าเวกเตอร์พฤกติกรรม B และ B_ideal
+  const B = {
+    s: parseFloat($('#b-s').value), e: parseFloat($('#b-e').value),
+    f: parseFloat($('#b-f').value), a: parseFloat($('#b-a').value)
+  };
+  const B_ideal = {
+    s: parseFloat($('#bi-s').value), e: parseFloat($('#bi-e').value),
+    f: parseFloat($('#bi-f').value), a: parseFloat($('#bi-a').value)
   };
 
-  const d2 = (Math.pow(C.earth-C0.earth,2)+Math.pow(C.water-C0.water,2)+Math.pow(C.wind-C0.wind,2)+Math.pow(C.fire-C0.fire,2))/4;
+  // หาค่าเดลต้า (B - B_ideal)
+  const dS = B.s - B_ideal.s;
+  const dE = B.e - B_ideal.e;
+  const dF = B.f - B_ideal.f;
+  const dA = B.a - B_ideal.a;
+
+  // 2. กำหนดจุดสมดุลส่วนบุคคล C₀ อิงตามรายงานเปเปอร์ของคุณเป๊ะๆ
+  const C0 = { earth: 0.60, water: 0.60, wind: 0.55, fire: 0.50 };
+
+  // 3. กำหนดค่าเมทริกซ์อิทธิพล M (Influence Matrix) จากรายงานเปเปอร์ของคุณ
+  const M = {
+    earth: { s: 0.30,  e: -0.10, f: 0.40,  a: -0.30 },
+    water: { s: 0.20,  e: -0.10, f: 0.30,  a: -0.30 },
+    wind:  { s: -0.30, e: 0.50,  f: -0.10, a: 0.40 },
+    fire:  { s: -0.40, e: 0.30,  f: 0.20,  a: 0.60 }
+  };
+
+  // Helper ฟังก์ชัน clip(val, 0, 1)
+  const clip = (v) => Math.min(Math.max(v, 0), 1);
+
+  // 4. คำนวณเวกเตอร์สถานะธาตุปัจจุบัน: C = clip( C₀ + M(B − B_ideal), 0, 1 )
+  const C = {
+    earth: clip(C0.earth + (M.earth.s * dS + M.earth.e * dE + M.earth.f * dF + M.earth.a * dA)),
+    water: clip(C0.water + (M.water.s * dS + M.water.e * dE + M.water.f * dF + M.water.a * dA)),
+    wind:  clip(C0.wind  + (M.wind.s  * dS + M.wind.e  * dE + M.wind.f  * dF + M.wind.a  * dA)),
+    fire:  clip(C0.fire  + (M.fire.s  * dS + M.fire.e  * dE + M.fire.f  * dF + M.fire.a  * dA))
+  };
+
+  // 5. คำนวณระยะห่างกำลังสองเฉลี่ย: D² = mean(C − C₀)²
+  const d2 = (
+    Math.pow(C.earth - C0.earth, 2) +
+    Math.pow(C.water - C0.water, 2) +
+    Math.pow(C.wind - C0.wind, 2) +
+    Math.pow(C.fire - C0.fire, 2)
+  ) / 4;
+
+  // 6. คำนวณดัชนีความสมดุลธาตุผ่านสมการหลัก: RSI = exp(-7 * D²) * 100
   const rsi = Math.exp(-7 * d2) * 100;
 
-  const devs = [
-    { n:'ดิน', v: C.earth-C0.earth }, { n:'น้ำ', v: C.water-C0.water },
-    { n:'ลม', v: C.wind-C0.wind }, { n:'ไฟ', v: C.fire-C0.fire }
-  ].sort((a,b) => Math.abs(b.v) - Math.abs(a.v));
+  // 7. วิเคราะห์หาธาตุที่เกิดภาวะแปรปรวนวิกฤตสูงสุด (ความต่างสัมบูรณ์จากจุดสมดุลสูงสุด)
+  const devList = [
+    { name: 'ดิน', key: 'earth', val: C.earth - C0.earth, abs: Math.abs(C.earth - C0.earth) },
+    { name: 'น้ำ', key: 'water', val: C.water - C0.water, abs: Math.abs(C.water - C0.water) },
+    { name: 'ลม', key: 'wind',  val: C.wind - C0.wind,   abs: Math.abs(C.wind - C0.wind) },
+    { name: 'ไฟ', key: 'fire',  val: C.fire - C0.fire,   abs: Math.abs(C.fire - C0.fire) }
+  ];
+  devList.sort((a,b) => b.abs - a.abs);
+  
+  let finalStatusText = 'ระบบธาตุอยู่ในภาวะสมดุลสมบูรณ์';
+  if (devList[0].abs > 0.001) {
+    const stateType = devList[0].val > 0 ? 'กำเริบ (Aggravated)' : 'หย่อน (Depleted)';
+    finalStatusText = ธาตุ${devList[0].name} มีภาวะ${stateType};
+  }
 
-  LAST_RESULT = {
-    id: uid('rec_'), name: CURRENT_PATIENT.name, hn: CURRENT_PATIENT.hn, date: new Date().toISOString(),
-    rsi: rsi, dominantTh: `ธาตุ${devs[0].n}${devs[0].v>0?'กำเริบ':'หย่อน'}`, data: C
-  };
-
-  let A = await DB.assessments(); A.unshift(LAST_RESULT);
-  await DB.saveAssessments(A);
-  ASSESS_STEP = 3; renderAssess();
+  const A = await DB.assessments(); 
+  LAST_RESULT = { 
+    id: uid('rec_'), 
+    patientId: CURRENT_PATIENT.id, 
+    hn: CURRENT_PATIENT.hn,
+    name: CURRENT_PATIENT.name, 
+    date: new Date().toISOString(), 
+    rsi: rsi, 
+    dominantTh: finalStatusText,
+    data: { B, B_ideal, C, C0, d2 } // เก็บก้อนข้อมูลวัตถุดิบทั้งหมดเข้าฐานข้อมูล
+  }; 
+  A.unshift(LAST_RESULT); 
+  await DB.saveAssessments(A); 
+  ASSESS_STEP = 3; 
+  renderAssess(); 
 }
 
-function renderStep3() {
-  const c = LAST_RESULT.data;
+function renderAssessStep3() {
+  const res = LAST_RESULT; if(!res) return;
+  const d = res.data;
+  
   $('#assess-content').innerHTML = `
-    <div class="card" style="text-align:center;">
-      <h2 style="color:var(--brand)">RSI Index: ${LAST_RESULT.rsi.toFixed(2)}%</h2>
-      <p style="margin:10px 0;">สถานะ: <b>${LAST_RESULT.dominantTh}</b></p>
-      
-      <div style="margin-top:25px; text-align:left;">
-        <label>Earth: ${c.earth.toFixed(2)}</label><div style="height:10px; background:#ddd; border-radius:5px;"><div style="width:${c.earth*100}%; background:var(--earth); height:100%; border-radius:5px;"></div></div>
-        <label>Water: ${c.water.toFixed(2)}</label><div style="height:10px; background:#ddd; border-radius:5px;"><div style="width:${c.water*100}%; background:var(--water); height:100%; border-radius:5px;"></div></div>
-        <label>Wind: ${c.wind.toFixed(2)}</label><div style="height:10px; background:#ddd; border-radius:5px;"><div style="width:${c.wind*100}%; background:var(--wind); height:100%; border-radius:5px;"></div></div>
-        <label>Fire: ${c.fire.toFixed(2)}</label><div style="height:10px; background:#ddd; border-radius:5px;"><div style="width:${c.fire*100}%; background:var(--fire); height:100%; border-radius:5px;"></div></div>
+    <div class="card">
+      <div style="text-align:center; margin-bottom:32px; border-bottom:1px solid var(--line2); padding-bottom:24px;">
+        <h2 style="color:var(--brand-ink);">รายงานการจำลองสภาวะทางคณิตศาสตร์ (RTLE Model)</h2>
+        <div style="color:var(--muted); font-size:14px; margin-top:8px;">ชื่อผู้ประเมิน: <b>${res.name}</b> | HN: <code style="font-family:monospace">${res.hn}</code></div>
       </div>
       
-      <button class="btn" style="width:100%; margin-top:30px;" onclick="ASSESS_STEP=1;go('assess')">เสร็จสิ้น</button>
+      <div style="text-align:center; margin-bottom:36px;">
+        <div style="font-size:14px; color:var(--brand-ink); font-weight:600; letter-spacing:0.5px;">ดัชนีสภาวะสมดุลรวม (Relative Status Index — RSI)</div>
+        <h1 style="color:var(--brand); font-size:60px; margin:6px 0; line-height:1;">${(res.rsi || 0).toFixed(2)}<span style="font-size:24px">%</span></h1>
+        
+        <div style="margin-top:16px; padding:12px 24px; background:var(--surface2); border-radius:var(--radius-sm); display:inline-block; border:1px solid var(--line);">
+          <div style="font-size:12px; color:var(--muted); margin-bottom:4px;">ผลลัพธ์พยาธิสภาพเชิงทฤษฎี</div>
+          <div style="font-size:16px; font-weight:700; color:var(--brand-ink);">${res.dominantTh}</div>
+        </div>
+      </div>
+
+      <div style="margin-bottom:32px; background:var(--surface2); padding:20px; border-radius:var(--radius); border:1px solid var(--line2);">
+        <h4 style="color:var(--brand-ink); margin-bottom:18px; font-size:15px; border-left:4px solid var(--brand); padding-left:8px;">สภาวะสถานะธาตุปัจจุบัน ($C$) เทียบกับจุดสมดุลอุดมคติส่วนบุคคล ($C_0$)</h4>
+        
+        <div style="margin-bottom:16px;">
+          <div style="display:flex; justify-content:space-between; font-size:13px; margin-bottom:6px;">
+            <span>ธาตุดิน (Earth Element) — $C_{earth}$: <b>${d.C.earth.toFixed(3)}</b></span>
+            <span style="color:var(--muted)">สมดุลเป้าหมาย $C_0$: ${d.C0.earth.toFixed(2)}</span>
+          </div>
+          <div style="width:100%; height:12px; background:var(--line); border-radius:6px; position:relative; overflow:hidden;">
+            <div style="width:${d.C.earth * 100}%; height:100%; background:var(--earth); border-radius:6px;"></div>
+            <div style="position:absolute; left:${d.C0.earth * 100}%; top:0; bottom:0; width:3px; background:#000; box-shadow:0 0 4px #FFF;" title="Target"></div>
+          </div>
+        </div>
+
+        <div style="margin-bottom:16px;">
+          <div style="display:flex; justify-content:space-between; font-size:13px; margin-bottom:6px;">
+            <span>ธาตุน้ำ (Water Element) — $C_{water}$: <b>${d.C.water.toFixed(3)}</b></span>
+            <span style="color:var(--muted)">สมดุลเป้าหมาย $C_0$: ${d.C0.water.toFixed(2)}</span>
+          </div>
+          <div style="width:100%; height:12px; background:var(--line); border-radius:6px; position:relative; overflow:hidden;">
+            <div style="width:${d.C.water * 100}%; height:100%; background:var(--water); border-radius:6px;"></div>
+            <div style="position:absolute; left:${d.C0.water * 100}%; top:0; bottom:0; width:3px; background:#000; box-shadow:0 0 4px #FFF;" title="Target"></div>
+          </div>
+        </div>
+
+        <div style="margin-bottom:16px;">
+          <div style="display:flex; justify-content:space-between; font-size:13px; margin-bottom:6px;">
+            <span>ธาตุลม (Wind Element) — $C_{wind}$: <b>${d.C.wind.toFixed(3)}</b></span>
+            <span style="color:var(--muted)">สมดุลเป้าหมาย $C_0$: ${d.C0.wind.toFixed(2)}</span>
+          </div>
+          <div style="width:100%; height:12px; background:var(--line); border-radius:6px; position:relative; overflow:hidden;">
+            <div style="width:${d.C.wind * 100}%; height:100%; background:var(--wind); border-radius:6px;"></div>
+            <div style="position:absolute; left:${d.C0.wind * 100}%; top:0; bottom:0; width:3px; background:#000; box-shadow:0 0 4px #FFF;" title="Target"></div>
+          </div>
+        </div>
+
+        <div style="margin-bottom:0;">
+          <div style="display:flex; justify-content:space-between; font-size:13px; margin-bottom:6px;">
+            <span>ธาตุไฟ (Fire Element) — $C_{fire}$: <b>${d.C.fire.toFixed(3)}</b></span>
+            <span style="color:var(--muted)">สมดุลเป้าหมาย $C_0$: ${d.C0.fire.toFixed(2)}</span>
+          </div>
+          <div style="width:100%; height:12px; background:var(--line); border-radius:6px; position:relative; overflow:hidden;">
+            <div style="width:${d.C.fire * 100}%; height:100%; background:var(--fire); border-radius:6px;"></div>
+            <div style="position:absolute; left:${d.C0.fire * 100}%; top:0; bottom:0; width:3px; background:#000; box-shadow:0 0 4px #FFF;" title="Target"></div>
+          </div>
+        </div>
+        
+        <div style="margin-top:12px; font-size:11px; color:var(--muted); text-align:right;">* เส้นสีดำแนวตั้งบ่งชี้ขอบเขตขีดจำกัดคงที่สมดุลดั้งเดิม ($C_0$) ของคนไข้</div>
+      </div>
+
+      <button class="btn" style="width:100%" onclick="ASSESS_STEP=1;LAST_RESULT=null;renderAssess()">เสร็จสิ้นกระบวนการ / ประเมินเคสถัดไป</button>
     </div>
   `;
 }
 
+// ==========================================
+// 5. Records Module
+// ==========================================
 async function renderRecords() {
   const A = await DB.assessments();
   $('#view').innerHTML = `
-    <div class="page-head"><h1>ประวัติการตรวจสะสม</h1></div>
-    <div class="table-wrapper">
-      <table><thead><tr><th>วันที่</th><th>ชื่อ</th><th>RSI</th><th>ผลตรวจ</th></tr></thead>
-      <tbody>${A.map(a => `<tr><td>${new Date(a.date).toLocaleDateString()}</td><td>${a.name}</td><td style="font-weight:bold; color:var(--brand)">${a.rsi.toFixed(1)}%</td><td>${a.dominantTh}</td></tr>`).join('')}</tbody></table>
+    <div class="page-head"><div><h1>บันทึกประวัติสะสมผลจำลอง</h1></div></div>
+    <div class="card" style="padding:0;">
+      <div class="table-wrapper" style="border:0; box-shadow:none;">
+        <table>
+          <thead><tr><th>วันที่คัดกรอง</th><th>ชื่อผู้รับการตรวจ</th><th>ค่าดัชนี RSI</th><th>สภาวะจำลองธาตุวิกฤต</th></tr></thead>
+          <tbody>
+            ${A.map(a => <tr><td>${new Date(a.date).toLocaleDateString('th-TH')}</td><td style="font-weight:600">${a.name}</td><td><code style="color:var(--brand); font-weight:700;">${(a.rsi || 0).toFixed(2)}%</code></td><td>${a.dominantTh}</td></tr>).join('')}
+          </tbody>
+        </table>
+      </div>
     </div>
   `;
 }
 
 // ==========================================
-// 5. INITIALIZATION & LOGIN UI
+// 6. Auth & Initialization
 // ==========================================
-async function initApp() {
-  const ss = DB.session();
-  if(ss) {
-    $('#login-screen').style.display='none';
-    $('#user-name-display').textContent = ss.user;
-    await go('dashboard');
+  
+function initApp() {
+  const session = DB.session(); // เรียกใช้ฟังก์ชันดึงเซสชันจากก้อน DB
+  
+  if (session) {
+    // แสดงชื่อบัญชีที่มุมขวาบน
+    if($('#user-display-name')) $('#user-display-name').textContent = session.user;
+    
+    // บังคับรีเฟรชหน้าเว็บไปยัง Dashboard เพื่อดึงข้อมูลที่แยกตามบัญชีผู้ใช้นั้นๆ ขึ้นมาใหม่
+    go(CURRENT_ROUTE); 
   } else {
-    $('#login-screen').style.display='flex';
+    // กรณีล็อกเอาท์ หรือยังไม่ได้ล็อกอิน ให้บังคับเด้งเปิดหน้าต่างหน้าจอเข้าสู่ระบบ
+    if($('#login-screen')) $('#login-screen').style.display = 'flex';
   }
 }
+function setAuthMode(mode) {
+  authMode = mode;
+  if(mode === 'login') {
+    $('#tab-login').style.borderColor = 'var(--brand)';
+    $('#tab-login').style.color = 'var(--brand)';
+    $('#tab-register').style.borderColor = 'transparent';
+    $('#tab-register').style.color = 'var(--muted)';
+    $('#btn-auth').textContent = 'เข้าสู่ระบบ';
+    $('#lbl-user').textContent = 'ชื่อบัญชี';
+  } else {
+    $('#tab-register').style.borderColor = 'var(--brand)';
+    $('#tab-register').style.color = 'var(--brand)';
+    $('#tab-login').style.borderColor = 'transparent';
+    $('#tab-login').style.color = 'var(--muted)';
+    $('#btn-auth').textContent = 'สร้างบัญชีใหม่';
+    $('#lbl-user').textContent = 'ตั้งชื่อบัญชีใหม่';
+  }
+}
+
+function handleAuth(e) {
+  e.preventDefault();
+  const u = $('#login-user').value.trim();
+  const p = $('#login-pass').value.trim();
+  
+  // ดึงข้อมูล user ทั้งหมดในระบบ (ถ้าไม่มี ให้มี admin 1234 เป็นค่าเริ่มต้น)
+  let registeredUsers = store.get('rtle_users', { 'admin': '1234' });
+
+  if (authMode === 'register') {
+    // ---------------- [โหมดลงทะเบียน] ----------------
+    if (registeredUsers[u]) {
+      alert('ชื่อบัญชีนี้มีผู้ใช้งานแล้ว กรุณาใช้ชื่ออื่นครับ');
+    } else if (p.length < 4) {
+      alert('รหัสผ่านต้องมีความยาวอย่างน้อย 4 ตัวอักษร');
+    } else {
+      registeredUsers[u] = p; // บันทึก user ใหม่
+      store.set('rtle_users', registeredUsers);
+      alert('ลงทะเบียนสำเร็จ! ระบบจะพาคุณเข้าสู่การใช้งาน');
+      DB.saveSession({user: u}); // ล็อกอินอัตโนมัติ
+      initApp();
+    }
+  } else {
+    // ---------------- [โหมดเข้าสู่ระบบ] ----------------
+    if (registeredUsers[u] && registeredUsers[u] === p) {
+      DB.saveSession({user: u});
+      initApp();
+    } else {
+      alert('ชื่อบัญชีหรือรหัสผ่านไม่ถูกต้อง');
+    }
+  }
+}
+
+function handleLogout() { DB.saveSession(null); initApp(); }
 
 window.addEventListener('DOMContentLoaded', initApp);
 </script>
 
 <div id="login-screen">
   <div class="login-box">
-    <div style="text-align:center; margin-bottom:25px;"><img src="เเพท.png" style="height:60px;"><h2>RTLE Platform</h2></div>
-    <div class="auth-tabs">
-      <button class="auth-tab active" id="tab-login" onclick="setAuthMode('login')">เข้าสู่ระบบ</button>
-      <button class="auth-tab" id="tab-register" onclick="setAuthMode('register')">ลงทะเบียน</button>
+    <div style="text-align:center;margin-bottom:24px">
+      <img src="เเพท.png" style="height:80px;">
+      <h2 style="margin-top:12px;color:var(--brand-ink)">RTLE Platform</h2>
     </div>
+    
+    <div style="display:flex; margin-bottom: 24px; border-bottom: 2px solid var(--line);">
+       <button id="tab-login" onclick="setAuthMode('login')" style="flex:1; padding:12px; background:none; border:none; border-bottom:3px solid var(--brand); color:var(--brand); font-weight:bold; cursor:pointer; font-size:16px;">เข้าสู่ระบบ</button>
+       <button id="tab-register" onclick="setAuthMode('register')" style="flex:1; padding:12px; background:none; border:none; border-bottom:3px solid transparent; color:var(--muted); font-weight:bold; cursor:pointer; font-size:16px;">ลงทะเบียน</button>
+    </div>
+
     <form onsubmit="handleAuth(event)">
-      <div class="form-group"><label>ชื่อผู้ใช้งาน</label><input type="text" id="login-user" required></div>
-      <div class="form-group"><label>รหัสผ่าน</label><input type="password" id="login-pass" required></div>
-      <button class="btn" id="btn-auth" style="width:100%; margin-top:10px;">เข้าสู่ระบบ</button>
+      <div class="form-group">
+        <label id="lbl-user">ชื่อบัญชี</label>
+        <input type="text" id="login-user" required placeholder="ภาษาอังกฤษหรือตัวเลข">
+      </div>
+      <div class="form-group">
+        <label id="lbl-pass">รหัสผ่าน</label>
+        <input type="password" id="login-pass" required placeholder="ความยาวอย่างน้อย 4 ตัว">
+      </div>
+      <button class="btn" id="btn-auth" style="width:100%;margin-top:16px;font-size:16px;padding:14px;">เข้าสู่ระบบ</button>
     </form>
   </div>
 </div>
 
 <div id="app-bar">
-  <div class="brand-title" onclick="go('dashboard')"><img src="เเพท.png"> <span>RTLE-HIS</span></div>
-  <div class="user-badge">
-    <div id="connection-status" class="status-pill online"><div class="status-dot"></div> พร้อมใช้งาน</div>
-    <span id="user-name-display"></span>
-    <button class="btn-logout" onclick="handleLogout()">ออก</button>
-  </div>
+  <div class="brand-title" onclick="go('dashboard')"><img src="เเพท.png"> <span>RTLE-HIS Platform</span></div>
+  <div class="user-badge"><div id="connection-status" class="status-pill offline"><div class="status-dot"></div> ...</div><span id="user-name-display"></span><button class="btn-logout" onclick="handleLogout()">ออก</button></div>
 </div>
 
 <div id="main-container">
   <div id="nav-bar">
-    <a onclick="go('dashboard')" data-route="dashboard"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg> แดชบอร์ด</a>
-    <a onclick="go('patients')" data-route="patients"><svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2M9 7a4 4 0 0 1 4-4 4 4 0 0 1 4 4"/></svg> ทะเบียน</a>
-    <a onclick="go('assess')" data-route="assess"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M16 13H8M16 17H8"/></svg> ตรวจธาตุ</a>
-    <a onclick="go('records')" data-route="records"><svg viewBox="0 0 24 24"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg> ประวัติ</a>
+    <a onclick="go('dashboard')"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg> หน้าหลัก</a>
+    <a onclick="go('patients')"><svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2M9 7a4 4 0 0 1 4-4 4 4 0 0 1 4 4"/></svg> ทะเบียนผู้ป่วย</a>
+    <a onclick="go('assess')"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M16 13H8M16 17H8M10 9H8"/></svg> จำลองโมเดลธาตุ</a>
+    <a onclick="go('records')"><svg viewBox="0 0 24 24"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg> ประวัติสะสม</a>
   </div>
   <div id="view"></div>
 </div>
-
 </body>
 </html>
