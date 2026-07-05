@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>RTLE — ระบบประเมินสมดุลธาตุ | Thai Traditional Medicine</title>
+<title>RTLE Platform — Resonance of Thai Life Elements</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -75,6 +75,13 @@ button, input, select, textarea { font-family: inherit; font-size: inherit; colo
 input[type="text"], input[type="password"], input[type="date"], select, textarea { width: 100%; padding: 12px 16px; border: 1px solid var(--line); border-radius: var(--radius-sm); background: var(--surface2); color: var(--ink); transition: all 0.2s; }
 input:focus, select:focus { border-color: var(--brand); background: #FFF; box-shadow: 0 0 0 3px var(--brand-tint); }
 
+/* Range Slider Custom Styling */
+input[type="range"] { -webkit-appearance: none; width: 100%; height: 6px; background: var(--line); border-radius: 3px; outline: none; margin: 10px 0; }
+input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; width: 18px; height: 18px; background: var(--brand); border-radius: 50%; cursor: pointer; transition: transform 0.1s; }
+input[type="range"]::-webkit-slider-thumb:hover { transform: scale(1.2); }
+.slider-container { margin-bottom: 18px; }
+.slider-label { display: flex; justify-content: space-between; font-size: 13px; color: var(--ink); font-weight: 500; }
+
 table { width: 100%; border-collapse: collapse; text-align: left; }
 th { background: var(--surface2); color: var(--brand-ink); font-weight: 600; padding: 16px 24px; border-bottom: 1px solid var(--line); font-size: 14px; white-space: nowrap; }
 td { padding: 16px 24px; border-bottom: 1px solid var(--line2); color: var(--ink); font-size: 14px; white-space: nowrap; }
@@ -94,13 +101,6 @@ tr:hover td { background: var(--surface2); }
 .stat-lbl { font-size: 14px; color: var(--muted); margin-top: 8px; }
 
 .patient-layout { display: grid; grid-template-columns: 340px 1fr; gap: 24px; align-items: flex-start; }
-
-.question-block { border-bottom: 1px solid var(--line2); padding: 24px 0; }
-.choice-row { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; }
-.choice-box { border: 1px solid var(--line); border-radius: var(--radius-sm); padding: 16px 8px; text-align: center; cursor: pointer; background: var(--surface); transition: all 0.2s; }
-.choice-box.active { border-color: var(--brand); background: var(--brand-tint); color: var(--brand); font-weight: 700; box-shadow: 0 0 0 2px var(--brand); }
-.choice-num { font-size: 18px; margin-bottom: 4px; }
-.choice-lbl { font-size: 12px; color: var(--muted); }
 
 #login-screen { position: fixed; inset: 0; background: var(--brand-ink); display: flex; align-items: center; justify-content: center; z-index: 999; padding: 20px; }
 .login-box { background: #FFF; width: 100%; max-width: 420px; padding: 48px; border-radius: 24px; box-shadow: 0 20px 40px rgba(0,0,0,0.4); }
@@ -132,10 +132,6 @@ tr:hover td { background: var(--surface2); }
   #view { padding: 16px; }
   .page-head h1 { font-size: 20px; }
   .card { padding: 20px 16px; }
-  .choice-row { gap: 4px; }
-  .choice-box { padding: 12px 2px; }
-  .choice-num { font-size: 16px; }
-  .choice-lbl { font-size: 10px; }
   .login-box { padding: 32px 24px; }
   .btn { width: 100%; }
 }
@@ -154,7 +150,7 @@ tr:hover td { background: var(--surface2); }
 
 <script>
 // ==========================================
-// 1. Core State & DB Functions
+// 1. Core State & DB Functions (RTLE Model)
 // ==========================================
 const store = {
   get(k, d) { try { const v=localStorage.getItem(k); return v?JSON.parse(v):d; } catch(e){ return d; } },
@@ -184,40 +180,11 @@ const DB = {
   saveSession(s) { store.set('rtle_session', s); }
 };
 
-const ELEMENTS = ['earth', 'water', 'wind', 'fire'];
-const ELEMENT_TH = { earth:'ดิน (ปถวี)', water:'น้ำ (อาโป)', wind:'ลม (วาโย)', fire:'ไฟ (เตโช)' };
-const QUESTIONS = [
-  { id:1, element:'earth', text:'รู้สึกหนักเนื้อตัว อ่อนเพลีย เคลื่อนไหวร่างกายช้าลงกว่าปกติ' },
-  { id:2, element:'earth', text:'มีอาการขัดตึงตามข้อต่อกระดูก หรือกล้ามเนื้อตึงแข็งยึด' },
-  { id:3, element:'earth', text:'ระบบย่อยอาหารทำงานช้า ท้องอืดแน่นท้อง' },
-  { id:4, element:'earth', text:'ผิวพรรณแห้งกร้าน หยาบกระด้าง หรือมีผื่นหนาด้าน' },
-  { id:5, element:'earth', text:'มีอาการเนื้อตัวบวมฉุ หรือรู้สึกหนักศีรษะ' },
-  { id:6, element:'water', text:'มีเสมหะในคอมาก เสมหะเหนียวข้น ขับออกยาก' },
-  { id:7, element:'water', text:'ปัสสาวะบ่อย ขุ่น หรือมีอาการบวมน้ำตามปลายมือเท้า' },
-  { id:8, element:'water', text:'มีน้ำมูกไหลบ่อย หรือตาแฉะ มีน้ำตาคลอง่าย' },
-  { id:9, element:'water', text:'รู้สึกปากเหนียว น้ำลายข้น' },
-  { id:10,element:'water', text:'เหงื่อออกง่ายเกินไป หรือผิวหน้ามันเยิ้ม' },
-  { id:11,element:'wind', text:'วิงเวียนศีรษะ หน้ามืดตาลาย ใจสั่นหวิวหวั่นไหวง่าย' },
-  { id:12,element:'wind', text:'ท้องอืด มีลมดันในกระเพาะและลำไส้มาก เรอบ่อย' },
-  { id:13,element:'wind', text:'ปวดเสียวแปลบตามเนื้อตัวหรือปลายประสาท' },
-  { id:14,element:'wind', text:'นอนไม่หลับ กระสับกระส่าย ความคิดฟุ้งซ่าน' },
-  { id:15,element:'wind', text:'อ่อนล้าสะบัดสะบอม หูอื้อ' },
-  { id:16,element:'fire', text:'รู้สึกร้อนรุ่มภายในเนื้อตัว ตัวร้อนผ่าว' },
-  { id:17,element:'fire', text:'หงุดหงิดง่าย ขี้โมโห อารมณ์ร้อน' },
-  { id:18,element:'fire', text:'หิวน้ำบ่อย คอแห้ง ผิวหนังอักเสบเป็นฝีง่าย' },
-  { id:19,element:'fire', text:'มีแผลในปากบ่อย (ร้อนใน) หรือแสบร้อนที่ผิวหนัง' },
-  { id:20,element:'fire', text:'ระบบเผาผลาญสูงเกินไป ทานเท่าไหร่ก็ไม่อ้วน' }
-];
-
 let CURRENT_ROUTE = 'dashboard';
 let CURRENT_PATIENT = null;
 let ASSESS_STEP = 1;
-let ANSWERS = {};
 let LAST_RESULT = null;
 
-// ==========================================
-// 2. Utility & Helper Functions
-// ==========================================
 const $ = (sel) => document.querySelector(sel);
 function getElKey(s) { return s?s.includes('ดิน')?'earth':s.includes('น้ำ')?'water':s.includes('ลม')?'wind':s.includes('ไฟ')?'fire':'earth':'earth'; }
 function uid(p='') { return p + Math.random().toString(36).substring(2,9); }
@@ -234,7 +201,7 @@ async function checkConnection() {
 }
 
 // ==========================================
-// 3. Navigation & Rendering
+// 2. Navigation & Rendering
 // ==========================================
 async function go(route) {
   CURRENT_ROUTE = route;
@@ -252,10 +219,10 @@ async function renderDashboard() {
   $('#view').innerHTML = `
     <div class="page-head">
       <div>
-        <h1>ระบบสารสนเทศแพทย์แผนไทยบริการต้นแบบ</h1>
-        <p>ยินดีต้อนรับเข้าสู่ระบบคำนวณดัชนีชี้วัดสภาวะความสมดุลธาตุ</p>
+        <h1>ระบบสารสนเทศแพทย์แผนไทยบริการต้นแบบ (RTLE-HIS)</h1>
+        <p>ยินดีต้อนรับเข้าสู่ระบบคำนวณดัชนีชี้วัดสภาวะความสมดุลธาตุเชิงปริมาณ</p>
       </div>
-      <button class="btn" onclick="ASSESS_STEP=1;go('assess')">เริ่มประเมินใหม่</button>
+      <button class="btn" onclick="ASSESS_STEP=1;go('assess')">เริ่มจำลองพฤติกรรม</button>
     </div>
     <div class="stat-row">
       <div class="stat-card"><div class="stat-val">${P.length}</div><div class="stat-lbl">ผู้ป่วยในระบบ</div></div>
@@ -279,9 +246,9 @@ async function renderDashboard() {
         <h3 style="margin:20px; color:var(--brand-ink)">ผลประเมินล่าสุด</h3>
         <div class="table-wrapper" style="border:0; box-shadow:none;">
           <table>
-            <thead><tr><th>ชื่อ-สกุล</th><th>RSI</th><th>ผลตรวจ</th></tr></thead>
+            <thead><tr><th>ชื่อ-สกุล</th><th>RSI</th><th>สถานะวิกฤต</th></tr></thead>
             <tbody>
-              ${A.slice(0,3).map(a => `<tr><td>${a.name}</td><td><code style="font-weight:600;color:var(--brand2)">${(a.rsi || 0).toFixed(1)}%</code></td><td><span class="badge badge-${getElKey(a.dominantTh)}">${a.dominantTh}แปรปรวน</span></td></tr>`).join('')}
+              ${A.slice(0,3).map(a => `<tr><td>${a.name}</td><td><code style="font-weight:600;color:var(--brand2)">${(a.rsi || 0).toFixed(1)}%</code></td><td><span class="badge badge-${getElKey(a.dominantTh)}">${a.dominantTh}</span></td></tr>`).join('')}
             </tbody>
           </table>
         </div>
@@ -291,7 +258,7 @@ async function renderDashboard() {
 }
 
 // ==========================================
-// 4. Patients Module
+// 3. Patients Module
 // ==========================================
 async function renderPatients() {
   const P = await DB.patients();
@@ -349,16 +316,16 @@ async function savePatient(e) {
 function resetPatientForm() { $('#p-id').value = ''; $('#form-patient').reset(); }
 
 // ==========================================
-// 5. Assessment Module
+// 4. Assessment Module (100% Math-Theory Matching)
 // ==========================================
 async function renderAssess() {
-  $('#view').innerHTML = `<div class="page-head"><div><h1>ประเมินสภาวะสมดุลธาตุ</h1></div></div><div id="assess-content"></div>`;
+  $('#view').innerHTML = `<div class="page-head"><div><h1>จำลองแบบจำลองเชิงปริมาณ (RTLE Model)</h1></div></div><div id="assess-content"></div>`;
   if(ASSESS_STEP === 1) await renderAssessStep1();
   else if(ASSESS_STEP === 2) renderAssessStep2();
   else if(ASSESS_STEP === 3) renderAssessStep3();
 }
 
-function startAssessFor(id) { DB.patients().then(l => { CURRENT_PATIENT = l.find(x=>x.id===id); ASSESS_STEP = 2; ANSWERS = {}; go('assess'); }); }
+function startAssessFor(id) { DB.patients().then(l => { CURRENT_PATIENT = l.find(x=>x.id===id); ASSESS_STEP = 2; go('assess'); }); }
 function selectPatientForAssess(id) { if(!id){CURRENT_PATIENT=null;return;} DB.patients().then(l => CURRENT_PATIENT = l.find(x=>x.id===id)); }
 
 async function renderAssessStep1() {
@@ -390,81 +357,169 @@ async function renderAssessStep1() {
           </select>
         </div>
       </div>
-      <button class="btn" style="width:100%;margin-top:24px;padding:14px;" onclick="submitStep1()">ถัดไป: เริ่มทำแบบประเมิน</button>
+      <button class="btn" style="width:100%;margin-top:24px;padding:14px;" onclick="submitStep1()">ถัดไป: ป้อนเวกเตอร์พฤติกรรม</button>
     </div>
   `;
 }
 
 function autoCalcRawConstitution() {
-  const bVal = $('#raw-birth').value; 
-  if(!bVal) return;
+  const bVal = $('#raw-birth').value; if(!bVal) return;
   const m = new Date(bVal).getMonth() + 1;
   $('#raw-constitution').value = [6,7,8].includes(m) ? 'น้ำ' : [9,10,11].includes(m) ? 'ลม' : [12,1,2].includes(m) ? 'ไฟ' : 'ดิน';
 }
 
 function submitStep1() {
   if(!CURRENT_PATIENT) {
-    const name = $('#raw-name').value;
-    const hn = $('#raw-hn').value || 'ไม่มี HN';
-    const constitution = $('#raw-constitution').value;
-
+    const name = $('#raw-name').value; const hn = $('#raw-hn').value || 'ไม่มี HN'; const constitution = $('#raw-constitution').value;
     if(!name) { alert('กรุณาระบุชื่อผู้รับการตรวจด้วยครับ'); return; }
     if(constitution === 'ไม่ได้ระบุ') { alert('กรุณาระบุ "วันเกิด" หรือเลือก "ธาตุเจ้าเรือนเกิด" ครับ'); return; }
-
     CURRENT_PATIENT = { id: uid('raw_'), hn: hn, name: name, constitution: constitution };
   }
-  ASSESS_STEP = 2;
-  ANSWERS = {};
-  renderAssess();
+  ASSESS_STEP = 2; renderAssess();
 }
 
 function renderAssessStep2() {
-  ANSWERS = ANSWERS || {};
   $('#assess-content').innerHTML = `
     <div class="card" style="padding:16px 20px; background:var(--brand-tint); margin-bottom:16px; border:1px solid var(--brand); display:flex; justify-content:space-between; align-items:center;">
       <div><b>ผู้รับการตรวจ:</b> ${CURRENT_PATIENT.name}</div>
       <div><span class="badge badge-${getElKey(CURRENT_PATIENT.constitution)}">พื้นฐานธาตุ${CURRENT_PATIENT.constitution}</span></div>
     </div>
-    <div class="card" style="padding:16px;">
-      ${QUESTIONS.map(q => `
-        <div class="question-block" id="q-block-${q.id}">
-          <div class="question-text">${q.id}. ${q.text} <span style="font-size:12px;color:var(--muted)">[กลุ่มธาตุ${ELEMENT_TH[q.element]}]</span></div>
-          <div class="choice-row">
-            ${[1,2,3,4,5].map(n => `<div class="choice-box ${ANSWERS[q.id]===n?'active':''}" onclick="setScore(${q.id}, ${n})"><div class="choice-num">${n}</div></div>`).join('')}
-          </div>
+    
+    <div class="card">
+      <h3 style="color:var(--brand-ink); margin-bottom:20px; border-bottom:1px solid var(--line); padding-bottom:10px;">ป้อนค่าเวกเตอร์พฤติกรรม $B$ และรูทีนในอุดมคติ $B_{ideal}$ [ช่วง 0.00 - 1.00]</h3>
+      
+      <div style="background:var(--surface2); padding:16px; border-radius:var(--radius-sm); border:1px solid var(--line); margin-bottom:16px;">
+        <div style="font-weight:600; color:var(--brand-ink); margin-bottom:12px;">S (Sleep) — พฤติกรรมการนอนหลับพักผ่อน</div>
+        <div class="slider-container">
+          <div class="slider-label"><span>พฤติกรรมปัจจุบัน (Current S)</span><span id="v-s" style="font-family:monospace;font-weight:bold;">0.50</span></div>
+          <input type="range" id="b-s" min="0" max="1" step="0.01" value="0.50" oninput="$('#v-s').textContent=Number(this.value).toFixed(2)">
         </div>
-      `).join('')}
+        <div class="slider-container" style="margin-bottom:0;">
+          <div class="slider-label"><span>พฤติกรรมในอุดมคติ (Ideal S)</span><span id="vi-s" style="font-family:monospace;font-weight:bold;color:var(--brand)">0.80</span></div>
+          <input type="range" id="bi-s" min="0" max="1" step="0.01" value="0.80" oninput="$('#vi-s').textContent=Number(this.value).toFixed(2)">
+        </div>
+      </div>
+
+      <div style="background:var(--surface2); padding:16px; border-radius:var(--radius-sm); border:1px solid var(--line); margin-bottom:16px;">
+        <div style="font-weight:600; color:var(--brand-ink); margin-bottom:12px;">E (Exercise) — การออกกำลังกายและการขยับกาย</div>
+        <div class="slider-container">
+          <div class="slider-label"><span>พฤติกรรมปัจจุบัน (Current E)</span><span id="v-e" style="font-family:monospace;font-weight:bold;">0.30</span></div>
+          <input type="range" id="b-e" min="0" max="1" step="0.01" value="0.30" oninput="$('#v-e').textContent=Number(this.value).toFixed(2)">
+        </div>
+        <div class="slider-container" style="margin-bottom:0;">
+          <div class="slider-label"><span>พฤติกรรมในอุดมคติ (Ideal E)</span><span id="vi-e" style="font-family:monospace;font-weight:bold;color:var(--brand)">0.50</span></div>
+          <input type="range" id="bi-e" min="0" max="1" step="0.01" value="0.50" oninput="$('#vi-e').textContent=Number(this.value).toFixed(2)">
+        </div>
+      </div>
+
+      <div style="background:var(--surface2); padding:16px; border-radius:var(--radius-sm); border:1px solid var(--line); margin-bottom:16px;">
+        <div style="font-weight:600; color:var(--brand-ink); margin-bottom:12px;">F (Food) — อาหารและสมุนไพรตามหลักรสยา</div>
+        <div class="slider-container">
+          <div class="slider-label"><span>พฤติกรรมปัจจุบัน (Current F)</span><span id="v-f" style="font-family:monospace;font-weight:bold;">0.60</span></div>
+          <input type="range" id="b-f" min="0" max="1" step="0.01" value="0.60" oninput="$('#v-f').textContent=Number(this.value).toFixed(2)">
+        </div>
+        <div class="slider-container" style="margin-bottom:0;">
+          <div class="slider-label"><span>พฤติกรรมในอุดมคติ (Ideal F)</span><span id="vi-f" style="font-family:monospace;font-weight:bold;color:var(--brand)">0.70</span></div>
+          <input type="range" id="bi-f" min="0" max="1" step="0.01" value="0.70" oninput="$('#vi-f').textContent=Number(this.value).toFixed(2)">
+        </div>
+      </div>
+
+      <div style="background:var(--surface2); padding:16px; border-radius:var(--radius-sm); border:1px solid var(--line); margin-bottom:0;">
+        <div style="font-weight:600; color:var(--brand-ink); margin-bottom:12px;">A (Activity / Stress) — ภาระงานและความเครียด</div>
+        <div class="slider-container">
+          <div class="slider-label"><span>พฤติกรรมปัจจุบัน (Current A)</span><span id="v-a" style="font-family:monospace;font-weight:bold;">0.40</span></div>
+          <input type="range" id="b-a" min="0" max="1" step="0.01" value="0.40" oninput="$('#v-a').textContent=Number(this.value).toFixed(2)">
+        </div>
+        <div class="slider-container" style="margin-bottom:0;">
+          <div class="slider-label"><span>พฤติกรรมในอุดมคติ (Ideal A)</span><span id="vi-a" style="font-family:monospace;font-weight:bold;color:var(--brand)">0.20</span></div>
+          <input type="range" id="bi-a" min="0" max="1" step="0.01" value="0.20" oninput="$('#vi-a').textContent=Number(this.value).toFixed(2)">
+        </div>
+      </div>
+
     </div>
+    
     <div style="display:flex;gap:10px;margin-top:20px;margin-bottom:40px;">
       <button class="btn btn-sec" style="flex:1" onclick="ASSESS_STEP=1;renderAssess()">กลับ</button>
-      <button class="btn" style="flex:2" onclick="computeResult()">ประมวลผลดัชนี (RSI)</button>
+      <button class="btn" style="flex:2" onclick="computeResult()">ประมวลผลดัชนีผ่านสมการ RTLE</button>
     </div>
   `;
 }
 
-function setScore(q, s) { 
-  ANSWERS[q] = s; 
-  renderAssessStep2(); 
-  setTimeout(() => { const e = document.getElementById(`q-block-${q}`); if(e) e.scrollIntoView({behavior:'smooth', block:'center'}); }, 50); 
-}
-
 async function computeResult() { 
-  if(QUESTIONS.filter(q=>!ANSWERS[q.id]).length>0) return alert('กรุณาตอบให้ครบทุกข้อครับ'); 
-  const raw={earth:0,water:0,wind:0,fire:0}; 
-  QUESTIONS.forEach(q=>raw[q.element]+=ANSWERS[q.id]); 
+  // 1. ดึงค่าเวกเตอร์พฤกติกรรม B และ B_ideal
+  const B = {
+    s: parseFloat($('#b-s').value), e: parseFloat($('#b-e').value),
+    f: parseFloat($('#b-f').value), a: parseFloat($('#b-a').value)
+  };
+  const B_ideal = {
+    s: parseFloat($('#bi-s').value), e: parseFloat($('#bi-e').value),
+    f: parseFloat($('#bi-f').value), a: parseFloat($('#bi-a').value)
+  };
+
+  // หาค่าเดลต้า (B - B_ideal)
+  const dS = B.s - B_ideal.s;
+  const dE = B.e - B_ideal.e;
+  const dF = B.f - B_ideal.f;
+  const dA = B.a - B_ideal.a;
+
+  // 2. กำหนดจุดสมดุลส่วนบุคคล C₀ อิงตามรายงานเปเปอร์ของคุณเป๊ะๆ
+  const C0 = { earth: 0.60, water: 0.60, wind: 0.55, fire: 0.50 };
+
+  // 3. กำหนดค่าเมทริกซ์อิทธิพล M (Influence Matrix) จากรายงานเปเปอร์ของคุณ
+  const M = {
+    earth: { s: 0.30,  e: -0.10, f: 0.40,  a: -0.30 },
+    water: { s: 0.20,  e: -0.10, f: 0.30,  a: -0.30 },
+    wind:  { s: -0.30, e: 0.50,  f: -0.10, a: 0.40 },
+    fire:  { s: -0.40, e: 0.30,  f: 0.20,  a: 0.60 }
+  };
+
+  // Helper ฟังก์ชัน clip(val, 0, 1)
+  const clip = (v) => Math.min(Math.max(v, 0), 1);
+
+  // 4. คำนวณเวกเตอร์สถานะธาตุปัจจุบัน: C = clip( C₀ + M(B − B_ideal), 0, 1 )
+  const C = {
+    earth: clip(C0.earth + (M.earth.s * dS + M.earth.e * dE + M.earth.f * dF + M.earth.a * dA)),
+    water: clip(C0.water + (M.water.s * dS + M.water.e * dE + M.water.f * dF + M.water.a * dA)),
+    wind:  clip(C0.wind  + (M.wind.s  * dS + M.wind.e  * dE + M.wind.f  * dF + M.wind.a  * dA)),
+    fire:  clip(C0.fire  + (M.fire.s  * dS + M.fire.e  * dE + M.fire.f  * dF + M.fire.a  * dA))
+  };
+
+  // 5. คำนวณระยะห่างกำลังสองเฉลี่ย: D² = mean(C − C₀)²
+  const d2 = (
+    Math.pow(C.earth - C0.earth, 2) +
+    Math.pow(C.water - C0.water, 2) +
+    Math.pow(C.wind - C0.wind, 2) +
+    Math.pow(C.fire - C0.fire, 2)
+  ) / 4;
+
+  // 6. คำนวณดัชนีความสมดุลธาตุผ่านสมการหลัก: RSI = exp(-7 * D²) * 100
+  const rsi = Math.exp(-7 * d2) * 100;
+
+  // 7. วิเคราะห์หาธาตุที่เกิดภาวะแปรปรวนวิกฤตสูงสุด (ความต่างสัมบูรณ์จากจุดสมดุลสูงสุด)
+  const devList = [
+    { name: 'ดิน', key: 'earth', val: C.earth - C0.earth, abs: Math.abs(C.earth - C0.earth) },
+    { name: 'น้ำ', key: 'water', val: C.water - C0.water, abs: Math.abs(C.water - C0.water) },
+    { name: 'ลม', key: 'wind',  val: C.wind - C0.wind,   abs: Math.abs(C.wind - C0.wind) },
+    { name: 'ไฟ', key: 'fire',  val: C.fire - C0.fire,   abs: Math.abs(C.fire - C0.fire) }
+  ];
+  devList.sort((a,b) => b.abs - a.abs);
   
-  let max=-1, dom='earth'; 
-  ELEMENTS.forEach(el=>{if(raw[el]>max){max=raw[el];dom=el;}}); 
-  
+  let finalStatusText = 'ระบบธาตุอยู่ในภาวะสมดุลสมบูรณ์';
+  if (devList[0].abs > 0.001) {
+    const stateType = devList[0].val > 0 ? 'กำเริบ (Aggravated)' : 'หย่อน (Depleted)';
+    finalStatusText = `ธาตุ${devList[0].name} มีภาวะ${stateType}`;
+  }
+
   const A = await DB.assessments(); 
   LAST_RESULT = { 
-    id:uid('rec_'), 
-    patientId:CURRENT_PATIENT.id, 
-    hn:CURRENT_PATIENT.hn,
-    name:CURRENT_PATIENT.name, 
-    date:new Date().toISOString(), 
-    rsi: Math.exp(-7*((Math.pow(raw.earth/25,2)+Math.pow(raw.water/25,2)+Math.pow(raw.wind/25,2)+Math.pow(raw.fire/25,2))/4))*100, 
-    dominantTh:{earth:'ดิน',water:'น้ำ',wind:'ลม',fire:'ไฟ'}[dom] 
+    id: uid('rec_'), 
+    patientId: CURRENT_PATIENT.id, 
+    hn: CURRENT_PATIENT.hn,
+    name: CURRENT_PATIENT.name, 
+    date: new Date().toISOString(), 
+    rsi: rsi, 
+    dominantTh: finalStatusText,
+    data: { B, B_ideal, C, C0, d2 } // เก็บก้อนข้อมูลวัตถุดิบทั้งหมดเข้าฐานข้อมูล
   }; 
   A.unshift(LAST_RESULT); 
   await DB.saveAssessments(A); 
@@ -474,38 +529,93 @@ async function computeResult() {
 
 function renderAssessStep3() {
   const res = LAST_RESULT; if(!res) return;
+  const d = res.data;
+  
   $('#assess-content').innerHTML = `
     <div class="card">
       <div style="text-align:center; margin-bottom:32px; border-bottom:1px solid var(--line2); padding-bottom:24px;">
-        <h2 style="color:var(--brand-ink);">รายงานผลประเมินดัชนีสมดุลธาตุ (RSI)</h2>
-        <div style="color:var(--muted); font-size:14px; margin-top:8px;">ชื่อ: <b>${res.name}</b> | รหัส: <code style="font-family:monospace">${res.hn}</code></div>
+        <h2 style="color:var(--brand-ink);">รายงานการจำลองสภาวะทางคณิตศาสตร์ (RTLE Model)</h2>
+        <div style="color:var(--muted); font-size:14px; margin-top:8px;">ชื่อผู้ประเมิน: <b>${res.name}</b> | HN: <code style="font-family:monospace">${res.hn}</code></div>
       </div>
-      <div style="text-align:center; margin-bottom:32px;">
-        <div style="font-size:14px; color:var(--brand-ink); font-weight:600;">ดัชนีสุขภาพรวม (RSI)</div>
-        <h1 style="color:var(--brand); font-size:56px; margin:8px 0; line-height:1;">${(res.rsi || 0).toFixed(1)}<span style="font-size:24px">%</span></h1>
-        <div style="margin-top:24px; padding:16px; background:var(--surface2); border-radius:var(--radius-sm); display:inline-block;">
-          <div style="font-size:13px; color:var(--muted); margin-bottom:8px;">พบความแปรปรวนสูงสุดที่</div>
-          <div class="badge badge-${getElKey(res.dominantTh)}" style="font-size:16px; padding:8px 16px;">ธาตุ${res.dominantTh}</div>
+      
+      <div style="text-align:center; margin-bottom:36px;">
+        <div style="font-size:14px; color:var(--brand-ink); font-weight:600; letter-spacing:0.5px;">ดัชนีสภาวะสมดุลรวม (Relative Status Index — RSI)</div>
+        <h1 style="color:var(--brand); font-size:60px; margin:6px 0; line-height:1;">${(res.rsi || 0).toFixed(2)}<span style="font-size:24px">%</span></h1>
+        
+        <div style="margin-top:16px; padding:12px 24px; background:var(--surface2); border-radius:var(--radius-sm); display:inline-block; border:1px solid var(--line);">
+          <div style="font-size:12px; color:var(--muted); margin-bottom:4px;">ผลลัพธ์พยาธิสภาพเชิงทฤษฎี</div>
+          <div style="font-size:16px; font-weight:700; color:var(--brand-ink);">${res.dominantTh}</div>
         </div>
       </div>
-      <button class="btn" style="width:100%" onclick="ASSESS_STEP=1;ANSWERS={};LAST_RESULT=null;renderAssess()">เสร็จสิ้นกระบวนการ / ประเมินเคสใหม่</button>
+
+      <div style="margin-bottom:32px; background:var(--surface2); padding:20px; border-radius:var(--radius); border:1px solid var(--line2);">
+        <h4 style="color:var(--brand-ink); margin-bottom:18px; font-size:15px; border-left:4px solid var(--brand); padding-left:8px;">สภาวะสถานะธาตุปัจจุบัน ($C$) เทียบกับจุดสมดุลอุดมคติส่วนบุคคล ($C_0$)</h4>
+        
+        <div style="margin-bottom:16px;">
+          <div style="display:flex; justify-content:space-between; font-size:13px; margin-bottom:6px;">
+            <span>ธาตุดิน (Earth Element) — $C_{earth}$: <b>${d.C.earth.toFixed(3)}</b></span>
+            <span style="color:var(--muted)">สมดุลเป้าหมาย $C_0$: ${d.C0.earth.toFixed(2)}</span>
+          </div>
+          <div style="width:100%; height:12px; background:var(--line); border-radius:6px; position:relative; overflow:hidden;">
+            <div style="width:${d.C.earth * 100}%; height:100%; background:var(--earth); border-radius:6px;"></div>
+            <div style="position:absolute; left:${d.C0.earth * 100}%; top:0; bottom:0; width:3px; background:#000; box-shadow:0 0 4px #FFF;" title="Target"></div>
+          </div>
+        </div>
+
+        <div style="margin-bottom:16px;">
+          <div style="display:flex; justify-content:space-between; font-size:13px; margin-bottom:6px;">
+            <span>ธาตุน้ำ (Water Element) — $C_{water}$: <b>${d.C.water.toFixed(3)}</b></span>
+            <span style="color:var(--muted)">สมดุลเป้าหมาย $C_0$: ${d.C0.water.toFixed(2)}</span>
+          </div>
+          <div style="width:100%; height:12px; background:var(--line); border-radius:6px; position:relative; overflow:hidden;">
+            <div style="width:${d.C.water * 100}%; height:100%; background:var(--water); border-radius:6px;"></div>
+            <div style="position:absolute; left:${d.C0.water * 100}%; top:0; bottom:0; width:3px; background:#000; box-shadow:0 0 4px #FFF;" title="Target"></div>
+          </div>
+        </div>
+
+        <div style="margin-bottom:16px;">
+          <div style="display:flex; justify-content:space-between; font-size:13px; margin-bottom:6px;">
+            <span>ธาตุลม (Wind Element) — $C_{wind}$: <b>${d.C.wind.toFixed(3)}</b></span>
+            <span style="color:var(--muted)">สมดุลเป้าหมาย $C_0$: ${d.C0.wind.toFixed(2)}</span>
+          </div>
+          <div style="width:100%; height:12px; background:var(--line); border-radius:6px; position:relative; overflow:hidden;">
+            <div style="width:${d.C.wind * 100}%; height:100%; background:var(--wind); border-radius:6px;"></div>
+            <div style="position:absolute; left:${d.C0.wind * 100}%; top:0; bottom:0; width:3px; background:#000; box-shadow:0 0 4px #FFF;" title="Target"></div>
+          </div>
+        </div>
+
+        <div style="margin-bottom:0;">
+          <div style="display:flex; justify-content:space-between; font-size:13px; margin-bottom:6px;">
+            <span>ธาตุไฟ (Fire Element) — $C_{fire}$: <b>${d.C.fire.toFixed(3)}</b></span>
+            <span style="color:var(--muted)">สมดุลเป้าหมาย $C_0$: ${d.C0.fire.toFixed(2)}</span>
+          </div>
+          <div style="width:100%; height:12px; background:var(--line); border-radius:6px; position:relative; overflow:hidden;">
+            <div style="width:${d.C.fire * 100}%; height:100%; background:var(--fire); border-radius:6px;"></div>
+            <div style="position:absolute; left:${d.C0.fire * 100}%; top:0; bottom:0; width:3px; background:#000; box-shadow:0 0 4px #FFF;" title="Target"></div>
+          </div>
+        </div>
+        
+        <div style="margin-top:12px; font-size:11px; color:var(--muted); text-align:right;">* เส้นสีดำแนวตั้งบ่งชี้ขอบเขตขีดจำกัดคงที่สมดุลดั้งเดิม ($C_0$) ของคนไข้</div>
+      </div>
+
+      <button class="btn" style="width:100%" onclick="ASSESS_STEP=1;LAST_RESULT=null;renderAssess()">เสร็จสิ้นกระบวนการ / ประเมินเคสถัดไป</button>
     </div>
   `;
 }
 
 // ==========================================
-// 6. Records Module
+// 5. Records Module
 // ==========================================
 async function renderRecords() {
   const A = await DB.assessments();
   $('#view').innerHTML = `
-    <div class="page-head"><div><h1>บันทึกประวัติสะสม</h1></div></div>
+    <div class="page-head"><div><h1>บันทึกประวัติสะสมผลจำลอง</h1></div></div>
     <div class="card" style="padding:0;">
       <div class="table-wrapper" style="border:0; box-shadow:none;">
         <table>
-          <thead><tr><th>วันที่</th><th>ชื่อผู้รับการตรวจ</th><th>RSI</th><th>ธาตุวิกฤต</th></tr></thead>
+          <thead><tr><th>วันที่คัดกรอง</th><th>ชื่อผู้รับการตรวจ</th><th>ค่าดัชนี RSI</th><th>สภาวะจำลองธาตุวิกฤต</th></tr></thead>
           <tbody>
-            ${A.map(a => `<tr><td>${new Date(a.date).toLocaleDateString('th-TH')}</td><td style="font-weight:600">${a.name}</td><td><code style="color:var(--brand)">${(a.rsi || 0).toFixed(1)}%</code></td><td><span class="badge badge-${getElKey(a.dominantTh)}">${a.dominantTh}</span></td></tr>`).join('')}
+            ${A.map(a => `<tr><td>${new Date(a.date).toLocaleDateString('th-TH')}</td><td style="font-weight:600">${a.name}</td><td><code style="color:var(--brand); font-weight:700;">${(a.rsi || 0).toFixed(2)}%</code></td><td>${a.dominantTh}</td></tr>`).join('')}
           </tbody>
         </table>
       </div>
@@ -514,7 +624,7 @@ async function renderRecords() {
 }
 
 // ==========================================
-// 7. Auth & Initialization
+// 6. Auth & Initialization
 // ==========================================
 async function initApp() { 
   await checkConnection(); 
@@ -525,8 +635,8 @@ async function initApp() {
 
 function handleLogin(e) { 
   e.preventDefault(); 
-  if(($('#login-user').value==='admin'||$('#login-user').value==='ttm001')&&$('#login-pass').value==='1234') { 
-    DB.saveSession({user:'พท.ป. แอดมิน'}); initApp(); 
+  if($('#login-user').value==='admin' && $('#login-pass').value==='1234') { 
+    DB.saveSession({user: 'พท.ป. แอดมิน'}); initApp(); 
   } else alert('รหัสผู้ใช้งานหรือรหัสผ่านไม่ถูกต้อง'); 
 }
 
@@ -547,7 +657,7 @@ window.addEventListener('DOMContentLoaded', initApp);
 </div>
 
 <div id="app-bar">
-  <div class="brand-title" onclick="go('dashboard')"><img src="เเพท.png"> <span>RTLE-HIS</span></div>
+  <div class="brand-title" onclick="go('dashboard')"><img src="เเพท.png"> <span>RTLE-HIS Platform</span></div>
   <div class="user-badge"><div id="connection-status" class="status-pill offline"><div class="status-dot"></div> ...</div><span id="user-name-display"></span><button class="btn-logout" onclick="handleLogout()">ออก</button></div>
 </div>
 
@@ -555,7 +665,7 @@ window.addEventListener('DOMContentLoaded', initApp);
   <div id="nav-bar">
     <a onclick="go('dashboard')"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg> หน้าหลัก</a>
     <a onclick="go('patients')"><svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2M9 7a4 4 0 0 1 4-4 4 4 0 0 1 4 4"/></svg> ทะเบียนผู้ป่วย</a>
-    <a onclick="go('assess')"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M16 13H8M16 17H8M10 9H8"/></svg> ประเมินธาตุ</a>
+    <a onclick="go('assess')"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M16 13H8M16 17H8M10 9H8"/></svg> จำลองโมเดลธาตุ</a>
     <a onclick="go('records')"><svg viewBox="0 0 24 24"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg> ประวัติสะสม</a>
   </div>
   <div id="view"></div>
