@@ -633,11 +633,60 @@ async function initApp() {
   else { $('#login-screen').style.display='flex'; } 
 }
 
-function handleLogin(e) { 
-  e.preventDefault(); 
-  if($('#login-user').value==='admin' && $('#login-pass').value==='1234') { 
-    DB.saveSession({user: 'พท.ป. แอดมิน'}); initApp(); 
-  } else alert('รหัสผู้ใช้งานหรือรหัสผ่านไม่ถูกต้อง'); 
+// ==========================================
+// 6. ระบบเข้าสู่ระบบ & ลงทะเบียน (Auth System)
+// ==========================================
+let authMode = 'login'; // สถานะเริ่มต้นคือหน้าเข้าสู่ระบบ
+
+function setAuthMode(mode) {
+  authMode = mode;
+  if(mode === 'login') {
+    $('#tab-login').style.borderColor = 'var(--brand)';
+    $('#tab-login').style.color = 'var(--brand)';
+    $('#tab-register').style.borderColor = 'transparent';
+    $('#tab-register').style.color = 'var(--muted)';
+    $('#btn-auth').textContent = 'เข้าสู่ระบบ';
+    $('#lbl-user').textContent = 'ชื่อบัญชี';
+  } else {
+    $('#tab-register').style.borderColor = 'var(--brand)';
+    $('#tab-register').style.color = 'var(--brand)';
+    $('#tab-login').style.borderColor = 'transparent';
+    $('#tab-login').style.color = 'var(--muted)';
+    $('#btn-auth').textContent = 'สร้างบัญชีใหม่';
+    $('#lbl-user').textContent = 'ตั้งชื่อบัญชีใหม่';
+  }
+}
+
+function handleAuth(e) {
+  e.preventDefault();
+  const u = $('#login-user').value.trim();
+  const p = $('#login-pass').value.trim();
+  
+  // ดึงข้อมูล user ทั้งหมดในระบบ (ถ้าไม่มี ให้มี admin 1234 เป็นค่าเริ่มต้น)
+  let registeredUsers = store.get('rtle_users', { 'admin': '1234' });
+
+  if (authMode === 'register') {
+    // ---------------- [โหมดลงทะเบียน] ----------------
+    if (registeredUsers[u]) {
+      alert('ชื่อบัญชีนี้มีผู้ใช้งานแล้ว กรุณาใช้ชื่ออื่นครับ');
+    } else if (p.length < 4) {
+      alert('รหัสผ่านต้องมีความยาวอย่างน้อย 4 ตัวอักษร');
+    } else {
+      registeredUsers[u] = p; // บันทึก user ใหม่
+      store.set('rtle_users', registeredUsers);
+      alert('ลงทะเบียนสำเร็จ! ระบบจะพาคุณเข้าสู่การใช้งาน');
+      DB.saveSession({user: u}); // ล็อกอินอัตโนมัติ
+      initApp();
+    }
+  } else {
+    // ---------------- [โหมดเข้าสู่ระบบ] ----------------
+    if (registeredUsers[u] && registeredUsers[u] === p) {
+      DB.saveSession({user: u});
+      initApp();
+    } else {
+      alert('ชื่อบัญชีหรือรหัสผ่านไม่ถูกต้อง');
+    }
+  }
 }
 
 function handleLogout() { DB.saveSession(null); initApp(); }
@@ -647,11 +696,26 @@ window.addEventListener('DOMContentLoaded', initApp);
 
 <div id="login-screen">
   <div class="login-box">
-    <div style="text-align:center;margin-bottom:24px"><img src="เเพท.png" style="height:80px;"><h2 style="margin-top:12px;color:var(--brand-ink)">RTLE Platform</h2></div>
-    <form onsubmit="handleLogin(event)">
-      <div class="form-group"><label>ชื่อบัญชี</label><input type="text" id="login-user" required></div>
-      <div class="form-group"><label>รหัสผ่าน</label><input type="password" id="login-pass" required></div>
-      <button class="btn" style="width:100%;margin-top:16px;">เข้าสู่ระบบ</button>
+    <div style="text-align:center;margin-bottom:24px">
+      <img src="เเพท.png" style="height:80px;">
+      <h2 style="margin-top:12px;color:var(--brand-ink)">RTLE Platform</h2>
+    </div>
+    
+    <div style="display:flex; margin-bottom: 24px; border-bottom: 2px solid var(--line);">
+       <button id="tab-login" onclick="setAuthMode('login')" style="flex:1; padding:12px; background:none; border:none; border-bottom:3px solid var(--brand); color:var(--brand); font-weight:bold; cursor:pointer; font-size:16px;">เข้าสู่ระบบ</button>
+       <button id="tab-register" onclick="setAuthMode('register')" style="flex:1; padding:12px; background:none; border:none; border-bottom:3px solid transparent; color:var(--muted); font-weight:bold; cursor:pointer; font-size:16px;">ลงทะเบียน</button>
+    </div>
+
+    <form onsubmit="handleAuth(event)">
+      <div class="form-group">
+        <label id="lbl-user">ชื่อบัญชี</label>
+        <input type="text" id="login-user" required placeholder="ภาษาอังกฤษหรือตัวเลข">
+      </div>
+      <div class="form-group">
+        <label id="lbl-pass">รหัสผ่าน</label>
+        <input type="password" id="login-pass" required placeholder="ความยาวอย่างน้อย 4 ตัว">
+      </div>
+      <button class="btn" id="btn-auth" style="width:100%;margin-top:16px;font-size:16px;padding:14px;">เข้าสู่ระบบ</button>
     </form>
   </div>
 </div>
