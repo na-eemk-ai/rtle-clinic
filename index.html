@@ -13,26 +13,26 @@
   --brand2: #0E5C63;
   --brand-tint: #E7F0EE;
   --brand-ink: #0B322C;
-  --bg: #F0F4F3;
+  --bg: #F9FBFB; /* สว่างขึ้นแบบมินิมอล */
   --surface: #FFFFFF;
   --surface2: #F8FAF9;
   --ink: #2C3E3A;
-  --muted: #6B7C77;
-  --line: #E1E8E6;
-  --line2: #EEF2F1;
-  --earth: #A9762F;
-  --water: #2F7FB5;
-  --wind: #1D9E75;
-  --fire: #D9542B;
-  --ok: #1F9D6B;
-  --ok-bg: #E4F3EC;
-  --danger: #C93B3B;
-  --danger-bg: #FCE8E8;
-  --info: #0288D1;
-  --info-bg: #E1F5FE;
-  --radius: 16px;
-  --radius-sm: 8px;
-  --shadow: 0 8px 24px rgba(18,77,69,0.06);
+  --muted: #82938E; /* อ่อนลงนิดหน่อย */
+  --line: #E8ECEB;
+  --line2: #F0F4F3;
+  --earth: #BCA68A;
+  --water: #78AED3;
+  --wind: #70B89C;
+  --fire: #E28F75;
+  --ok: #2E8B57;
+  --ok-bg: #EAF4EE;
+  --danger: #D9534F;
+  --danger-bg: #FDF0EF;
+  --info: #4682B4;
+  --info-bg: #EDF3F8;
+  --radius: 20px; /* โค้งมนขึ้น */
+  --radius-sm: 12px;
+  --shadow: 0 10px 30px rgba(18,77,69,0.03); /* เงาฟุ้งๆ นุ่มๆ */
 }
 * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Sarabun', sans-serif; -webkit-font-smoothing: antialiased; }
 body { background: var(--bg); color: var(--ink); font-size: 15px; line-height: 1.6; display: flex; flex-direction: column; height: 100vh; overflow: hidden; }
@@ -49,13 +49,13 @@ button, input, select, textarea { font-family: inherit; font-size: inherit; colo
 .status-dot { width: 8px; height: 8px; border-radius: 50%; }
 .status-pill.online .status-dot { background: var(--ok); }
 .status-pill.offline .status-dot { background: var(--danger); }
-.btn-logout { background: var(--surface2); border: 1px solid var(--line); padding: 8px 16px; color: var(--danger); border-radius: var(--radius-sm); cursor: pointer; font-size: 13px; font-weight: 600; transition: all 0.2s; }
-.btn-logout:hover { background: var(--danger-bg); border-color: var(--danger-bg); }
+.btn-logout { background: transparent; border: none; color: var(--muted); cursor: pointer; font-size: 13px; font-weight: 600; transition: all 0.2s; }
+.btn-logout:hover { color: var(--danger); }
 
 #main-container { display: flex; flex: 1; overflow: hidden; }
-#nav-bar { background: var(--surface); width: 260px; border-right: 1px solid var(--line); display: flex; flex-direction: column; padding: 24px 12px; }
-#nav-bar a { display: flex; align-items: center; gap: 14px; padding: 14px 20px; margin-bottom: 4px; color: var(--muted); font-weight: 500; border-radius: var(--radius-sm); transition: all 0.2s; }
-#nav-bar a:hover { background: var(--bg); color: var(--brand); }
+#nav-bar { background: var(--surface); width: 240px; border-right: 1px solid var(--line); display: flex; flex-direction: column; padding: 24px 12px; }
+#nav-bar a { display: flex; align-items: center; gap: 14px; padding: 12px 18px; margin-bottom: 4px; color: var(--muted); font-weight: 500; border-radius: var(--radius-sm); transition: all 0.2s; }
+#nav-bar a:hover { background: var(--surface2); color: var(--brand); }
 #nav-bar a.active { background: var(--brand-tint); color: var(--brand); font-weight: 600; }
 #nav-bar a svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 2; }
 
@@ -64,87 +64,72 @@ button, input, select, textarea { font-family: inherit; font-size: inherit; colo
 .page-head h1 { font-size: 24px; font-weight: 700; color: var(--brand-ink); }
 .page-head p { color: var(--muted); font-size: 14px; margin-top: 6px; }
 
-.card { background: var(--surface); border-radius: var(--radius); padding: 32px; box-shadow: var(--shadow); margin-bottom: 24px; border: 1px solid var(--line2); }
-.btn { background: var(--brand); color: #FFF; border: 0; padding: 12px 24px; border-radius: var(--radius-sm); font-weight: 600; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; gap: 8px; transition: all 0.2s; }
-.btn:hover { background: var(--brand2); transform: translateY(-1px); }
-.btn-sec { background: #FFF; color: var(--brand); border: 1px solid var(--line); }
-.btn-sec:hover { background: var(--brand-tint); border-color: var(--brand); }
+.card { background: var(--surface); border-radius: var(--radius); padding: 32px; box-shadow: var(--shadow); margin-bottom: 24px; border: 1px solid var(--line); }
+.card-minimal { background: var(--surface); border-radius: var(--radius); padding: 48px; box-shadow: 0 10px 40px rgba(0,0,0,0.03); max-width: 800px; margin: 0 auto 40px auto; text-align: center; border: 1px solid var(--line2); }
 
-.form-group { margin-bottom: 20px; width: 100%; }
+.btn { background: var(--brand); color: #FFF; border: 0; padding: 12px 28px; border-radius: 30px; font-weight: 600; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; gap: 8px; transition: all 0.2s; font-size: 15px; }
+.btn:hover { background: var(--brand2); transform: translateY(-2px); box-shadow: 0 4px 12px rgba(18,77,69,0.2); }
+.btn-sec { background: var(--surface); color: var(--ink); border: 1px solid var(--line); }
+.btn-sec:hover { background: var(--surface2); border-color: var(--muted); transform: translateY(-2px); }
+
+.form-group { margin-bottom: 20px; width: 100%; text-align: left; }
 .form-group label { display: block; font-weight: 600; margin-bottom: 8px; color: var(--brand-ink); font-size: 14px; }
-input[type="text"], input[type="password"], input[type="date"], select, textarea { width: 100%; padding: 12px 16px; border: 1px solid var(--line); border-radius: var(--radius-sm); background: var(--surface2); color: var(--ink); transition: all 0.2s; }
-input:focus, select:focus { border-color: var(--brand); background: #FFF; box-shadow: 0 0 0 3px var(--brand-tint); }
+input[type="text"], input[type="password"], input[type="date"], select, textarea { width: 100%; padding: 12px 16px; border: 1px solid var(--line); border-radius: var(--radius-sm); background: var(--surface); color: var(--ink); transition: all 0.2s; font-size: 15px; }
+input:focus, select:focus { border-color: var(--brand); box-shadow: 0 0 0 3px var(--brand-tint); outline: none; }
 
-/* Custom Sliders for Questionnaire */
-.q-card { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius-sm); padding: 24px; margin-bottom: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.02); }
-.q-header { display: flex; align-items: center; gap: 12px; margin-bottom: 8px; }
-.q-icon { width: 40px; height: 40px; border-radius: 50%; background: var(--brand-tint); color: var(--brand); display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 18px; }
-.q-title { font-size: 16px; font-weight: 700; color: var(--brand-ink); }
-.q-desc { font-size: 13.5px; color: var(--muted); margin-bottom: 20px; padding-left: 52px; }
+/* Custom Radio Buttons for Questionnaire */
+.q-box { margin-bottom: 32px; text-align: left; background: var(--surface); padding: 24px; border-radius: var(--radius-sm); border: 1px solid var(--line2); }
+.q-title { font-size: 16px; font-weight: 700; color: var(--brand-ink); margin-bottom: 6px; }
+.q-desc { font-size: 13.5px; color: var(--muted); margin-bottom: 16px; }
+.radio-group { display: flex; flex-direction: column; gap: 8px; }
+.radio-option { display: flex; align-items: center; padding: 12px 16px; border: 1px solid var(--line); border-radius: 8px; cursor: pointer; transition: all 0.2s; }
+.radio-option:hover { background: var(--surface2); }
+.radio-option input[type="radio"] { margin-right: 12px; accent-color: var(--brand); transform: scale(1.2); }
+.radio-option.selected { border-color: var(--brand); background: var(--brand-tint); }
 
-.slider-wrapper { padding: 16px; background: var(--surface2); border-radius: var(--radius-sm); margin-bottom: 12px; border: 1px dashed var(--line); }
-input[type="range"] { -webkit-appearance: none; width: 100%; height: 8px; background: var(--line); border-radius: 4px; outline: none; margin: 15px 0; }
-input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; width: 22px; height: 22px; background: var(--brand); border-radius: 50%; cursor: pointer; transition: transform 0.1s; box-shadow: 0 2px 4px rgba(0,0,0,0.2); }
-input[type="range"]::-webkit-slider-thumb:hover { transform: scale(1.15); }
-.slider-label { display: flex; justify-content: space-between; font-size: 14px; color: var(--ink); font-weight: 600; }
-.slider-scale { display: flex; justify-content: space-between; font-size: 12px; color: var(--muted); margin-top: -5px; }
+/* Loader */
+.loader-spinner { border: 4px solid var(--line); border-top: 4px solid var(--brand); border-radius: 50%; width: 50px; height: 50px; animation: spin 1s linear infinite; margin: 0 auto 20px auto; }
+@keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+.math-eq { font-family: 'Courier New', Courier, monospace; background: var(--surface2); padding: 12px; border-radius: 8px; text-align: left; font-size: 14px; color: var(--ink); margin-bottom: 8px; }
 
 table { width: 100%; border-collapse: collapse; text-align: left; }
 th { background: var(--surface2); color: var(--brand-ink); font-weight: 600; padding: 16px 24px; border-bottom: 1px solid var(--line); font-size: 14px; white-space: nowrap; }
 td { padding: 16px 24px; border-bottom: 1px solid var(--line2); color: var(--ink); font-size: 14px; white-space: nowrap; }
 tr:hover td { background: var(--surface2); }
-.table-wrapper { width: 100%; overflow-x: auto; background: var(--surface); border-radius: var(--radius); box-shadow: var(--shadow); border: 1px solid var(--line2); }
+.table-wrapper { width: 100%; overflow-x: auto; background: var(--surface); border-radius: var(--radius); box-shadow: var(--shadow); border: 1px solid var(--line); }
 
-.badge { display: inline-flex; align-items: center; padding: 4px 10px; border-radius: 20px; font-size: 12px; font-weight: 600; }
-.badge-earth { background: #F3EBE1; color: var(--earth); }
-.badge-water { background: #E6F2FA; color: var(--water); }
-.badge-wind { background: #E3F5EF; color: var(--wind); }
-.badge-fire { background: #FCEEEA; color: var(--fire); }
+.badge { display: inline-flex; align-items: center; padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 600; }
+.badge-earth { background: rgba(188,166,138,0.15); color: #8A6E4B; }
+.badge-water { background: rgba(120,174,211,0.15); color: #3B78A3; }
+.badge-wind { background: rgba(112,184,156,0.15); color: #358563; }
+.badge-fire { background: rgba(226,143,117,0.15); color: #B34B2E; }
 
 .dash-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
 .stat-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; margin-bottom: 32px; }
-.stat-card { background: var(--surface); padding: 24px; border-radius: var(--radius); box-shadow: var(--shadow); border: 1px solid var(--line2); }
-.stat-val { font-size: 32px; font-weight: 700; color: var(--brand); line-height: 1.2; }
+.stat-card { background: var(--surface); padding: 24px; border-radius: var(--radius); box-shadow: var(--shadow); border: 1px solid var(--line); text-align: center; }
+.stat-val { font-size: 36px; font-weight: 700; color: var(--brand); line-height: 1.2; }
 .stat-lbl { font-size: 14px; color: var(--muted); margin-top: 8px; }
 
-.patient-layout { display: grid; grid-template-columns: 340px 1fr; gap: 24px; align-items: flex-start; }
-
-#login-screen { position: fixed; inset: 0; background: var(--brand-ink); display: flex; align-items: center; justify-content: center; z-index: 999; padding: 20px; }
-.login-box { background: #FFF; width: 100%; max-width: 420px; padding: 48px; border-radius: 24px; box-shadow: 0 20px 40px rgba(0,0,0,0.4); }
+#login-screen { position: fixed; inset: 0; background: var(--bg); display: flex; align-items: center; justify-content: center; z-index: 999; padding: 20px; }
+.login-box { background: var(--surface); width: 100%; max-width: 400px; padding: 48px; border-radius: 24px; box-shadow: 0 20px 40px rgba(0,0,0,0.05); border: 1px solid var(--line); }
 .auth-tabs { display: flex; margin-bottom: 24px; border-bottom: 1px solid var(--line); }
 .auth-tab { flex: 1; padding: 12px; border: none; background: none; cursor: pointer; color: var(--muted); font-weight: 600; text-align: center; border-bottom: 3px solid transparent; }
 .auth-tab.active { color: var(--brand); border-bottom-color: var(--brand); }
 
-.info-box { background: var(--info-bg); border-left: 4px solid var(--info); padding: 16px 20px; border-radius: 0 var(--radius-sm) var(--radius-sm) 0; margin-bottom: 24px; }
-.info-box h4 { color: var(--info); margin-bottom: 8px; font-size: 15px; display: flex; align-items: center; gap: 6px; }
-.info-box p { font-size: 13.5px; color: var(--ink); margin: 0; line-height: 1.6; }
-
 @media (max-width: 1024px) {
   .stat-row { grid-template-columns: repeat(2, 1fr); }
-  .dash-grid, .patient-layout { grid-template-columns: 1fr; }
-  #nav-bar { width: 220px; }
-  #view { padding: 24px; }
+  .dash-grid { grid-template-columns: 1fr; }
+  #nav-bar { width: 200px; }
 }
 @media (max-width: 768px) {
-  body { font-size: 14px; }
-  #app-bar { flex-direction: column; height: auto; padding: 12px 16px; gap: 12px; align-items: center; text-align: center; }
-  .brand-title { font-size: 16px; flex-direction: column; gap: 8px; }
-  .user-badge { width: 100%; justify-content: center; flex-wrap: wrap; }
+  #app-bar { flex-direction: column; height: auto; padding: 12px 16px; gap: 12px; }
+  .brand-title { font-size: 16px; }
   #main-container { flex-direction: column; padding-bottom: 70px; } 
-  #nav-bar {
-    position: fixed; bottom: 0; left: 0; width: 100%; height: auto;
-    flex-direction: row; justify-content: space-between; padding: 8px 5px;
-    border-right: none; border-top: 1px solid var(--line);
-    background: var(--surface); z-index: 999; box-shadow: 0 -2px 10px rgba(0,0,0,0.05);
-  }
+  #nav-bar { position: fixed; bottom: 0; left: 0; width: 100%; height: auto; flex-direction: row; justify-content: space-between; padding: 8px 5px; border-right: none; border-top: 1px solid var(--line); z-index: 999; box-shadow: 0 -2px 10px rgba(0,0,0,0.02); }
   #nav-bar a { flex-direction: column; padding: 6px; margin: 0; gap: 4px; font-size: 10px; flex: 1; text-align: center; justify-content: center; }
   #nav-bar a svg { margin: 0 auto; width: 22px; height: 22px; }
   #view { padding: 16px; }
-  .page-head h1 { font-size: 20px; }
-  .card { padding: 20px 16px; }
-  .login-box { padding: 32px 24px; }
-  .btn { width: 100%; }
-  .q-desc { padding-left: 0; margin-top: 10px; }
+  .card-minimal { padding: 24px; }
 }
 </style>
 </head>
@@ -152,624 +137,491 @@ tr:hover td { background: var(--surface2); }
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
+  // Supabase & State Init
   const SUPABASE_URL = 'https://warkpuitktomlpsxfyls.supabase.co';
   const SUPABASE_KEY = 'sb_publishable_B0P20i1nNSuGtRHqCUcBmQ_hKspTQOl';
-  let sb = null;
-  let IS_ONLINE = false;
+  let sb = null; let IS_ONLINE = false;
   try { sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY); } catch(e) {}
-</script>
 
-<script>
-// ==========================================
-// 1. CORE STATE & DATA ISOLATION
-// ==========================================
-const store = {
-  get(k, d) { try { const v=localStorage.getItem(k); return v?JSON.parse(v):d; } catch(e){ return d; } },
-  set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch(e){} }
-};
+  const store = {
+    get(k, d) { try { const v=localStorage.getItem(k); return v?JSON.parse(v):d; } catch(e){ return d; } },
+    set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch(e){} }
+  };
 
-const DB = {
-  session() { return store.get('rtle_session', null); },
-  saveSession(s) { store.set('rtle_session', s); },
-  
-  async patients() {
-    const user = this.session()?.user || 'guest';
-    if (IS_ONLINE) { try { const { data } = await sb.from('patients').select('*').order('hn', { ascending: true }); if (data) return data; } catch(e) {} }
-    return store.get(`rtle_patients_${user}`, []);
-  },
-  async savePatients(pList) {
-    const user = this.session()?.user || 'guest';
-    store.set(`rtle_patients_${user}`, pList);
-    if (IS_ONLINE) { try { for(let p of pList) { await sb.from('patients').upsert(p); } } catch(e) {} }
-  },
-  async assessments() {
-    const user = this.session()?.user || 'guest';
-    if (IS_ONLINE) { try { const { data } = await sb.from('assessments').select('*').order('created_at', { ascending: false }); if (data) return data.map(r => ({ ...r.data, id: r.id })); } catch(e) {} }
-    return store.get(`rtle_assessments_${user}`, []);
-  },
-  async saveAssessments(updatedList) {
-    const user = this.session()?.user || 'guest';
-    store.set(`rtle_assessments_${user}`, updatedList);
-    const latest = updatedList[0];
-    if (IS_ONLINE && latest) { try { await sb.from('assessments').insert({ id: latest.id, hn: latest.hn, name: latest.name, rsi: latest.rsi, data: latest }); } catch(e) {} }
+  const DB = {
+    session() { return store.get('rtle_session', null); },
+    saveSession(s) { store.set('rtle_session', s); },
+    async patients() {
+      const user = this.session()?.user || 'guest';
+      if (IS_ONLINE) { try { const { data } = await sb.from('patients').select('*').order('hn', { ascending: true }); if (data) return data; } catch(e) {} }
+      return store.get(`rtle_patients_${user}`, []);
+    },
+    async savePatients(pList) {
+      const user = this.session()?.user || 'guest';
+      store.set(`rtle_patients_${user}`, pList);
+      if (IS_ONLINE) { try { for(let p of pList) { await sb.from('patients').upsert(p); } } catch(e) {} }
+    },
+    async assessments() {
+      const user = this.session()?.user || 'guest';
+      if (IS_ONLINE) { try { const { data } = await sb.from('assessments').select('*').order('created_at', { ascending: false }); if (data) return data.map(r => ({ ...r.data, id: r.id })); } catch(e) {} }
+      return store.get(`rtle_assessments_${user}`, []);
+    },
+    async saveAssessments(updatedList) {
+      const user = this.session()?.user || 'guest';
+      store.set(`rtle_assessments_${user}`, updatedList);
+      const latest = updatedList[0];
+      if (IS_ONLINE && latest) { try { await sb.from('assessments').insert({ id: latest.id, hn: latest.hn, name: latest.name, rsi: latest.rsi, data: latest }); } catch(e) {} }
+    }
+  };
+
+  let CURRENT_ROUTE = 'dashboard';
+  let CURRENT_PATIENT = null;
+  let ASSESS_STEP = 1;
+  let LAST_RESULT = null;
+  let AUTH_MODE = 'login';
+
+  const $ = (sel) => document.querySelector(sel);
+  function getElKey(s) { return s?s.includes('ดิน')?'earth':s.includes('น้ำ')?'water':s.includes('ลม')?'wind':s.includes('ไฟ')?'fire':'earth':'earth'; }
+  function uid(p='') { return p + Math.random().toString(36).substring(2,9); }
+
+  async function checkConnection() {
+    if(!sb) return false;
+    try { const { error } = await sb.from('patients').select('id').limit(1); if(!error) IS_ONLINE = true; } catch(e) { IS_ONLINE = false; }
+    const el = document.getElementById('connection-status');
+    if(el) {
+      if(IS_ONLINE) { el.className = 'status-pill online'; el.innerHTML = '<div class="status-dot"></div> ออนไลน์'; } 
+      else { el.className = 'status-pill offline'; el.innerHTML = '<div class="status-dot"></div> ออฟไลน์'; }
+    }
+    return IS_ONLINE;
   }
-};
 
-let CURRENT_ROUTE = 'dashboard';
-let CURRENT_PATIENT = null;
-let ASSESS_STEP = 1;
-let LAST_RESULT = null;
-let AUTH_MODE = 'login';
-
-const $ = (sel) => document.querySelector(sel);
-function getElKey(s) { return s?s.includes('ดิน')?'earth':s.includes('น้ำ')?'water':s.includes('ลม')?'wind':s.includes('ไฟ')?'fire':'earth':'earth'; }
-function uid(p='') { return p + Math.random().toString(36).substring(2,9); }
-
-async function checkConnection() {
-  if(!sb) return false;
-  try { const { error } = await sb.from('patients').select('id').limit(1); if(!error) IS_ONLINE = true; } catch(e) { IS_ONLINE = false; }
-  const el = document.getElementById('connection-status');
-  if(el) {
-    if(IS_ONLINE) { el.className = 'status-pill online'; el.innerHTML = '<div class="status-dot"></div> ออนไลน์'; } 
-    else { el.className = 'status-pill offline'; el.innerHTML = '<div class="status-dot"></div> ออฟไลน์'; }
+  // Auth
+  function setAuthMode(mode) {
+    AUTH_MODE = mode;
+    document.querySelectorAll('.auth-tab').forEach(t => t.classList.remove('active'));
+    $(`#tab-${mode}`).classList.add('active');
+    $('#btn-auth').textContent = mode === 'login' ? 'เข้าสู่ระบบ' : 'ลงทะเบียนและเข้าใช้';
   }
-  return IS_ONLINE;
-}
-
-// ==========================================
-// 2. AUTHENTICATION (REGISTER & LOGIN)
-// ==========================================
-function setAuthMode(mode) {
-  AUTH_MODE = mode;
-  document.querySelectorAll('.auth-tab').forEach(t => t.classList.remove('active'));
-  $(`#tab-${mode}`).classList.add('active');
-  $('#btn-auth').textContent = mode === 'login' ? 'เข้าสู่ระบบ' : 'ลงทะเบียนและเข้าใช้';
-}
-
-function handleAuth(e) {
-  e.preventDefault();
-  const u = $('#login-user').value.trim();
-  const p = $('#login-pass').value.trim();
-  let users = store.get('rtle_users', { 'admin': '1234' });
-
-  if (AUTH_MODE === 'register') {
-    if (users[u]) return alert('ชื่อผู้ใช้งานนี้มีผู้อื่นใช้แล้วครับ');
-    users[u] = p;
-    store.set('rtle_users', users);
-    alert('ลงทะเบียนสำเร็จแล้วครับ');
-  } else {
-    if (users[u] !== p) return alert('ชื่อผู้ใช้งานหรือรหัสผ่านไม่ถูกต้อง');
+  function handleAuth(e) {
+    e.preventDefault();
+    const u = $('#login-user').value.trim(); const p = $('#login-pass').value.trim();
+    let users = store.get('rtle_users', { 'admin': '1234' });
+    if (AUTH_MODE === 'register') {
+      if (users[u]) return alert('ชื่อผู้ใช้งานนี้มีผู้อื่นใช้แล้วครับ');
+      users[u] = p; store.set('rtle_users', users); alert('ลงทะเบียนสำเร็จ');
+    } else {
+      if (users[u] !== p) return alert('รหัสผ่านไม่ถูกต้อง');
+    }
+    DB.saveSession({ user: u }); initApp();
   }
-  
-  DB.saveSession({ user: u });
-  initApp();
-}
+  function handleLogout() { DB.saveSession(null); initApp(); }
 
-function handleLogout() { DB.saveSession(null); initApp(); }
+  // Navigation
+  async function go(route) {
+    CURRENT_ROUTE = route;
+    document.querySelectorAll('#nav-bar a').forEach(a => { a.classList.toggle('active', a.getAttribute('onclick').includes(`'${route}'`)); });
+    const renderMap = { dashboard: renderDashboard, patients: renderPatients, assess: renderAssess, records: renderRecords };
+    if (renderMap[route]) await renderMap[route]();
+    document.getElementById('view').scrollTop = 0;
+  }
 
-// ==========================================
-// 3. NAVIGATION & RENDERING
-// ==========================================
-async function go(route) {
-  CURRENT_ROUTE = route;
-  document.querySelectorAll('#nav-bar a').forEach(a => { a.classList.toggle('active', a.getAttribute('onclick').includes(`'${route}'`)); });
-  const renderMap = { dashboard: renderDashboard, patients: renderPatients, assess: renderAssess, records: renderRecords };
-  if (renderMap[route]) await renderMap[route]();
-  document.getElementById('view').scrollTop = 0;
-}
+  async function renderDashboard() {
+    const A = await DB.assessments(); const P = await DB.patients();
+    const todayCount = A.filter(a => new Date(a.date).toDateString() === new Date().toDateString()).length;
+    let avgRSI = A.length ? A.reduce((s,a) => s + (a.rsi||0), 0) / A.length : 100;
 
-async function renderDashboard() {
-  const A = await DB.assessments(); const P = await DB.patients();
-  const todayCount = A.filter(a => new Date(a.date).toDateString() === new Date().toDateString()).length;
-  let avgRSI = A.length ? A.reduce((s,a) => s + (a.rsi||0), 0) / A.length : 100;
-
-  $('#view').innerHTML = `
-    <div class="page-head">
-      <div>
-        <h1>ระบบสารสนเทศแพทย์แผนไทยบริการต้นแบบ (RTLE-HIS)</h1>
-        <p>ยินดีต้อนรับเข้าสู่ระบบคำนวณดัชนีชี้วัดสภาวะความสมดุลธาตุเชิงปริมาณ</p>
+    $('#view').innerHTML = `
+      <div class="page-head">
+        <div><h1>ภาพรวมระบบ (Dashboard)</h1><p>ระบบสารสนเทศแพทย์แผนไทยบริการต้นแบบ (RTLE-HIS)</p></div>
+        <button class="btn" onclick="ASSESS_STEP=1;go('assess')">+ เริ่มประเมินพฤติกรรม</button>
       </div>
-      <button class="btn" onclick="ASSESS_STEP=1;go('assess')">เริ่มจำลองพฤติกรรม</button>
-    </div>
-    <div class="stat-row">
-      <div class="stat-card"><div class="stat-val">${P.length}</div><div class="stat-lbl">ผู้ป่วยในระบบ</div></div>
-      <div class="stat-card"><div class="stat-val">${A.length}</div><div class="stat-lbl">ประวัติการตรวจ</div></div>
-      <div class="stat-card"><div class="stat-val">${todayCount}</div><div class="stat-lbl">คัดกรองวันนี้</div></div>
-      <div class="stat-card"><div class="stat-val" style="color:var(--brand2)">${avgRSI.toFixed(1)}%</div><div class="stat-lbl">RSI เฉลี่ยรวม</div></div>
-    </div>
-    <div class="dash-grid">
-      <div class="card" style="padding:0;">
-        <h3 style="margin:20px; color:var(--brand-ink)">ผู้ป่วยล่าสุด</h3>
-        <div class="table-wrapper" style="border:0; box-shadow:none;">
-          <table>
-            <thead><tr><th>HN</th><th>ชื่อ-สกุล</th><th>ธาตุเกิด</th></tr></thead>
-            <tbody>
-              ${P.slice(-4).reverse().map(p => `<tr><td><code style="font-family:monospace">${p.hn}</code></td><td style="font-weight:600">${p.name}</td><td><span class="badge badge-${getElKey(p.constitution)}">${p.constitution}</span></td></tr>`).join('')}
-            </tbody>
-          </table>
-        </div>
+      <div class="stat-row">
+        <div class="stat-card"><div class="stat-val">${P.length}</div><div class="stat-lbl">ผู้ป่วยทั้งหมด</div></div>
+        <div class="stat-card"><div class="stat-val">${A.length}</div><div class="stat-lbl">ประวัติการตรวจ</div></div>
+        <div class="stat-card"><div class="stat-val">${todayCount}</div><div class="stat-lbl">ตรวจวันนี้</div></div>
+        <div class="stat-card"><div class="stat-val" style="color:var(--brand2)">${avgRSI.toFixed(1)}%</div><div class="stat-lbl">สุขภาพเฉลี่ยรวม</div></div>
       </div>
-      <div class="card" style="padding:0;">
-        <h3 style="margin:20px; color:var(--brand-ink)">ผลประเมินล่าสุด</h3>
-        <div class="table-wrapper" style="border:0; box-shadow:none;">
-          <table>
-            <thead><tr><th>ชื่อ-สกุล</th><th>RSI</th><th>สถานะวิกฤต</th></tr></thead>
-            <tbody>
-              ${A.slice(0,3).map(a => `<tr><td>${a.name}</td><td><code style="font-weight:600;color:var(--brand2)">${(a.rsi || 0).toFixed(1)}%</code></td><td>${a.dominantTh}</td></tr>`).join('')}
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </div>
-  `;
-}
-
-async function renderPatients() {
-  const P = await DB.patients();
-  $('#view').innerHTML = `
-    <div class="page-head"><div><h1>ทะเบียนประวัติผู้ป่วย</h1></div></div>
-    <div class="patient-layout">
-      <div class="card">
-        <h3 style="margin-bottom:20px;color:var(--brand-ink)">ลงทะเบียนใหม่</h3>
-        <form id="form-patient" onsubmit="savePatient(event)">
-          <input type="hidden" id="p-id">
-          <div class="form-group"><label>HN</label><input type="text" id="p-hn" required></div>
-          <div class="form-group"><label>ชื่อ - นามสกุล</label><input type="text" id="p-name" required></div>
-          <div class="form-group"><label>วันเกิด</label><input type="date" id="p-birth" required onchange="autoCalcConstitution()"></div>
-          <div class="form-group"><label>ธาตุเกิด</label>
-            <select id="p-constitution">
-              <option value="ดิน">ดิน (มี.ค.-พ.ค.)</option><option value="น้ำ">น้ำ (มิ.ย.-ส.ค.)</option>
-              <option value="ลม">ลม (ก.ย.-พ.ย.)</option><option value="ไฟ">ไฟ (ธ.ค.-ก.พ.)</option>
-            </select>
+      <div class="dash-grid">
+        <div class="card" style="padding:0;">
+          <h3 style="margin:24px; color:var(--brand-ink); font-size:16px;">ผู้ป่วยล่าสุด</h3>
+          <div class="table-wrapper" style="border:0; box-shadow:none;">
+            <table>
+              <thead><tr><th>HN</th><th>ชื่อ-สกุล</th><th>ธาตุเกิด</th></tr></thead>
+              <tbody>
+                ${P.slice(-4).reverse().map(p => `<tr><td><code>${p.hn}</code></td><td>${p.name}</td><td><span class="badge badge-${getElKey(p.constitution)}">${p.constitution}</span></td></tr>`).join('')}
+              </tbody>
+            </table>
           </div>
-          <div style="display:flex;gap:12px;margin-top:20px"><button type="submit" class="btn" style="flex:1">บันทึก</button><button type="button" class="btn btn-sec" onclick="resetPatientForm()">เคลียร์</button></div>
-        </form>
-      </div>
-      <div class="card" style="padding:0;">
-        <div class="table-wrapper" style="border:0; box-shadow:none;">
-          <table>
-            <thead><tr><th>HN</th><th>ชื่อ-สกุล</th><th>ธาตุเกิด</th><th>จัดการ</th></tr></thead>
-            <tbody>
-              ${P.map(p => `<tr><td>${p.hn}</td><td style="font-weight:600">${p.name}</td><td><span class="badge badge-${getElKey(p.constitution)}">${p.constitution}</span></td><td>
-                <button class="btn btn-sec" style="padding:4px 8px;font-size:12px" onclick="startAssessFor('${p.id}')">ประเมิน</button>
-              </td></tr>`).join('')}
-            </tbody>
-          </table>
+        </div>
+        <div class="card" style="padding:0;">
+          <h3 style="margin:24px; color:var(--brand-ink); font-size:16px;">ผลประเมินล่าสุด</h3>
+          <div class="table-wrapper" style="border:0; box-shadow:none;">
+            <table>
+              <thead><tr><th>ชื่อ-สกุล</th><th>ดัชนีสุขภาพ</th><th>คำแนะนำ</th></tr></thead>
+              <tbody>
+                ${A.slice(0,4).map(a => `<tr><td>${a.name}</td><td><b style="color:var(--brand2)">${(a.rsi || 0).toFixed(0)}%</b></td><td style="color:var(--muted); font-size:13px;">${a.dominantTh.substring(0,25)}...</td></tr>`).join('')}
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
-    </div>
-  `;
-}
+    `;
+  }
 
-function autoCalcConstitution() {
-  const m = new Date($('#p-birth').value).getMonth() + 1;
-  $('#p-constitution').value = [6,7,8].includes(m) ? 'น้ำ' : [9,10,11].includes(m) ? 'ลม' : [12,1,2].includes(m) ? 'ไฟ' : 'ดิน';
-}
-
-async function savePatient(e) {
-  e.preventDefault();
-  const P = await DB.patients();
-  const p = { id:$('#p-id').value||uid('p_'), hn:$('#p-hn').value, name:$('#p-name').value, birth:$('#p-birth').value, constitution:$('#p-constitution').value };
-  const idx = P.findIndex(x=>x.id===p.id);
-  if(idx > -1) P[idx] = p; else P.push(p);
-  await DB.savePatients(P);
-  resetPatientForm();
-  await renderPatients();
-}
-
-function resetPatientForm() { $('#p-id').value = ''; $('#form-patient').reset(); }
-
-// ==========================================
-// 4. ASSESSMENT MODULE (DETAILED THEORY & RESULT)
-// ==========================================
-async function renderAssess() {
-  $('#view').innerHTML = `<div class="page-head"><div><h1>จำลองแบบจำลองเชิงปริมาณ (RTLE Model)</h1></div></div><div id="assess-content"></div>`;
-  if(ASSESS_STEP === 1) await renderAssessStep1();
-  else if(ASSESS_STEP === 2) renderAssessStep2();
-  else if(ASSESS_STEP === 3) renderAssessStep3();
-}
-
-function startAssessFor(id) { DB.patients().then(l => { CURRENT_PATIENT = l.find(x=>x.id===id); ASSESS_STEP = 2; go('assess'); }); }
-function selectPatientForAssess(id) { if(!id){CURRENT_PATIENT=null;return;} DB.patients().then(l => CURRENT_PATIENT = l.find(x=>x.id===id)); }
-
-async function renderAssessStep1() {
-  const P = await DB.patients();
-  $('#assess-content').innerHTML = `
-    <div class="card" style="max-width:560px;margin:0 auto">
-      <h3 style="margin-bottom:20px;text-align:center;color:var(--brand-ink);">1. ค้นหาผู้ป่วยจากระบบ</h3>
-      <div class="form-group">
-        <select id="select-assess-p" onchange="selectPatientForAssess(this.value)">
-          <option value="">-- เลือกประวัติผู้ป่วย --</option>
-          ${P.map(p => `<option value="${p.id}" ${CURRENT_PATIENT&&CURRENT_PATIENT.id===p.id?'selected':''}>${p.hn} — ${p.name} (${p.constitution})</option>`).join('')}
-        </select>
+  async function renderPatients() {
+    const P = await DB.patients();
+    $('#view').innerHTML = `
+      <div class="page-head"><div><h1>ทะเบียนประวัติผู้ป่วย</h1></div></div>
+      <div style="display:grid; grid-template-columns: 320px 1fr; gap: 24px; align-items: start;">
+        <div class="card">
+          <h3 style="margin-bottom:20px; font-size:16px;">ลงทะเบียนใหม่</h3>
+          <form onsubmit="savePatient(event)">
+            <input type="hidden" id="p-id">
+            <div class="form-group"><label>HN</label><input type="text" id="p-hn" required></div>
+            <div class="form-group"><label>ชื่อ - นามสกุล</label><input type="text" id="p-name" required></div>
+            <div class="form-group"><label>วันเกิด (เพื่อคำนวณธาตุ)</label><input type="date" id="p-birth" required onchange="autoCalcConstitution()"></div>
+            <div class="form-group"><label>ธาตุเกิด</label>
+              <select id="p-constitution">
+                <option value="ดิน">ดิน (มี.ค.-พ.ค.)</option><option value="น้ำ">น้ำ (มิ.ย.-ส.ค.)</option>
+                <option value="ลม">ลม (ก.ย.-พ.ย.)</option><option value="ไฟ">ไฟ (ธ.ค.-ก.พ.)</option>
+              </select>
+            </div>
+            <div style="display:flex;gap:12px;margin-top:24px"><button type="submit" class="btn" style="flex:1">บันทึก</button><button type="button" class="btn btn-sec" onclick="resetPatientForm()">เคลียร์</button></div>
+          </form>
+        </div>
+        <div class="card" style="padding:0;">
+          <div class="table-wrapper" style="border:0; box-shadow:none;">
+            <table>
+              <thead><tr><th>HN</th><th>ชื่อ-สกุล</th><th>ธาตุเกิด</th><th>จัดการ</th></tr></thead>
+              <tbody>
+                ${P.map(p => `<tr><td>${p.hn}</td><td>${p.name}</td><td><span class="badge badge-${getElKey(p.constitution)}">${p.constitution}</span></td><td>
+                  <button class="btn btn-sec" style="padding:6px 12px; font-size:12px;" onclick="startAssessFor('${p.id}')">ทำแบบประเมิน</button>
+                </td></tr>`).join('')}
+              </tbody>
+            </table>
+          </div>
+        </div>
       </div>
-      
-      <div style="text-align:center; margin:32px 0; position:relative;">
-        <hr style="border:0; border-top:1px dashed var(--line); position:absolute; top:50%; width:100%; z-index:1;">
-        <span style="background:var(--surface); padding:0 16px; position:relative; z-index:2; color:var(--muted); font-size:14px; font-weight:600;">หรือ ตรวจด่วน (ไม่เซฟลงทะเบียน)</span>
-      </div>
+    `;
+  }
 
-      <div style="background:var(--surface2); padding:24px; border-radius:var(--radius-sm); border:1px solid var(--line);">
-        <div class="form-group"><label>รหัสคนไข้ (HN) - ถ้ามี</label><input type="text" id="raw-hn" placeholder="เช่น HN-9999 หรือเว้นว่างไว้"></div>
-        <div class="form-group"><label>ชื่อ-นามสกุล *</label><input type="text" id="raw-name" placeholder="ระบุชื่อผู้รับการตรวจ"></div>
-        <div class="form-group"><label>วันเดือนปีเกิด (เพื่อคำนวณธาตุ) *</label><input type="date" id="raw-birth" onchange="autoCalcRawConstitution()"></div>
-        <div class="form-group" style="margin-bottom:0;"><label>ธาตุเจ้าเรือนเกิด *</label>
-          <select id="raw-constitution">
-            <option value="ไม่ได้ระบุ">-- เลือกระบุธาตุ (หรือใส่วันเกิดด้านบน) --</option>
-            <option value="ดิน">ดิน (เกิด มี.ค. - พ.ค.)</option><option value="น้ำ">น้ำ (เกิด มิ.ย. - ส.ค.)</option>
-            <option value="ลม">ลม (เกิด ก.ย. - พ.ย.)</option><option value="ไฟ">ไฟ (เกิด ธ.ค. - ก.พ.)</option>
+  function autoCalcConstitution() {
+    const m = new Date($('#p-birth').value).getMonth() + 1;
+    $('#p-constitution').value = [6,7,8].includes(m) ? 'น้ำ' : [9,10,11].includes(m) ? 'ลม' : [12,1,2].includes(m) ? 'ไฟ' : 'ดิน';
+  }
+  async function savePatient(e) {
+    e.preventDefault(); const P = await DB.patients();
+    const p = { id:$('#p-id').value||uid('p_'), hn:$('#p-hn').value, name:$('#p-name').value, birth:$('#p-birth').value, constitution:$('#p-constitution').value };
+    const idx = P.findIndex(x=>x.id===p.id); if(idx > -1) P[idx] = p; else P.push(p);
+    await DB.savePatients(P); resetPatientForm(); await renderPatients();
+  }
+  function resetPatientForm() { $('#p-id').value = ''; document.querySelector('form').reset(); }
+
+  // Assessment
+  async function renderAssess() {
+    $('#view').innerHTML = `<div class="page-head" style="justify-content:center; text-align:center;"><div><h1>ประเมินสภาวะธาตุตามพฤติกรรม</h1></div></div><div id="assess-content"></div>`;
+    if(ASSESS_STEP === 1) await renderAssessStep1();
+    else if(ASSESS_STEP === 2) renderAssessStep2();
+    else if(ASSESS_STEP === 'processing') renderAssessProcessing();
+    else if(ASSESS_STEP === 3) renderAssessStep3();
+  }
+
+  function startAssessFor(id) { DB.patients().then(l => { CURRENT_PATIENT = l.find(x=>x.id===id); ASSESS_STEP = 2; go('assess'); }); }
+  function selectPatientForAssess(id) { if(!id){CURRENT_PATIENT=null;return;} DB.patients().then(l => CURRENT_PATIENT = l.find(x=>x.id===id)); }
+
+  async function renderAssessStep1() {
+    const P = await DB.patients();
+    $('#assess-content').innerHTML = `
+      <div class="card-minimal">
+        <h3 style="margin-bottom:24px; font-size:18px;">1. เลือกผู้รับการประเมิน</h3>
+        <div class="form-group">
+          <select id="select-assess-p" onchange="selectPatientForAssess(this.value)" style="text-align:center;">
+            <option value="">-- เลือกจากประวัติผู้ป่วย --</option>
+            ${P.map(p => `<option value="${p.id}" ${CURRENT_PATIENT&&CURRENT_PATIENT.id===p.id?'selected':''}>${p.hn} — ${p.name} (${p.constitution})</option>`).join('')}
           </select>
         </div>
+        <div style="margin:32px 0; color:var(--line); border-top:1px solid; position:relative;">
+          <span style="background:var(--surface); padding:0 16px; position:absolute; top:-12px; left:50%; transform:translateX(-50%); color:var(--muted); font-size:13px;">หรือตรวจด่วน (ไม่เซฟประวัติ)</span>
+        </div>
+        <div style="text-align:left;">
+          <div class="form-group"><input type="text" id="raw-name" placeholder="ชื่อ-นามสกุล"></div>
+          <div class="form-group"><select id="raw-constitution">
+            <option value="ไม่ได้ระบุ">-- เลือกธาตุเจ้าเรือน --</option>
+            <option value="ดิน">ดิน</option><option value="น้ำ">น้ำ</option><option value="ลม">ลม</option><option value="ไฟ">ไฟ</option>
+          </select></div>
+        </div>
+        <button class="btn" style="width:100%; margin-top:16px;" onclick="submitStep1()">ไปทำแบบสอบถาม</button>
       </div>
-      <button class="btn" style="width:100%;margin-top:24px;padding:14px;" onclick="submitStep1()">ถัดไป: ทำแบบประเมินพฤติกรรม</button>
-    </div>
-  `;
-}
-
-function autoCalcRawConstitution() {
-  const bVal = $('#raw-birth').value; if(!bVal) return;
-  const m = new Date(bVal).getMonth() + 1;
-  $('#raw-constitution').value = [6,7,8].includes(m) ? 'น้ำ' : [9,10,11].includes(m) ? 'ลม' : [12,1,2].includes(m) ? 'ไฟ' : 'ดิน';
-}
-
-function submitStep1() {
-  if(!CURRENT_PATIENT) {
-    const name = $('#raw-name').value; const hn = $('#raw-hn').value || 'ไม่มี HN'; const constitution = $('#raw-constitution').value;
-    if(!name) { alert('กรุณาระบุชื่อผู้รับการตรวจด้วยครับ'); return; }
-    if(constitution === 'ไม่ได้ระบุ') { alert('กรุณาระบุ "วันเกิด" หรือเลือก "ธาตุเจ้าเรือนเกิด" ครับ'); return; }
-    CURRENT_PATIENT = { id: uid('raw_'), hn: hn, name: name, constitution: constitution };
-  }
-  ASSESS_STEP = 2; renderAssess();
-}
-
-// =========================================================
-// ปรับปรุง UI หน้าแบบสอบถามให้สวยงาม อ่านง่าย เหมือนฟอร์มมาตรฐาน
-// =========================================================
-function renderAssessStep2() {
-  $('#assess-content').innerHTML = `
-    <div class="card" style="padding:16px 20px; background:var(--brand-tint); margin-bottom:20px; border:1px solid var(--brand); display:flex; justify-content:space-between; align-items:center;">
-      <div><b>ผู้รับการตรวจ:</b> ${CURRENT_PATIENT.name} <span style="color:var(--muted); font-size:13px; margin-left:8px;">(HN: ${CURRENT_PATIENT.hn})</span></div>
-      <div><span class="badge badge-${getElKey(CURRENT_PATIENT.constitution)}">ธาตุเจ้าเรือน: ${CURRENT_PATIENT.constitution}</span></div>
-    </div>
-    
-    <div style="margin-bottom:24px;">
-      <h3 style="color:var(--brand-ink);">แบบประเมินพฤติกรรมสุขภาพ (SEFA)</h3>
-      <p style="color:var(--muted); font-size:14px;">โปรดเลื่อนแถบเพื่อระบุระดับพฤติกรรมของท่าน (0 = น้อยที่สุด/แย่ที่สุด, 1 = มากที่สุด/ดีที่สุด) โดยเปรียบเทียบระหว่าง "สิ่งที่ทำจริงในปัจจุบัน" และ "สิ่งที่ตั้งใจ/คาดหวังในอุดมคติ"</p>
-    </div>
-
-    <div class="q-card">
-      <div class="q-header">
-        <div class="q-icon">S</div>
-        <div class="q-title">พฤติกรรมการนอนหลับพักผ่อน (Sleep)</div>
-      </div>
-      <div class="q-desc">ความสม่ำเสมอของการนอนหลับ ระยะเวลาที่เพียงพอ และความรู้สึกสดชื่นหลังตื่นนอน</div>
-      
-      <div class="slider-wrapper">
-        <div class="slider-label"><span>พฤติกรรมปัจจุบัน (Current)</span><span id="v-s" style="font-family:monospace; color:var(--brand-ink);">0.50</span></div>
-        <input type="range" id="b-s" min="0" max="1" step="0.01" value="0.50" oninput="$('#v-s').textContent=Number(this.value).toFixed(2)">
-        <div class="slider-scale"><span>0 (นอนหลับยาก/พักผ่อนน้อยมาก)</span><span>1 (หลับลึก/ตื่นมาสดชื่นสมบูรณ์)</span></div>
-      </div>
-      
-      <div class="slider-wrapper" style="background:#fff; border-color:var(--brand); border-style:solid;">
-        <div class="slider-label"><span>เป้าหมายในอุดมคติ (Ideal)</span><span id="vi-s" style="font-family:monospace; color:var(--brand);">0.80</span></div>
-        <input type="range" id="bi-s" min="0" max="1" step="0.01" value="0.80" oninput="$('#vi-s').textContent=Number(this.value).toFixed(2)">
-        <div class="slider-scale"><span>เป้าหมายขั้นต่ำ</span><span>เป้าหมายสูงสุด</span></div>
-      </div>
-    </div>
-
-    <div class="q-card">
-      <div class="q-header">
-        <div class="q-icon">E</div>
-        <div class="q-title">การออกกำลังกายและการขยับกาย (Exercise)</div>
-      </div>
-      <div class="q-desc">ความถี่ในการออกกำลังกาย การบริหารร่างกายให้เหงื่อออก หรือการเคลื่อนไหวระหว่างวัน</div>
-      
-      <div class="slider-wrapper">
-        <div class="slider-label"><span>พฤติกรรมปัจจุบัน (Current)</span><span id="v-e" style="font-family:monospace; color:var(--brand-ink);">0.30</span></div>
-        <input type="range" id="b-e" min="0" max="1" step="0.01" value="0.30" oninput="$('#v-e').textContent=Number(this.value).toFixed(2)">
-        <div class="slider-scale"><span>0 (ไม่ออกกำลังกายเลย/นั่งนิ่งๆ)</span><span>1 (ออกกำลังกายสม่ำเสมอ/แข็งแรงมาก)</span></div>
-      </div>
-      
-      <div class="slider-wrapper" style="background:#fff; border-color:var(--brand); border-style:solid;">
-        <div class="slider-label"><span>เป้าหมายในอุดมคติ (Ideal)</span><span id="vi-e" style="font-family:monospace; color:var(--brand);">0.50</span></div>
-        <input type="range" id="bi-e" min="0" max="1" step="0.01" value="0.50" oninput="$('#vi-e').textContent=Number(this.value).toFixed(2)">
-        <div class="slider-scale"><span>เป้าหมายขั้นต่ำ</span><span>เป้าหมายสูงสุด</span></div>
-      </div>
-    </div>
-
-    <div class="q-card">
-      <div class="q-header">
-        <div class="q-icon">F</div>
-        <div class="q-title">พฤติกรรมการรับประทานอาหาร (Food)</div>
-      </div>
-      <div class="q-desc">การเลือกทานอาหารที่มีประโยชน์ ตรงเวลา ทานตามหลักรสยา และงดเว้นของแสลง</div>
-      
-      <div class="slider-wrapper">
-        <div class="slider-label"><span>พฤติกรรมปัจจุบัน (Current)</span><span id="v-f" style="font-family:monospace; color:var(--brand-ink);">0.60</span></div>
-        <input type="range" id="b-f" min="0" max="1" step="0.01" value="0.60" oninput="$('#v-f').textContent=Number(this.value).toFixed(2)">
-        <div class="slider-scale"><span>0 (ทานไม่ตรงเวลา/ทานของไม่มีประโยชน์)</span><span>1 (ทานอาหารดี/คุมโภชนาการได้ดีเยี่ยม)</span></div>
-      </div>
-      
-      <div class="slider-wrapper" style="background:#fff; border-color:var(--brand); border-style:solid;">
-        <div class="slider-label"><span>เป้าหมายในอุดมคติ (Ideal)</span><span id="vi-f" style="font-family:monospace; color:var(--brand);">0.70</span></div>
-        <input type="range" id="bi-f" min="0" max="1" step="0.01" value="0.70" oninput="$('#vi-f').textContent=Number(this.value).toFixed(2)">
-        <div class="slider-scale"><span>เป้าหมายขั้นต่ำ</span><span>เป้าหมายสูงสุด</span></div>
-      </div>
-    </div>
-
-    <div class="q-card">
-      <div class="q-header">
-        <div class="q-icon">A</div>
-        <div class="q-title">ภาระงานและความเครียด (Activity / Stress)</div>
-      </div>
-      <div class="q-desc">สภาวะความตึงเครียดทางอารมณ์ ภาระงานที่หนักเกินไป และการจัดการความเครียด</div>
-      
-      <div class="slider-wrapper">
-        <div class="slider-label"><span>พฤติกรรมปัจจุบัน (Current)</span><span id="v-a" style="font-family:monospace; color:var(--brand-ink);">0.40</span></div>
-        <input type="range" id="b-a" min="0" max="1" step="0.01" value="0.40" oninput="$('#v-a').textContent=Number(this.value).toFixed(2)">
-        <div class="slider-scale"><span>0 (ผ่อนคลาย/ไม่มีความเครียดเลย)</span><span>1 (เครียดหนักมาก/ภาระงานล้นมือสุดๆ)</span></div>
-      </div>
-      
-      <div class="slider-wrapper" style="background:#fff; border-color:var(--brand); border-style:solid;">
-        <div class="slider-label"><span>เป้าหมายในอุดมคติ (Ideal)</span><span id="vi-a" style="font-family:monospace; color:var(--brand);">0.20</span></div>
-        <input type="range" id="bi-a" min="0" max="1" step="0.01" value="0.20" oninput="$('#vi-a').textContent=Number(this.value).toFixed(2)">
-        <div class="slider-scale"><span>เป้าหมายขั้นต่ำ</span><span>เป้าหมายสูงสุด</span></div>
-      </div>
-    </div>
-    
-    <div style="display:flex;gap:10px;margin-top:20px;margin-bottom:40px;">
-      <button class="btn btn-sec" style="flex:1" onclick="ASSESS_STEP=1;renderAssess()">กลับ</button>
-      <button class="btn" style="flex:2" onclick="computeResult()">ส่งแบบประเมินและวิเคราะห์ผลลัพธ์</button>
-    </div>
-  `;
-}
-
-async function computeResult() { 
-  const B = {
-    s: parseFloat($('#b-s').value), e: parseFloat($('#b-e').value),
-    f: parseFloat($('#b-f').value), a: parseFloat($('#b-a').value)
-  };
-  const B_ideal = {
-    s: parseFloat($('#bi-s').value), e: parseFloat($('#bi-e').value),
-    f: parseFloat($('#bi-f').value), a: parseFloat($('#bi-a').value)
-  };
-
-  const dS = B.s - B_ideal.s;
-  const dE = B.e - B_ideal.e;
-  const dF = B.f - B_ideal.f;
-  const dA = B.a - B_ideal.a;
-
-  const C0 = { earth: 0.60, water: 0.60, wind: 0.55, fire: 0.50 };
-
-  const M = {
-    earth: { s: 0.30,  e: -0.10, f: 0.40,  a: -0.30 },
-    water: { s: 0.20,  e: -0.10, f: 0.30,  a: -0.30 },
-    wind:  { s: -0.30, e: 0.50,  f: -0.10, a: 0.40 },
-    fire:  { s: -0.40, e: 0.30,  f: 0.20,  a: 0.60 }
-  };
-
-  const clip = (v) => Math.min(Math.max(v, 0), 1);
-
-  const C = {
-    earth: clip(C0.earth + (M.earth.s * dS + M.earth.e * dE + M.earth.f * dF + M.earth.a * dA)),
-    water: clip(C0.water + (M.water.s * dS + M.water.e * dE + M.water.f * dF + M.water.a * dA)),
-    wind:  clip(C0.wind  + (M.wind.s  * dS + M.wind.e  * dE + M.wind.f  * dF + M.wind.a  * dA)),
-    fire:  clip(C0.fire  + (M.fire.s  * dS + M.fire.e  * dE + M.fire.f  * dF + M.fire.a  * dA))
-  };
-
-  const d2 = (
-    Math.pow(C.earth - C0.earth, 2) +
-    Math.pow(C.water - C0.water, 2) +
-    Math.pow(C.wind - C0.wind, 2) +
-    Math.pow(C.fire - C0.fire, 2)
-  ) / 4;
-
-  const rsi = Math.exp(-7 * d2) * 100;
-
-  const devList = [
-    { name: 'ดิน', key: 'earth', val: C.earth - C0.earth, abs: Math.abs(C.earth - C0.earth) },
-    { name: 'น้ำ', key: 'water', val: C.water - C0.water, abs: Math.abs(C.water - C0.water) },
-    { name: 'ลม', key: 'wind',  val: C.wind - C0.wind,   abs: Math.abs(C.wind - C0.wind) },
-    { name: 'ไฟ', key: 'fire',  val: C.fire - C0.fire,   abs: Math.abs(C.fire - C0.fire) }
-  ];
-  devList.sort((a,b) => b.abs - a.abs);
-  
-  let finalStatusText = 'ระบบธาตุอยู่ในภาวะสมดุลสมบูรณ์';
-  if (devList[0].abs > 0.001) {
-    const stateType = devList[0].val > 0 ? 'กำเริบ (Aggravated)' : 'หย่อน (Depleted)';
-    finalStatusText = `ธาตุ${devList[0].name} มีภาวะ${stateType}`;
+    `;
   }
 
-  const A = await DB.assessments(); 
-  LAST_RESULT = { 
-    id: uid('rec_'), 
-    patientId: CURRENT_PATIENT.id, 
-    hn: CURRENT_PATIENT.hn,
-    name: CURRENT_PATIENT.name, 
-    date: new Date().toISOString(), 
-    rsi: rsi, 
-    dominantTh: finalStatusText,
-    data: { B, B_ideal, C, C0, d2 }
-  }; 
-  A.unshift(LAST_RESULT); 
-  await DB.saveAssessments(A); 
-  ASSESS_STEP = 3; 
-  renderAssess(); 
-}
-
-// =========================================================
-// ปรับปรุงคำอธิบาย "สมดุลเป้าหมาย" ในหน้าวินิจฉัยผลลัพธ์
-// =========================================================
-function renderAssessStep3() {
-  const res = LAST_RESULT; if(!res) return;
-  const d = res.data;
-  
-  const constitution = CURRENT_PATIENT?.constitution || res.constitution || 'ดิน';
-  
-  let riskTitle = ''; let riskVulnerability = ''; let riskDetails = ''; let riskStyle = '';
-  if (constitution === 'ดิน') {
-    riskTitle = 'ธาตุดิน (ปถวีสมุฏฐาน)'; riskVulnerability = 'ระบบโครงสร้าง อวัยวะเนื้อเยื่อ และระบบดูดซึมสารอาหาร';
-    riskDetails = 'ระวังโรคเรื้อรัง ระบบทางเดินอาหาร ลำไส้ มีแนวโน้มเกิดอาการท้องผูกเรื้อรัง และอาการปวดตึงกล้ามเนื้อหากขาดการเคลื่อนไหว';
-    riskStyle = 'background: #fdfaf4; border-left: 5px solid #a1887f;';
-  } else if (constitution === 'น้ำ') {
-    riskTitle = 'ธาตุน้ำ (อาโปสมุฏฐาน)'; riskVulnerability = 'ระบบของเหลว ระบบไหลเวียนโลหิต และทางเดินหายใจ';
-    riskDetails = 'ระวังโรคเกี่ยวกับระบบทางเดินหายใจ เช่น หวัดเรื้อรัง ภูมิแพ้อากาศ หอบหืด ภาวะน้ำเหลืองเสีย และเสี่ยงต่อภาวะบวมน้ำสะสม';
-    riskStyle = 'background: #f4fafc; border-left: 5px solid #4fc3f7;';
-  } else if (constitution === 'ลม') {
-    riskTitle = 'ธาตุลม (วาโยสมุฏฐาน)'; riskVulnerability = 'ระบบประสาท ส่วนปลาย การเคลื่อนไหว และลมในทางเดินอาหาร';
-    riskDetails = 'ระวังอาการท้องอืด ท้องเฟ้อ มีลมในกระเพาะ วิงเวียนศีรษะ หน้ามืด นอนไม่หลับ และอาการปวดเสียวตามเส้นเอ็นเมื่อมีความเครียด';
-    riskStyle = 'background: #f5fbf6; border-left: 5px solid #81c784;';
-  } else if (constitution === 'ไฟ') {
-    riskTitle = 'ธาตุไฟ (เตโชสมุฏฐาน)'; riskVulnerability = 'ระบบเผาผลาญ ความร้อนในร่างกาย และอัคคีสมุฏฐาน';
-    riskDetails = 'ระวังโรคกระเพาะอาหารอักเสบ กรดไหลย้อน มีอาการร้อนใน แผลในช่องปาก และเสี่ยงต่อภาวะความดันโลหิตสูงเมื่อมีความเครียดเรื้อรัง';
-    riskStyle = 'background: #fff8f5; border-left: 5px solid #ff8a65;';
+  function submitStep1() {
+    if(!CURRENT_PATIENT) {
+      const name = $('#raw-name').value; const constitution = $('#raw-constitution').value;
+      if(!name) return alert('กรุณาระบุชื่อครับ'); if(constitution === 'ไม่ได้ระบุ') return alert('กรุณาระบุธาตุเจ้าเรือน');
+      CURRENT_PATIENT = { id: uid('raw_'), hn: 'ไม่มี', name: name, constitution: constitution };
+    }
+    ASSESS_STEP = 2; renderAssess();
   }
 
-  $('#assess-content').innerHTML = `
-    <div class="card">
-      <div style="text-align:center; margin-bottom:32px; border-bottom:1px solid var(--line2); padding-bottom:24px;">
-        <h2 style="color:var(--brand-ink);">รายงานผลการวินิจฉัย (RTLE Report)</h2>
-        <div style="color:var(--muted); font-size:14px; margin-top:8px;">ชื่อ: <b>${res.name}</b> | HN: <code style="font-family:monospace">${res.hn}</code></div>
+  // --- แบบสอบถาม แบบใหม่ มินิมอล เลือก 5 ระดับ ---
+  function renderAssessStep2() {
+    $('#assess-content').innerHTML = `
+      <div class="card-minimal" style="text-align:left; max-width:600px; padding:32px;">
+        <div style="margin-bottom:24px; padding-bottom:16px; border-bottom:1px solid var(--line);">
+          <div>คุณ <b>${CURRENT_PATIENT.name}</b> (ธาตุ${CURRENT_PATIENT.constitution})</div>
+          <p style="color:var(--muted); font-size:13px; margin-top:4px;">กรุณาเลือกระดับพฤติกรรมในชีวิตประจำวันของคุณในรอบ 1 สัปดาห์ที่ผ่านมา</p>
+        </div>
+
+        <div class="q-box">
+          <div class="q-title">1. การนอนหลับพักผ่อน (Sleep)</div>
+          <div class="q-desc">คุณภาพและระยะเวลาการนอนของคุณเป็นอย่างไร?</div>
+          <div class="radio-group" id="group-s">
+            <label class="radio-option"><input type="radio" name="b_s" value="0.0"> แย่มาก (นอนไม่หลับ/พักผ่อนน้อยมาก)</label>
+            <label class="radio-option"><input type="radio" name="b_s" value="0.25"> ไม่ค่อยดี (หลับๆ ตื่นๆ/รู้สึกเพลีย)</label>
+            <label class="radio-option"><input type="radio" name="b_s" value="0.5" checked> ปานกลาง (นอนได้ตามปกติ)</label>
+            <label class="radio-option"><input type="radio" name="b_s" value="0.75"> ดี (หลับสบายตื่นมาสดชื่น)</label>
+            <label class="radio-option"><input type="radio" name="b_s" value="1.0"> ดีเยี่ยม (นอนหลับลึกและเพียงพอมาก)</label>
+          </div>
+        </div>
+
+        <div class="q-box">
+          <div class="q-title">2. การเคลื่อนไหว/ออกกำลังกาย (Exercise)</div>
+          <div class="q-desc">คุณได้ขยับร่างกายหรือออกกำลังกายมากน้อยเพียงใด?</div>
+          <div class="radio-group" id="group-e">
+            <label class="radio-option"><input type="radio" name="b_e" value="0.0"> ไม่เลย (นั่งนิ่งๆ ทั้งวัน)</label>
+            <label class="radio-option"><input type="radio" name="b_e" value="0.25"> น้อย (เดินหรือขยับตัวบ้างเล็กน้อย)</label>
+            <label class="radio-option"><input type="radio" name="b_e" value="0.5" checked> ปานกลาง (มีกิจกรรมเคลื่อนไหวปกติ)</label>
+            <label class="radio-option"><input type="radio" name="b_e" value="0.75"> บ่อยครั้ง (ออกกำลังกาย 2-3 วัน/สัปดาห์)</label>
+            <label class="radio-option"><input type="radio" name="b_e" value="1.0"> สม่ำเสมอ (ออกกำลังกายเป็นประจำ/แข็งแรงมาก)</label>
+          </div>
+        </div>
+
+        <div class="q-box">
+          <div class="q-title">3. การรับประทานอาหาร (Food)</div>
+          <div class="q-desc">โภชนาการและความตรงต่อเวลาในการทานอาหาร?</div>
+          <div class="radio-group" id="group-f">
+            <label class="radio-option"><input type="radio" name="b_f" value="0.0"> แย่ (ทานไม่ตรงเวลา/เน้นของทอดของหวาน)</label>
+            <label class="radio-option"><input type="radio" name="b_f" value="0.25"> ไม่ค่อยดี (ทานอาหารไม่มีประโยชน์บ่อยๆ)</label>
+            <label class="radio-option"><input type="radio" name="b_f" value="0.5" checked> ปานกลาง (ทานครบมื้อปกติ)</label>
+            <label class="radio-option"><input type="radio" name="b_f" value="0.75"> ดี (คุมอาหาร/ทานผักผลไม้)</label>
+            <label class="radio-option"><input type="radio" name="b_f" value="1.0"> ดีเยี่ยม (โภชนาการดีมาก/ตรงเวลาเป๊ะ)</label>
+          </div>
+        </div>
+
+        <div class="q-box">
+          <div class="q-title">4. ความเครียดและภาระงาน (Activity/Stress)</div>
+          <div class="q-desc">คุณรู้สึกตึงเครียดหรือมีภาระงานหนักแค่ไหน?</div>
+          <div class="radio-group" id="group-a">
+            <label class="radio-option"><input type="radio" name="b_a" value="0.0"> สบายๆ (ผ่อนคลาย/ไม่มีความเครียดเลย)</label>
+            <label class="radio-option"><input type="radio" name="b_a" value="0.25"> เครียดนิดหน่อย (จัดการได้สบาย)</label>
+            <label class="radio-option"><input type="radio" name="b_a" value="0.5" checked> ปานกลาง (เครียดระดับทั่วไปของงาน)</label>
+            <label class="radio-option"><input type="radio" name="b_a" value="0.75"> เครียดมาก (ภาระงานหนัก/เริ่มส่งผลต่ออารมณ์)</label>
+            <label class="radio-option"><input type="radio" name="b_a" value="1.0"> วิกฤต (เครียดจัด/รับมือแทบไม่ไหว)</label>
+          </div>
+        </div>
+
+        <div style="display:flex; gap:12px; margin-top:32px;">
+          <button class="btn btn-sec" style="flex:1" onclick="ASSESS_STEP=1;renderAssess()">ย้อนกลับ</button>
+          <button class="btn" style="flex:2" onclick="processMath()">ประมวลผลสุขภาพ</button>
+        </div>
       </div>
-      
-      <div style="text-align:center; margin-bottom:36px;">
-        <div style="font-size:14px; color:var(--brand-ink); font-weight:600;">ดัชนีภาพรวมสุขภาพ (RSI Index)</div>
-        <h1 style="color:var(--brand); font-size:64px; margin:6px 0; line-height:1;">${(res.rsi || 0).toFixed(2)}<span style="font-size:24px">%</span></h1>
+    `;
+
+    // Highlight selected option visually
+    document.querySelectorAll('input[type="radio"]').forEach(radio => {
+      radio.addEventListener('change', function() {
+        const name = this.getAttribute('name');
+        document.querySelectorAll(`input[name="${name}"]`).forEach(r => {
+          r.parentElement.classList.remove('selected');
+        });
+        if(this.checked) this.parentElement.classList.add('selected');
+      });
+      // trigger initial highlight
+      if(radio.checked) radio.parentElement.classList.add('selected');
+    });
+  }
+
+  // --- หน้า Loading โชว์สมการ ---
+  function renderAssessProcessing() {
+    $('#assess-content').innerHTML = `
+      <div class="card-minimal">
+        <div class="loader-spinner"></div>
+        <h2 style="color:var(--brand-ink); margin-bottom:12px;">กำลังประมวลผลดัชนีสุขภาพ...</h2>
+        <p style="color:var(--muted); font-size:14px; margin-bottom:24px;">วิเคราะห์ด้วยโมเดลคณิตศาสตร์การแพทย์แผนไทย (RTLE)</p>
         
-        <div style="margin-top:16px; padding:12px 24px; background:var(--surface2); border-radius:var(--radius-sm); display:inline-block; border:1px solid var(--line);">
-          <div style="font-size:12px; color:var(--muted); margin-bottom:4px;">ข้อบ่งชี้ทางพยาธิสภาพ</div>
-          <div style="font-size:16px; font-weight:700; color:var(--danger);">${res.dominantTh}</div>
+        <div style="max-width:400px; margin:0 auto;">
+          <div class="math-eq">1. วิเคราะห์พฤติกรรม:<br>&nbsp;&nbsp;ΔB = B<sub>current</sub> - B<sub>standard</sub></div>
+          <div class="math-eq">2. คำนวณสมดุลธาตุเกิด (Matrix):<br>&nbsp;&nbsp;C = C<sub>0</sub> + (M &times; ΔB)</div>
+          <div class="math-eq">3. ประเมินระยะห่างความสมดุล:<br>&nbsp;&nbsp;d² = &Sigma; (C - C<sub>0</sub>)² / 4</div>
+          <div class="math-eq">4. สรุปดัชนีภาพรวม (RSI):<br>&nbsp;&nbsp;RSI = e<sup>-7(d²)</sup> &times; 100</div>
         </div>
       </div>
-
-      <div class="info-box">
-        <h4><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg> สมดุลเป้าหมาย ($C_0$) คืออะไร?</h4>
-        <p><b>สมดุลเป้าหมาย</b> คือค่าระดับความสมดุลของธาตุทั้ง 4 ในสภาวะ <b>"ปกติที่ควรจะเป็น"</b> ของร่างกายคุณ เพื่อให้สุขภาพแข็งแรงและไม่เจ็บป่วย<br><br>
-        เปรียบเสมือนเป้าหมายสุขภาพส่วนตัวของคุณ ซึ่งหากเส้นกราฟ "ระดับปัจจุบัน (Current)" ยื่นเกิน หรือ หดต่ำกว่า "สมดุลเป้าหมาย" ย่อมหมายความว่าธาตุนั้นกำลังมีปัญหา (กำเริบหรือหย่อน) และอาจนำไปสู่การเจ็บป่วยได้นั่นเอง</p>
-      </div>
-
-      <div style="margin-top:24px; margin-bottom:32px; background:var(--surface2); padding:24px; border-radius:var(--radius); border:1px solid var(--line2);">
-        <h4 style="color:var(--brand-ink); margin-bottom:20px; font-size:16px; border-left:4px solid var(--brand); padding-left:12px;">กราฟเปรียบเทียบ: สภาวะปัจจุบัน เทียบกับ สมดุลเป้าหมาย</h4>
-        
-        <div style="margin-bottom:18px;">
-          <div style="display:flex; justify-content:space-between; font-size:14px; margin-bottom:8px;">
-            <span>🤎 ธาตุดิน: <b>${d.C.earth.toFixed(3)}</b></span>
-            <span style="color:var(--muted)">สมดุลเป้าหมาย: ${d.C0.earth.toFixed(2)}</span>
-          </div>
-          <div style="height:12px; background:#e0e0e0; border-radius:6px; overflow:hidden; position:relative;">
-            <div style="width:${d.C.earth * 100}%; background:var(--earth); height:100%;"></div>
-            <div style="position:absolute; top:0; bottom:0; left:${d.C0.earth * 100}%; width:3px; background:#000; z-index:2;"></div>
-          </div>
-        </div>
-
-        <div style="margin-bottom:18px;">
-          <div style="display:flex; justify-content:space-between; font-size:14px; margin-bottom:8px;">
-            <span>💧 ธาตุน้ำ: <b>${d.C.water.toFixed(3)}</b></span>
-            <span style="color:var(--muted)">สมดุลเป้าหมาย: ${d.C0.water.toFixed(2)}</span>
-          </div>
-          <div style="height:12px; background:#e0e0e0; border-radius:6px; overflow:hidden; position:relative;">
-            <div style="width:${d.C.water * 100}%; background:var(--water); height:100%;"></div>
-            <div style="position:absolute; top:0; bottom:0; left:${d.C0.water * 100}%; width:3px; background:#000; z-index:2;"></div>
-          </div>
-        </div>
-
-        <div style="margin-bottom:18px;">
-          <div style="display:flex; justify-content:space-between; font-size:14px; margin-bottom:8px;">
-            <span>🍃 ธาตุลม: <b>${d.C.wind.toFixed(3)}</b></span>
-            <span style="color:var(--muted)">สมดุลเป้าหมาย: ${d.C0.wind.toFixed(2)}</span>
-          </div>
-          <div style="height:12px; background:#e0e0e0; border-radius:6px; overflow:hidden; position:relative;">
-            <div style="width:${d.C.wind * 100}%; background:var(--wind); height:100%;"></div>
-            <div style="position:absolute; top:0; bottom:0; left:${d.C0.wind * 100}%; width:3px; background:#000; z-index:2;"></div>
-          </div>
-        </div>
-
-        <div style="margin-bottom:0;">
-          <div style="display:flex; justify-content:space-between; font-size:14px; margin-bottom:8px;">
-            <span>🔥 ธาตุไฟ: <b>${d.C.fire.toFixed(3)}</b></span>
-            <span style="color:var(--muted)">สมดุลเป้าหมาย: ${d.C0.fire.toFixed(2)}</span>
-          </div>
-          <div style="height:12px; background:#e0e0e0; border-radius:6px; overflow:hidden; position:relative;">
-            <div style="width:${d.C.fire * 100}%; background:var(--fire); height:100%;"></div>
-            <div style="position:absolute; top:0; bottom:0; left:${d.C0.fire * 100}%; width:3px; background:#000; z-index:2;"></div>
-          </div>
-        </div>
-        <div style="font-size:11px; color:var(--muted); margin-top:12px; text-align:right;">*เส้นสีดำแนวตั้ง (|) คือระดับสมดุลเป้าหมาย</div>
-      </div>
-
-      <div style="margin-top:12px; margin-bottom:24px; padding:18px; border-radius:var(--radius); box-shadow: 0 2px 8px rgba(0,0,0,0.04); ${riskStyle}">
-        <h4 style="color:var(--brand-ink); margin-bottom:10px; font-size:15px;">🔍 การประเมินจุดอ่อนสุขภาพตามธาตุเกิด</h4>
-        <div style="font-size:13.5px; margin-bottom:6px; color:var(--brand-ink);"><b>ธาตุเกิด:</b> ${riskTitle}</div>
-        <div style="font-size:13.5px; margin-bottom:10px;"><b>ระบบอวัยวะที่ต้องระวัง:</b> <span style="color:var(--danger); font-weight:600;">${riskVulnerability}</span></div>
-        <p style="font-size:13px; color:var(--ink); line-height:1.6; text-align:justify; margin:0; background:rgba(255,255,255,0.8); padding:12px; border-radius:var(--radius-sm);">
-          ${riskDetails}
-        </p>
-      </div>
-      
-      <button class="btn" style="width:100%; padding:14px;" onclick="ASSESS_STEP=1;CURRENT_PATIENT=null;go('dashboard')">เสร็จสิ้น บันทึกและกลับสู่หน้าหลัก</button>
-    </div>
-  `;
-}
-
-async function renderRecords() {
-  const A = await DB.assessments();
-  $('#view').innerHTML = `
-    <div class="page-head"><div><h1>ประวัติบันทึกการประเมิน</h1></div></div>
-    <div class="table-wrapper">
-      <table>
-        <thead><tr><th>วันที่ประเมิน</th><th>ชื่อ-นามสกุล</th><th>RSI Index</th><th>สภาวะตามโมเดล</th></tr></thead>
-        <tbody>
-          ${A.map(a => `<tr><td>${new Date(a.date).toLocaleString('th-TH')}</td><td style="font-weight:600">${a.name}</td><td><code style="font-weight:bold;color:var(--brand)">${(a.rsi||0).toFixed(2)}%</code></td><td>${a.dominantTh}</td></tr>`).join('')}
-        </tbody>
-      </table>
-    </div>
-  `;
-}
-
-// ==========================================
-// 5. INITIALIZATION
-// ==========================================
-async function initApp() {
-  await checkConnection();
-  const session = DB.session();
-  if (session) {
-    if($('#login-screen')) $('#login-screen').style.display = 'none';
-    if($('#user-name-display')) $('#user-name-display').textContent = session.user;
-    await go(CURRENT_ROUTE);
-  } else {
-    if($('#login-screen')) $('#login-screen').style.display = 'flex';
+    `;
   }
-}
 
-window.addEventListener('DOMContentLoaded', initApp);
+  async function processMath() {
+    // 1. Get values from Radio Buttons
+    const val = (name) => parseFloat(document.querySelector(`input[name="${name}"]:checked`).value);
+    const B = { s: val('b_s'), e: val('b_e'), f: val('b_f'), a: val('b_a') };
+    
+    // 2. Fixed "Ideal/Standard" (ไม่ต้องให้ผู้ใช้กรอก ใช้ค่ามาตรฐานสุขภาพดี)
+    const B_ideal = { s: 0.8, e: 0.6, f: 0.7, a: 0.2 }; 
+
+    // Go to processing screen
+    ASSESS_STEP = 'processing'; renderAssess();
+
+    // Do Math in background
+    setTimeout(async () => {
+      const dS = B.s - B_ideal.s;
+      const dE = B.e - B_ideal.e;
+      const dF = B.f - B_ideal.f;
+      const dA = B.a - B_ideal.a;
+
+      const C0 = { earth: 0.60, water: 0.60, wind: 0.55, fire: 0.50 };
+      const M = {
+        earth: { s: 0.30,  e: -0.10, f: 0.40,  a: -0.30 },
+        water: { s: 0.20,  e: -0.10, f: 0.30,  a: -0.30 },
+        wind:  { s: -0.30, e: 0.50,  f: -0.10, a: 0.40 },
+        fire:  { s: -0.40, e: 0.30,  f: 0.20,  a: 0.60 }
+      };
+
+      const clip = (v) => Math.min(Math.max(v, 0), 1);
+      const C = {
+        earth: clip(C0.earth + (M.earth.s * dS + M.earth.e * dE + M.earth.f * dF + M.earth.a * dA)),
+        water: clip(C0.water + (M.water.s * dS + M.water.e * dE + M.water.f * dF + M.water.a * dA)),
+        wind:  clip(C0.wind  + (M.wind.s  * dS + M.wind.e  * dE + M.wind.f  * dF + M.wind.a  * dA)),
+        fire:  clip(C0.fire  + (M.fire.s  * dS + M.fire.e  * dE + M.fire.f  * dF + M.fire.a  * dA))
+      };
+
+      const d2 = (Math.pow(C.earth-C0.earth,2) + Math.pow(C.water-C0.water,2) + Math.pow(C.wind-C0.wind,2) + Math.pow(C.fire-C0.fire,2)) / 4;
+      const rsi = Math.exp(-7 * d2) * 100;
+
+      // Map to daily life advice based on the most deviated element
+      const devList = [
+        { name: 'ดิน', val: C.earth - C0.earth, abs: Math.abs(C.earth - C0.earth) },
+        { name: 'น้ำ', val: C.water - C0.water, abs: Math.abs(C.water - C0.water) },
+        { name: 'ลม', val: C.wind - C0.wind, abs: Math.abs(C.wind - C0.wind) },
+        { name: 'ไฟ', val: C.fire - C0.fire, abs: Math.abs(C.fire - C0.fire) }
+      ];
+      devList.sort((a,b) => b.abs - a.abs);
+      
+      let dailyAdvice = "สุขภาพโดยรวมอยู่ในเกณฑ์สมดุลดีเยี่ยม แนะนำให้รักษาพฤติกรรมนี้ต่อไป";
+      if (devList[0].abs > 0.02) {
+        if (devList[0].name === 'ดิน') {
+          dailyAdvice = "รู้สึกร่างกายอ่อนล้า กล้ามเนื้อตึง หรือระบบขับถ่ายเริ่มแปรปรวน แนะนำให้ทานอาหารให้ตรงเวลา ทานของย่อยง่าย และพยายามยืดเหยียดร่างกายระหว่างวันเพื่อลดความตึงเครียดสะสมครับ";
+        } else if (devList[0].name === 'น้ำ') {
+          dailyAdvice = "ระบบของเหลวในร่างกายทำงานหนัก อาจมีอาการภูมิแพ้ อ่อนเพลีย หรือบวมน้ำ แนะนำให้จิบน้ำอุ่นบ่อยๆ พักผ่อนให้เพียงพอ และหลีกเลี่ยงอาหารรสจัดหรือของทอดมันชั่วคราวครับ";
+        } else if (devList[0].name === 'ลม') {
+          dailyAdvice = "อาจมีอาการท้องอืด ลมจุกเสียด วิงเวียน หรือนอนไม่หลับ แนะนำให้ออกกำลังกายเบาๆ เช่น เดินแกว่งแขน ทานอาหารรสเผ็ดร้อนอ่อนๆ เพื่อขับลม และหาเวลาพักสายตาเพื่อลดความเครียดครับ";
+        } else if (devList[0].name === 'ไฟ') {
+          dailyAdvice = "ร่างกายมีความร้อนสะสมมาก อาจหงุดหงิดง่าย ร้อนใน หรือกรดไหลย้อน แนะนำให้ทำจิตใจให้สงบ หลีกเลี่ยงการนอนดึก และเลือกทานอาหารรสขมจืดเย็น (เช่น ฟักเขียว แตงกวา มะระ) เพื่อดับพิษร้อนครับ";
+        }
+      }
+
+      const A = await DB.assessments(); 
+      LAST_RESULT = { 
+        id: uid('rec_'), patientId: CURRENT_PATIENT.id, hn: CURRENT_PATIENT.hn, name: CURRENT_PATIENT.name, 
+        date: new Date().toISOString(), rsi: rsi, dominantTh: dailyAdvice, data: { C, C0 }
+      }; 
+      A.unshift(LAST_RESULT); await DB.saveAssessments(A); 
+      
+      // Go to result after 2.5 seconds
+      ASSESS_STEP = 3; renderAssess(); 
+    }, 2500);
+  }
+
+  // --- หน้าผลลัพธ์ (มินิมอล เน้นชีวิตประจำวัน) ---
+  function renderAssessStep3() {
+    const res = LAST_RESULT; if(!res) return;
+    
+    let colorRSI = 'var(--ok)';
+    if(res.rsi < 60) colorRSI = 'var(--danger)';
+    else if(res.rsi < 80) colorRSI = '#D4A017'; // สีเหลืองทอง
+
+    $('#assess-content').innerHTML = `
+      <div class="card-minimal">
+        <div style="font-size:14px; color:var(--muted); margin-bottom:8px;">คุณ ${res.name}</div>
+        <h2 style="font-size:20px; font-weight:600; color:var(--brand-ink);">ผลประเมินสุขภาพภาพรวม (RSI)</h2>
+        
+        <div style="margin: 32px 0;">
+          <div style="font-size: 80px; font-weight: 700; color:${colorRSI}; line-height: 1;">
+            ${(res.rsi || 0).toFixed(0)}<span style="font-size:32px;">%</span>
+          </div>
+        </div>
+
+        <div style="background:var(--surface2); border-radius:var(--radius-sm); padding:24px; text-align:left; max-width:500px; margin:0 auto 32px auto;">
+          <h4 style="font-size:15px; color:var(--brand-ink); margin-bottom:12px; display:flex; align-items:center; gap:8px;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+            คำแนะนำปรับพฤติกรรม (จากแพทย์แผนไทย)
+          </h4>
+          <p style="font-size:14px; color:var(--ink); line-height:1.7; margin:0;">
+            ${res.dominantTh}
+          </p>
+        </div>
+
+        <button class="btn" style="width:100%; max-width:300px;" onclick="ASSESS_STEP=1;CURRENT_PATIENT=null;go('dashboard')">กลับสู่หน้าหลัก</button>
+      </div>
+    `;
+  }
+
+  async function renderRecords() {
+    const A = await DB.assessments();
+    $('#view').innerHTML = `
+      <div class="page-head"><div><h1>ประวัติสะสม</h1></div></div>
+      <div class="table-wrapper">
+        <table>
+          <thead><tr><th>วันที่ประเมิน</th><th>ชื่อ-นามสกุล</th><th>ดัชนีสุขภาพ</th><th>คำแนะนำ/ผลวิเคราะห์</th></tr></thead>
+          <tbody>
+            ${A.map(a => `<tr>
+              <td style="color:var(--muted); font-size:13px;">${new Date(a.date).toLocaleString('th-TH')}</td>
+              <td><b>${a.name}</b></td>
+              <td><span style="background:var(--surface2); padding:4px 10px; border-radius:12px; font-weight:bold; color:var(--brand2); border:1px solid var(--line);">${(a.rsi||0).toFixed(0)}%</span></td>
+              <td style="font-size:13px; color:var(--muted); max-width:300px; overflow:hidden; text-overflow:ellipsis;">${a.dominantTh}</td>
+            </tr>`).join('')}
+          </tbody>
+        </table>
+      </div>
+    `;
+  }
+
+  async function initApp() {
+    await checkConnection();
+    const session = DB.session();
+    if (session) {
+      if($('#login-screen')) $('#login-screen').style.display = 'none';
+      if($('#user-name-display')) $('#user-name-display').textContent = session.user;
+      await go(CURRENT_ROUTE);
+    } else {
+      if($('#login-screen')) $('#login-screen').style.display = 'flex';
+    }
+  }
+
+  window.addEventListener('DOMContentLoaded', initApp);
 </script>
 
 <div id="login-screen">
   <div class="login-box">
     <div style="text-align:center; margin-bottom:28px;">
-      <img src="เเพท.png" alt="Logo" style="height: 65px; margin-bottom: 12px; object-fit: contain;">
       <h2>RTLE Platform</h2>
-      <p style="color:var(--muted); font-size:13px; margin-top:4px;">Resonance of Thai Life Elements</p>
+      <p style="color:var(--muted); font-size:13px;">ระบบประเมินสมดุลธาตุด้วยพฤติกรรม</p>
     </div>
     <div class="auth-tabs">
       <button class="auth-tab active" id="tab-login" onclick="setAuthMode('login')">เข้าสู่ระบบ</button>
       <button class="auth-tab" id="tab-register" onclick="setAuthMode('register')">ลงทะเบียน</button>
     </div>
     <form onsubmit="handleAuth(event)">
-      <div class="form-group"><label>ชื่อผู้ใช้งาน (Username)</label><input type="text" id="login-user" required></div>
-      <div class="form-group"><label>รหัสผ่าน (Password)</label><input type="password" id="login-pass" required></div>
-      <button class="btn" id="btn-auth" style="width:100%; margin-top:12px; padding:14px;">เข้าสู่ระบบ</button>
+      <div class="form-group"><label>ชื่อผู้ใช้งาน</label><input type="text" id="login-user" required></div>
+      <div class="form-group"><label>รหัสผ่าน</label><input type="password" id="login-pass" required></div>
+      <button class="btn" id="btn-auth" style="width:100%; margin-top:12px;">เข้าสู่ระบบ</button>
     </form>
   </div>
 </div>
 
 <div id="app-bar">
-  <div class="brand-title" onclick="go('dashboard')" style="display:flex; align-items:center; gap:10px;">
-    <img src="เเพท.png" alt="Logo" style="height: 35px; object-fit: contain;">
-    <span>RTLE Platform (HIS)</span>
-  </div>
+  <div class="brand-title" onclick="go('dashboard')"><span>RTLE Platform (HIS)</span></div>
   <div class="user-badge">
-    <div id="connection-status" class="status-pill offline"><div class="status-dot"></div> กำลังตรวจสอบ...</div>
+    <div id="connection-status" class="status-pill offline"><div class="status-dot"></div> ...</div>
     <span id="user-name-display" style="font-weight:600; color:var(--brand-ink);"></span>
     <button class="btn-logout" onclick="handleLogout()">ออกจากระบบ</button>
   </div>
@@ -777,9 +629,9 @@ window.addEventListener('DOMContentLoaded', initApp);
 
 <div id="main-container">
   <div id="nav-bar">
-    <a onclick="go('dashboard')"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg> แดชบอร์ดหลัก</a>
-    <a onclick="go('patients')"><svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2M9 7a4 4 0 0 1 4-4 4 4 0 0 1 4 4"/></svg> ทะเบียนผู้ป่วย</a>
-    <a onclick="ASSESS_STEP=1;CURRENT_PATIENT=null;go('assess')"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M16 13H8M16 17H8"/></svg> เริ่มจำลองสภาวะ</a>
+    <a onclick="go('dashboard')"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg> หน้าหลัก</a>
+    <a onclick="go('patients')"><svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2M9 7a4 4 0 0 1 4-4 4 4 0 0 1 4 4"/></svg> ทะเบียนประวัติ</a>
+    <a onclick="ASSESS_STEP=1;CURRENT_PATIENT=null;go('assess')"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M16 13H8M16 17H8"/></svg> แบบประเมิน</a>
     <a onclick="go('records')"><svg viewBox="0 0 24 24"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg> ประวัติสะสม</a>
   </div>
   <div id="view"></div>
