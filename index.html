@@ -28,6 +28,8 @@
   --ok-bg: #E4F3EC;
   --danger: #C93B3B;
   --danger-bg: #FCE8E8;
+  --info: #0288D1;
+  --info-bg: #E1F5FE;
   --radius: 16px;
   --radius-sm: 8px;
   --shadow: 0 8px 24px rgba(18,77,69,0.06);
@@ -73,11 +75,19 @@ button, input, select, textarea { font-family: inherit; font-size: inherit; colo
 input[type="text"], input[type="password"], input[type="date"], select, textarea { width: 100%; padding: 12px 16px; border: 1px solid var(--line); border-radius: var(--radius-sm); background: var(--surface2); color: var(--ink); transition: all 0.2s; }
 input:focus, select:focus { border-color: var(--brand); background: #FFF; box-shadow: 0 0 0 3px var(--brand-tint); }
 
-input[type="range"] { -webkit-appearance: none; width: 100%; height: 6px; background: var(--line); border-radius: 3px; outline: none; margin: 10px 0; }
-input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; width: 18px; height: 18px; background: var(--brand); border-radius: 50%; cursor: pointer; transition: transform 0.1s; }
-input[type="range"]::-webkit-slider-thumb:hover { transform: scale(1.2); }
-.slider-container { margin-bottom: 18px; }
-.slider-label { display: flex; justify-content: space-between; font-size: 13px; color: var(--ink); font-weight: 500; }
+/* Custom Sliders for Questionnaire */
+.q-card { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius-sm); padding: 24px; margin-bottom: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.02); }
+.q-header { display: flex; align-items: center; gap: 12px; margin-bottom: 8px; }
+.q-icon { width: 40px; height: 40px; border-radius: 50%; background: var(--brand-tint); color: var(--brand); display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 18px; }
+.q-title { font-size: 16px; font-weight: 700; color: var(--brand-ink); }
+.q-desc { font-size: 13.5px; color: var(--muted); margin-bottom: 20px; padding-left: 52px; }
+
+.slider-wrapper { padding: 16px; background: var(--surface2); border-radius: var(--radius-sm); margin-bottom: 12px; border: 1px dashed var(--line); }
+input[type="range"] { -webkit-appearance: none; width: 100%; height: 8px; background: var(--line); border-radius: 4px; outline: none; margin: 15px 0; }
+input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; width: 22px; height: 22px; background: var(--brand); border-radius: 50%; cursor: pointer; transition: transform 0.1s; box-shadow: 0 2px 4px rgba(0,0,0,0.2); }
+input[type="range"]::-webkit-slider-thumb:hover { transform: scale(1.15); }
+.slider-label { display: flex; justify-content: space-between; font-size: 14px; color: var(--ink); font-weight: 600; }
+.slider-scale { display: flex; justify-content: space-between; font-size: 12px; color: var(--muted); margin-top: -5px; }
 
 table { width: 100%; border-collapse: collapse; text-align: left; }
 th { background: var(--surface2); color: var(--brand-ink); font-weight: 600; padding: 16px 24px; border-bottom: 1px solid var(--line); font-size: 14px; white-space: nowrap; }
@@ -105,6 +115,10 @@ tr:hover td { background: var(--surface2); }
 .auth-tab { flex: 1; padding: 12px; border: none; background: none; cursor: pointer; color: var(--muted); font-weight: 600; text-align: center; border-bottom: 3px solid transparent; }
 .auth-tab.active { color: var(--brand); border-bottom-color: var(--brand); }
 
+.info-box { background: var(--info-bg); border-left: 4px solid var(--info); padding: 16px 20px; border-radius: 0 var(--radius-sm) var(--radius-sm) 0; margin-bottom: 24px; }
+.info-box h4 { color: var(--info); margin-bottom: 8px; font-size: 15px; display: flex; align-items: center; gap: 6px; }
+.info-box p { font-size: 13.5px; color: var(--ink); margin: 0; line-height: 1.6; }
+
 @media (max-width: 1024px) {
   .stat-row { grid-template-columns: repeat(2, 1fr); }
   .dash-grid, .patient-layout { grid-template-columns: 1fr; }
@@ -130,6 +144,7 @@ tr:hover td { background: var(--surface2); }
   .card { padding: 20px 16px; }
   .login-box { padding: 32px 24px; }
   .btn { width: 100%; }
+  .q-desc { padding-left: 0; margin-top: 10px; }
 }
 </style>
 </head>
@@ -386,7 +401,7 @@ async function renderAssessStep1() {
           </select>
         </div>
       </div>
-      <button class="btn" style="width:100%;margin-top:24px;padding:14px;" onclick="submitStep1()">ถัดไป: ป้อนเวกเตอร์พฤติกรรม</button>
+      <button class="btn" style="width:100%;margin-top:24px;padding:14px;" onclick="submitStep1()">ถัดไป: ทำแบบประเมินพฤติกรรม</button>
     </div>
   `;
 }
@@ -407,69 +422,104 @@ function submitStep1() {
   ASSESS_STEP = 2; renderAssess();
 }
 
+// =========================================================
+// ปรับปรุง UI หน้าแบบสอบถามให้สวยงาม อ่านง่าย เหมือนฟอร์มมาตรฐาน
+// =========================================================
 function renderAssessStep2() {
   $('#assess-content').innerHTML = `
-    <div class="card" style="padding:16px 20px; background:var(--brand-tint); margin-bottom:16px; border:1px solid var(--brand); display:flex; justify-content:space-between; align-items:center;">
-      <div><b>ผู้รับการตรวจ:</b> ${CURRENT_PATIENT.name}</div>
-      <div><span class="badge badge-${getElKey(CURRENT_PATIENT.constitution)}">พื้นฐานธาตุ${CURRENT_PATIENT.constitution}</span></div>
+    <div class="card" style="padding:16px 20px; background:var(--brand-tint); margin-bottom:20px; border:1px solid var(--brand); display:flex; justify-content:space-between; align-items:center;">
+      <div><b>ผู้รับการตรวจ:</b> ${CURRENT_PATIENT.name} <span style="color:var(--muted); font-size:13px; margin-left:8px;">(HN: ${CURRENT_PATIENT.hn})</span></div>
+      <div><span class="badge badge-${getElKey(CURRENT_PATIENT.constitution)}">ธาตุเจ้าเรือน: ${CURRENT_PATIENT.constitution}</span></div>
     </div>
     
-    <div class="card">
-      <h3 style="color:var(--brand-ink); margin-bottom:20px; border-bottom:1px solid var(--line); padding-bottom:10px;">ป้อนค่าเวกเตอร์พฤติกรรม $B$ และรูทีนในอุดมคติ $B_{ideal}$ [ช่วง 0.00 - 1.00]</h3>
+    <div style="margin-bottom:24px;">
+      <h3 style="color:var(--brand-ink);">แบบประเมินพฤติกรรมสุขภาพ (SEFA)</h3>
+      <p style="color:var(--muted); font-size:14px;">โปรดเลื่อนแถบเพื่อระบุระดับพฤติกรรมของท่าน (0 = น้อยที่สุด/แย่ที่สุด, 1 = มากที่สุด/ดีที่สุด) โดยเปรียบเทียบระหว่าง "สิ่งที่ทำจริงในปัจจุบัน" และ "สิ่งที่ตั้งใจ/คาดหวังในอุดมคติ"</p>
+    </div>
+
+    <div class="q-card">
+      <div class="q-header">
+        <div class="q-icon">S</div>
+        <div class="q-title">พฤติกรรมการนอนหลับพักผ่อน (Sleep)</div>
+      </div>
+      <div class="q-desc">ความสม่ำเสมอของการนอนหลับ ระยะเวลาที่เพียงพอ และความรู้สึกสดชื่นหลังตื่นนอน</div>
       
-      <div style="background:var(--surface2); padding:16px; border-radius:var(--radius-sm); border:1px solid var(--line); margin-bottom:16px;">
-        <div style="font-weight:600; color:var(--brand-ink); margin-bottom:12px;">S (Sleep) — พฤติกรรมการนอนหลับพักผ่อน</div>
-        <div class="slider-container">
-          <div class="slider-label"><span>พฤติกรรมปัจจุบัน (Current S)</span><span id="v-s" style="font-family:monospace;font-weight:bold;">0.50</span></div>
-          <input type="range" id="b-s" min="0" max="1" step="0.01" value="0.50" oninput="$('#v-s').textContent=Number(this.value).toFixed(2)">
-        </div>
-        <div class="slider-container" style="margin-bottom:0;">
-          <div class="slider-label"><span>พฤติกรรมในอุดมคติ (Ideal S)</span><span id="vi-s" style="font-family:monospace;font-weight:bold;color:var(--brand)">0.80</span></div>
-          <input type="range" id="bi-s" min="0" max="1" step="0.01" value="0.80" oninput="$('#vi-s').textContent=Number(this.value).toFixed(2)">
-        </div>
+      <div class="slider-wrapper">
+        <div class="slider-label"><span>พฤติกรรมปัจจุบัน (Current)</span><span id="v-s" style="font-family:monospace; color:var(--brand-ink);">0.50</span></div>
+        <input type="range" id="b-s" min="0" max="1" step="0.01" value="0.50" oninput="$('#v-s').textContent=Number(this.value).toFixed(2)">
+        <div class="slider-scale"><span>0 (นอนหลับยาก/พักผ่อนน้อยมาก)</span><span>1 (หลับลึก/ตื่นมาสดชื่นสมบูรณ์)</span></div>
       </div>
-
-      <div style="background:var(--surface2); padding:16px; border-radius:var(--radius-sm); border:1px solid var(--line); margin-bottom:16px;">
-        <div style="font-weight:600; color:var(--brand-ink); margin-bottom:12px;">E (Exercise) — การออกกำลังกายและการขยับกาย</div>
-        <div class="slider-container">
-          <div class="slider-label"><span>พฤติกรรมปัจจุบัน (Current E)</span><span id="v-e" style="font-family:monospace;font-weight:bold;">0.30</span></div>
-          <input type="range" id="b-e" min="0" max="1" step="0.01" value="0.30" oninput="$('#v-e').textContent=Number(this.value).toFixed(2)">
-        </div>
-        <div class="slider-container" style="margin-bottom:0;">
-          <div class="slider-label"><span>พฤติกรรมในอุดมคติ (Ideal E)</span><span id="vi-e" style="font-family:monospace;font-weight:bold;color:var(--brand)">0.50</span></div>
-          <input type="range" id="bi-e" min="0" max="1" step="0.01" value="0.50" oninput="$('#vi-e').textContent=Number(this.value).toFixed(2)">
-        </div>
+      
+      <div class="slider-wrapper" style="background:#fff; border-color:var(--brand); border-style:solid;">
+        <div class="slider-label"><span>เป้าหมายในอุดมคติ (Ideal)</span><span id="vi-s" style="font-family:monospace; color:var(--brand);">0.80</span></div>
+        <input type="range" id="bi-s" min="0" max="1" step="0.01" value="0.80" oninput="$('#vi-s').textContent=Number(this.value).toFixed(2)">
+        <div class="slider-scale"><span>เป้าหมายขั้นต่ำ</span><span>เป้าหมายสูงสุด</span></div>
       </div>
+    </div>
 
-      <div style="background:var(--surface2); padding:16px; border-radius:var(--radius-sm); border:1px solid var(--line); margin-bottom:16px;">
-        <div style="font-weight:600; color:var(--brand-ink); margin-bottom:12px;">F (Food) — อาหารและสมุนไพรตามหลักรสยา</div>
-        <div class="slider-container">
-          <div class="slider-label"><span>พฤติกรรมปัจจุบัน (Current F)</span><span id="v-f" style="font-family:monospace;font-weight:bold;">0.60</span></div>
-          <input type="range" id="b-f" min="0" max="1" step="0.01" value="0.60" oninput="$('#v-f').textContent=Number(this.value).toFixed(2)">
-        </div>
-        <div class="slider-container" style="margin-bottom:0;">
-          <div class="slider-label"><span>พฤติกรรมในอุดมคติ (Ideal F)</span><span id="vi-f" style="font-family:monospace;font-weight:bold;color:var(--brand)">0.70</span></div>
-          <input type="range" id="bi-f" min="0" max="1" step="0.01" value="0.70" oninput="$('#vi-f').textContent=Number(this.value).toFixed(2)">
-        </div>
+    <div class="q-card">
+      <div class="q-header">
+        <div class="q-icon">E</div>
+        <div class="q-title">การออกกำลังกายและการขยับกาย (Exercise)</div>
       </div>
-
-      <div style="background:var(--surface2); padding:16px; border-radius:var(--radius-sm); border:1px solid var(--line); margin-bottom:0;">
-        <div style="font-weight:600; color:var(--brand-ink); margin-bottom:12px;">A (Activity / Stress) — ภาระงานและความเครียด</div>
-        <div class="slider-container">
-          <div class="slider-label"><span>พฤติกรรมปัจจุบัน (Current A)</span><span id="v-a" style="font-family:monospace;font-weight:bold;">0.40</span></div>
-          <input type="range" id="b-a" min="0" max="1" step="0.01" value="0.40" oninput="$('#v-a').textContent=Number(this.value).toFixed(2)">
-        </div>
-        <div class="slider-container" style="margin-bottom:0;">
-          <div class="slider-label"><span>พฤติกรรมในอุดมคติ (Ideal A)</span><span id="vi-a" style="font-family:monospace;font-weight:bold;color:var(--brand)">0.20</span></div>
-          <input type="range" id="bi-a" min="0" max="1" step="0.01" value="0.20" oninput="$('#vi-a').textContent=Number(this.value).toFixed(2)">
-        </div>
+      <div class="q-desc">ความถี่ในการออกกำลังกาย การบริหารร่างกายให้เหงื่อออก หรือการเคลื่อนไหวระหว่างวัน</div>
+      
+      <div class="slider-wrapper">
+        <div class="slider-label"><span>พฤติกรรมปัจจุบัน (Current)</span><span id="v-e" style="font-family:monospace; color:var(--brand-ink);">0.30</span></div>
+        <input type="range" id="b-e" min="0" max="1" step="0.01" value="0.30" oninput="$('#v-e').textContent=Number(this.value).toFixed(2)">
+        <div class="slider-scale"><span>0 (ไม่ออกกำลังกายเลย/นั่งนิ่งๆ)</span><span>1 (ออกกำลังกายสม่ำเสมอ/แข็งแรงมาก)</span></div>
       </div>
+      
+      <div class="slider-wrapper" style="background:#fff; border-color:var(--brand); border-style:solid;">
+        <div class="slider-label"><span>เป้าหมายในอุดมคติ (Ideal)</span><span id="vi-e" style="font-family:monospace; color:var(--brand);">0.50</span></div>
+        <input type="range" id="bi-e" min="0" max="1" step="0.01" value="0.50" oninput="$('#vi-e').textContent=Number(this.value).toFixed(2)">
+        <div class="slider-scale"><span>เป้าหมายขั้นต่ำ</span><span>เป้าหมายสูงสุด</span></div>
+      </div>
+    </div>
 
+    <div class="q-card">
+      <div class="q-header">
+        <div class="q-icon">F</div>
+        <div class="q-title">พฤติกรรมการรับประทานอาหาร (Food)</div>
+      </div>
+      <div class="q-desc">การเลือกทานอาหารที่มีประโยชน์ ตรงเวลา ทานตามหลักรสยา และงดเว้นของแสลง</div>
+      
+      <div class="slider-wrapper">
+        <div class="slider-label"><span>พฤติกรรมปัจจุบัน (Current)</span><span id="v-f" style="font-family:monospace; color:var(--brand-ink);">0.60</span></div>
+        <input type="range" id="b-f" min="0" max="1" step="0.01" value="0.60" oninput="$('#v-f').textContent=Number(this.value).toFixed(2)">
+        <div class="slider-scale"><span>0 (ทานไม่ตรงเวลา/ทานของไม่มีประโยชน์)</span><span>1 (ทานอาหารดี/คุมโภชนาการได้ดีเยี่ยม)</span></div>
+      </div>
+      
+      <div class="slider-wrapper" style="background:#fff; border-color:var(--brand); border-style:solid;">
+        <div class="slider-label"><span>เป้าหมายในอุดมคติ (Ideal)</span><span id="vi-f" style="font-family:monospace; color:var(--brand);">0.70</span></div>
+        <input type="range" id="bi-f" min="0" max="1" step="0.01" value="0.70" oninput="$('#vi-f').textContent=Number(this.value).toFixed(2)">
+        <div class="slider-scale"><span>เป้าหมายขั้นต่ำ</span><span>เป้าหมายสูงสุด</span></div>
+      </div>
+    </div>
+
+    <div class="q-card">
+      <div class="q-header">
+        <div class="q-icon">A</div>
+        <div class="q-title">ภาระงานและความเครียด (Activity / Stress)</div>
+      </div>
+      <div class="q-desc">สภาวะความตึงเครียดทางอารมณ์ ภาระงานที่หนักเกินไป และการจัดการความเครียด</div>
+      
+      <div class="slider-wrapper">
+        <div class="slider-label"><span>พฤติกรรมปัจจุบัน (Current)</span><span id="v-a" style="font-family:monospace; color:var(--brand-ink);">0.40</span></div>
+        <input type="range" id="b-a" min="0" max="1" step="0.01" value="0.40" oninput="$('#v-a').textContent=Number(this.value).toFixed(2)">
+        <div class="slider-scale"><span>0 (ผ่อนคลาย/ไม่มีความเครียดเลย)</span><span>1 (เครียดหนักมาก/ภาระงานล้นมือสุดๆ)</span></div>
+      </div>
+      
+      <div class="slider-wrapper" style="background:#fff; border-color:var(--brand); border-style:solid;">
+        <div class="slider-label"><span>เป้าหมายในอุดมคติ (Ideal)</span><span id="vi-a" style="font-family:monospace; color:var(--brand);">0.20</span></div>
+        <input type="range" id="bi-a" min="0" max="1" step="0.01" value="0.20" oninput="$('#vi-a').textContent=Number(this.value).toFixed(2)">
+        <div class="slider-scale"><span>เป้าหมายขั้นต่ำ</span><span>เป้าหมายสูงสุด</span></div>
+      </div>
     </div>
     
     <div style="display:flex;gap:10px;margin-top:20px;margin-bottom:40px;">
       <button class="btn btn-sec" style="flex:1" onclick="ASSESS_STEP=1;renderAssess()">กลับ</button>
-      <button class="btn" style="flex:2" onclick="computeResult()">ประมวลผลดัชนีผ่านสมการ RTLE</button>
+      <button class="btn" style="flex:2" onclick="computeResult()">ส่งแบบประเมินและวิเคราะห์ผลลัพธ์</button>
     </div>
   `;
 }
@@ -547,175 +597,116 @@ async function computeResult() {
   renderAssess(); 
 }
 
-// ==========================================
-// 4.5 การวิเคราะห์กลุ่มอาการที่ควรเฝ้าระวัง (ธาตุสมุฏฐาน แพทย์แผนไทย)
-//     * เทียบเคียงตามทฤษฎีเพื่อการเฝ้าระวัง/ส่งเสริมสุขภาพ — ไม่ใช่การวินิจฉัยโรค *
-// ==========================================
-const TTM_RISK = {
-  earth: {
-    name: 'ดิน', color: 'var(--earth)', badge: 'badge-earth',
-    system: 'โครงสร้างร่างกาย กล้ามเนื้อ กระดูก เนื้อเยื่อ และภูมิต้านทาน',
-    up:   { label: 'กำเริบ (Aggravated)',
-      symptoms: ['รู้สึกตัวหนัก อึดอัด แน่นท้อง', 'ระบบเผาผลาญช้า น้ำหนักขึ้นง่าย', 'มีก้อน/บวมแข็งตามร่างกาย'],
-      advice: 'ปรับอาหารให้ย่อยง่าย เพิ่มการเคลื่อนไหว ลดของหนักท้องและของมัน' },
-    down: { label: 'หย่อน/พร่อง (Depleted)',
-      symptoms: ['อ่อนเพลีย เรี่ยวแรงน้อย', 'กล้ามเนื้อลีบ ผอมแห้ง โครงสร้างอ่อนแอ', 'ภูมิต้านทานต่ำ ป่วยง่าย ข้อ/กระดูกเสื่อม'],
-      advice: 'บำรุงกำลังด้วยอาหารครบหมู่ โปรตีนเพียงพอ รสฝาด/มัน/หวานเล็กน้อย และพักผ่อนให้พอ' }
-  },
-  water: {
-    name: 'น้ำ', color: 'var(--water)', badge: 'badge-water',
-    system: 'ระบบสารน้ำ เลือดลม การหล่อลื่น เสมหะ และของเหลวในร่างกาย',
-    up:   { label: 'กำเริบ (Aggravated)',
-      symptoms: ['เสมหะมาก คัดจมูก น้ำมูกไหล', 'บวมน้ำ ตัวเย็นชื้น', 'ท้องเสีย ขับถ่ายเหลว'],
-      advice: 'ลดของเย็น ของหวาน ของมัน เพิ่มรสเปรี้ยว/เผ็ดร้อนเล็กน้อยเพื่อขับเสมหะ' },
-    down: { label: 'หย่อน/พร่อง (Depleted)',
-      symptoms: ['ปากคอแห้ง ผิวแห้ง ขาดความชุ่มชื้น', 'ท้องผูก', 'ปัสสาวะน้อย ร่างกายขาดน้ำหล่อลื่น'],
-      advice: 'ดื่มน้ำให้เพียงพอ เพิ่มผัก-ผลไม้ที่มีน้ำมาก รสเปรี้ยว/หวานชุ่ม' }
-  },
-  wind: {
-    name: 'ลม', color: 'var(--wind)', badge: 'badge-wind',
-    system: 'ระบบการเคลื่อนไหว ลมปราณ ระบบประสาท และการไหลเวียน',
-    up:   { label: 'กำเริบ (Aggravated)',
-      symptoms: ['ท้องอืด ท้องเฟ้อ ลมในท้องมาก', 'ปวดเมื่อยตามตัว ปวดข้อ ชา เหน็บชา', 'วิงเวียน หน้ามืด ใจสั่น นอนไม่หลับ'],
-      advice: 'อาหารอุ่นย่อยง่าย รสเผ็ดร้อนพอดีเพื่อขับลม (ขิง ข่า พริกไทย) ยืดเหยียดผ่อนคลาย' },
-    down: { label: 'หย่อน/พร่อง (Depleted)',
-      symptoms: ['อ่อนแรง เคลื่อนไหวเชื่องช้า', 'เหนื่อยง่าย ไม่กระฉับกระเฉง'],
-      advice: 'ค่อย ๆ เพิ่มการเคลื่อนไหว/บริหารร่างกาย และฝึกการหายใจลึก' }
-  },
-  fire: {
-    name: 'ไฟ', color: 'var(--fire)', badge: 'badge-fire',
-    system: 'ระบบเผาผลาญ ความร้อน การย่อยอาหาร และอุณหภูมิร่างกาย',
-    up:   { label: 'กำเริบ (Aggravated)',
-      symptoms: ['ร้อนใน ตัวร้อน กระหายน้ำ', 'แสบร้อนกลางอก กรดไหลย้อน', 'หงุดหงิด อารมณ์ร้อน นอนไม่หลับ ผื่นร้อน'],
-      advice: 'พักผ่อนให้พอ ลดความเครียด หลีกเลี่ยงรสเผ็ดร้อนจัด เพิ่มรสขม/จืด/เย็น' },
-    down: { label: 'หย่อน/พร่อง (Depleted)',
-      symptoms: ['ย่อยอาหารไม่ดี ท้องอืดหลังกิน', 'มือเท้าเย็น ระบบเผาผลาญต่ำ', 'เบื่ออาหาร อ่อนเพลีย'],
-      advice: 'กระตุ้นธาตุไฟด้วยรสเผ็ดร้อน (ขิง ข่า พริกไทย) กินอาหารอุ่น เคลื่อนไหวสม่ำเสมอ' }
-  }
-};
-
-function ttmDeviations(C, C0) {
-  return [
-    { key: 'earth', dev: C.earth - C0.earth },
-    { key: 'water', dev: C.water - C0.water },
-    { key: 'wind',  dev: C.wind  - C0.wind  },
-    { key: 'fire',  dev: C.fire  - C0.fire  }
-  ].map(x => ({ ...x, abs: Math.abs(x.dev), dir: x.dev >= 0 ? 'up' : 'down' }))
-   .sort((a, b) => b.abs - a.abs);
-}
-
-function renderTTMRisk(C, C0) {
-  const THRESHOLD = 0.03;                 // ต่ำกว่านี้ถือว่าสมดุล
-  const devs = ttmDeviations(C, C0).filter(d => d.abs >= THRESHOLD);
-
-  let inner;
-  if (devs.length === 0) {
-    inner = `<div style="text-align:center; padding:20px; color:var(--ok); font-weight:600;">
-      ระบบธาตุอยู่ในภาวะสมดุล ไม่พบธาตุที่กำเริบหรือหย่อนอย่างมีนัยสำคัญ — แนะนำให้รักษาแนวทางการดูแลสุขภาพเดิม</div>`;
-  } else {
-    inner = devs.slice(0, 2).map(d => {
-      const t = TTM_RISK[d.key], info = t[d.dir];
-      const cVal = C[d.key], c0Val = C0[d.key];
-      return `
-      <div style="border:1px solid var(--line); border-left:4px solid ${t.color}; border-radius:var(--radius-sm); padding:16px 18px; margin-bottom:14px; background:var(--surface2);">
-        <div style="display:flex; align-items:center; gap:10px; flex-wrap:wrap; margin-bottom:10px;">
-          <span class="badge ${t.badge}">ธาตุ${t.name}</span>
-          <span style="font-weight:700; color:var(--brand-ink);">ภาวะ${info.label}</span>
-          <span style="margin-left:auto; font-family:monospace; font-size:12px; color:var(--muted);">C=${cVal.toFixed(3)} · C&#8320;=${c0Val.toFixed(2)} · &#916;=${(d.dev>=0?'+':'')}${d.dev.toFixed(3)}</span>
-        </div>
-        <div style="font-size:13px; color:var(--muted); margin-bottom:10px;">ระบบที่เกี่ยวข้อง: ${t.system}</div>
-        <div style="font-weight:600; font-size:13.5px; color:var(--brand-ink); margin-bottom:6px;">กลุ่มอาการที่ควรเฝ้าระวัง</div>
-        <ul style="margin:0 0 12px 18px; font-size:13.5px; color:var(--ink); line-height:1.7;">
-          ${info.symptoms.map(s => `<li>${s}</li>`).join('')}
-        </ul>
-        <div style="font-size:13px; background:var(--brand-tint); border-radius:6px; padding:10px 12px; color:var(--brand-ink);">
-          <b>คำแนะนำเบื้องต้น (ตามหลักรสยา):</b> ${info.advice}
-        </div>
-      </div>`;
-    }).join('');
-  }
-
-  return `
-    <div style="margin:28px 0; background:var(--surface); padding:20px; border-radius:var(--radius); border:1px solid var(--line2);">
-      <h4 style="color:var(--brand-ink); margin-bottom:16px; font-size:15px; border-left:4px solid var(--brand); padding-left:8px;">
-        การวิเคราะห์กลุ่มอาการที่ควรเฝ้าระวัง (ตามทฤษฎีธาตุสมุฏฐาน แพทย์แผนไทย)
-      </h4>
-      ${inner}
-      <div style="display:flex; gap:10px; align-items:flex-start; background:var(--danger-bg); border:1px solid #F0C9C9; border-radius:var(--radius-sm); padding:12px 14px; font-size:12.5px; color:#8a3232; margin-top:6px;">
-        <span style="font-size:16px; line-height:1;">&#9888;</span>
-        <div>ข้อมูลนี้เป็นการ<b>เทียบเคียงตามทฤษฎีแพทย์แผนไทยเพื่อการเฝ้าระวังและส่งเสริมสุขภาพ</b> ไม่ใช่การวินิจฉัยโรค ควรพบแพทย์แผนไทยหรือแพทย์เพื่อการตรวจประเมินและวินิจฉัยที่ถูกต้อง</div>
-      </div>
-    </div>`;
-}
-
+// =========================================================
+// ปรับปรุงคำอธิบาย "สมดุลเป้าหมาย" ในหน้าวินิจฉัยผลลัพธ์
+// =========================================================
 function renderAssessStep3() {
   const res = LAST_RESULT; if(!res) return;
   const d = res.data;
   
+  const constitution = CURRENT_PATIENT?.constitution || res.constitution || 'ดิน';
+  
+  let riskTitle = ''; let riskVulnerability = ''; let riskDetails = ''; let riskStyle = '';
+  if (constitution === 'ดิน') {
+    riskTitle = 'ธาตุดิน (ปถวีสมุฏฐาน)'; riskVulnerability = 'ระบบโครงสร้าง อวัยวะเนื้อเยื่อ และระบบดูดซึมสารอาหาร';
+    riskDetails = 'ระวังโรคเรื้อรัง ระบบทางเดินอาหาร ลำไส้ มีแนวโน้มเกิดอาการท้องผูกเรื้อรัง และอาการปวดตึงกล้ามเนื้อหากขาดการเคลื่อนไหว';
+    riskStyle = 'background: #fdfaf4; border-left: 5px solid #a1887f;';
+  } else if (constitution === 'น้ำ') {
+    riskTitle = 'ธาตุน้ำ (อาโปสมุฏฐาน)'; riskVulnerability = 'ระบบของเหลว ระบบไหลเวียนโลหิต และทางเดินหายใจ';
+    riskDetails = 'ระวังโรคเกี่ยวกับระบบทางเดินหายใจ เช่น หวัดเรื้อรัง ภูมิแพ้อากาศ หอบหืด ภาวะน้ำเหลืองเสีย และเสี่ยงต่อภาวะบวมน้ำสะสม';
+    riskStyle = 'background: #f4fafc; border-left: 5px solid #4fc3f7;';
+  } else if (constitution === 'ลม') {
+    riskTitle = 'ธาตุลม (วาโยสมุฏฐาน)'; riskVulnerability = 'ระบบประสาท ส่วนปลาย การเคลื่อนไหว และลมในทางเดินอาหาร';
+    riskDetails = 'ระวังอาการท้องอืด ท้องเฟ้อ มีลมในกระเพาะ วิงเวียนศีรษะ หน้ามืด นอนไม่หลับ และอาการปวดเสียวตามเส้นเอ็นเมื่อมีความเครียด';
+    riskStyle = 'background: #f5fbf6; border-left: 5px solid #81c784;';
+  } else if (constitution === 'ไฟ') {
+    riskTitle = 'ธาตุไฟ (เตโชสมุฏฐาน)'; riskVulnerability = 'ระบบเผาผลาญ ความร้อนในร่างกาย และอัคคีสมุฏฐาน';
+    riskDetails = 'ระวังโรคกระเพาะอาหารอักเสบ กรดไหลย้อน มีอาการร้อนใน แผลในช่องปาก และเสี่ยงต่อภาวะความดันโลหิตสูงเมื่อมีความเครียดเรื้อรัง';
+    riskStyle = 'background: #fff8f5; border-left: 5px solid #ff8a65;';
+  }
+
   $('#assess-content').innerHTML = `
     <div class="card">
       <div style="text-align:center; margin-bottom:32px; border-bottom:1px solid var(--line2); padding-bottom:24px;">
-        <h2 style="color:var(--brand-ink);">รายงานการจำลองสภาวะทางคณิตศาสตร์ (RTLE Model)</h2>
-        <div style="color:var(--muted); font-size:14px; margin-top:8px;">ชื่อผู้ประเมิน: <b>${res.name}</b> | HN: <code style="font-family:monospace">${res.hn}</code></div>
+        <h2 style="color:var(--brand-ink);">รายงานผลการวินิจฉัย (RTLE Report)</h2>
+        <div style="color:var(--muted); font-size:14px; margin-top:8px;">ชื่อ: <b>${res.name}</b> | HN: <code style="font-family:monospace">${res.hn}</code></div>
       </div>
       
       <div style="text-align:center; margin-bottom:36px;">
-        <div style="font-size:14px; color:var(--brand-ink); font-weight:600; letter-spacing:0.5px;">ดัชนีสภาวะสมดุลรวม (Relative Status Index — RSI)</div>
-        <h1 style="color:var(--brand); font-size:60px; margin:6px 0; line-height:1;">${(res.rsi || 0).toFixed(2)}<span style="font-size:24px">%</span></h1>
+        <div style="font-size:14px; color:var(--brand-ink); font-weight:600;">ดัชนีภาพรวมสุขภาพ (RSI Index)</div>
+        <h1 style="color:var(--brand); font-size:64px; margin:6px 0; line-height:1;">${(res.rsi || 0).toFixed(2)}<span style="font-size:24px">%</span></h1>
         
         <div style="margin-top:16px; padding:12px 24px; background:var(--surface2); border-radius:var(--radius-sm); display:inline-block; border:1px solid var(--line);">
-          <div style="font-size:12px; color:var(--muted); margin-bottom:4px;">ผลลัพธ์พยาธิสภาพเชิงทฤษฎี</div>
-          <div style="font-size:16px; font-weight:700; color:var(--brand-ink);">${res.dominantTh}</div>
+          <div style="font-size:12px; color:var(--muted); margin-bottom:4px;">ข้อบ่งชี้ทางพยาธิสภาพ</div>
+          <div style="font-size:16px; font-weight:700; color:var(--danger);">${res.dominantTh}</div>
         </div>
       </div>
 
-      <div style="margin-bottom:32px; background:var(--surface2); padding:20px; border-radius:var(--radius); border:1px solid var(--line2);">
-        <h4 style="color:var(--brand-ink); margin-bottom:18px; font-size:15px; border-left:4px solid var(--brand); padding-left:8px;">สภาวะสถานะธาตุปัจจุบัน ($C$) เทียบกับจุดสมดุลอุดมคติส่วนบุคคล ($C_0$)</h4>
+      <div class="info-box">
+        <h4><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg> สมดุลเป้าหมาย ($C_0$) คืออะไร?</h4>
+        <p><b>สมดุลเป้าหมาย</b> คือค่าระดับความสมดุลของธาตุทั้ง 4 ในสภาวะ <b>"ปกติที่ควรจะเป็น"</b> ของร่างกายคุณ เพื่อให้สุขภาพแข็งแรงและไม่เจ็บป่วย<br><br>
+        เปรียบเสมือนเป้าหมายสุขภาพส่วนตัวของคุณ ซึ่งหากเส้นกราฟ "ระดับปัจจุบัน (Current)" ยื่นเกิน หรือ หดต่ำกว่า "สมดุลเป้าหมาย" ย่อมหมายความว่าธาตุนั้นกำลังมีปัญหา (กำเริบหรือหย่อน) และอาจนำไปสู่การเจ็บป่วยได้นั่นเอง</p>
+      </div>
+
+      <div style="margin-top:24px; margin-bottom:32px; background:var(--surface2); padding:24px; border-radius:var(--radius); border:1px solid var(--line2);">
+        <h4 style="color:var(--brand-ink); margin-bottom:20px; font-size:16px; border-left:4px solid var(--brand); padding-left:12px;">กราฟเปรียบเทียบ: สภาวะปัจจุบัน เทียบกับ สมดุลเป้าหมาย</h4>
         
-        <div style="margin-bottom:16px;">
-          <div style="display:flex; justify-content:space-between; font-size:13px; margin-bottom:6px;">
-            <span>ธาตุดิน (Earth Element) — $C_{earth}$: <b>${d.C.earth.toFixed(3)}</b></span>
-            <span style="color:var(--muted)">สมดุลเป้าหมาย $C_0$: ${d.C0.earth.toFixed(2)}</span>
+        <div style="margin-bottom:18px;">
+          <div style="display:flex; justify-content:space-between; font-size:14px; margin-bottom:8px;">
+            <span>🤎 ธาตุดิน: <b>${d.C.earth.toFixed(3)}</b></span>
+            <span style="color:var(--muted)">สมดุลเป้าหมาย: ${d.C0.earth.toFixed(2)}</span>
           </div>
-          <div style="height:10px; background:#ddd; border-radius:5px; overflow:hidden;">
+          <div style="height:12px; background:#e0e0e0; border-radius:6px; overflow:hidden; position:relative;">
             <div style="width:${d.C.earth * 100}%; background:var(--earth); height:100%;"></div>
+            <div style="position:absolute; top:0; bottom:0; left:${d.C0.earth * 100}%; width:3px; background:#000; z-index:2;"></div>
           </div>
         </div>
 
-        <div style="margin-bottom:16px;">
-          <div style="display:flex; justify-content:space-between; font-size:13px; margin-bottom:6px;">
-            <span>ธาตุน้ำ (Water Element) — $C_{water}$: <b>${d.C.water.toFixed(3)}</b></span>
-            <span style="color:var(--muted)">สมดุลเป้าหมาย $C_0$: ${d.C0.water.toFixed(2)}</span>
+        <div style="margin-bottom:18px;">
+          <div style="display:flex; justify-content:space-between; font-size:14px; margin-bottom:8px;">
+            <span>💧 ธาตุน้ำ: <b>${d.C.water.toFixed(3)}</b></span>
+            <span style="color:var(--muted)">สมดุลเป้าหมาย: ${d.C0.water.toFixed(2)}</span>
           </div>
-          <div style="height:10px; background:#ddd; border-radius:5px; overflow:hidden;">
+          <div style="height:12px; background:#e0e0e0; border-radius:6px; overflow:hidden; position:relative;">
             <div style="width:${d.C.water * 100}%; background:var(--water); height:100%;"></div>
+            <div style="position:absolute; top:0; bottom:0; left:${d.C0.water * 100}%; width:3px; background:#000; z-index:2;"></div>
           </div>
         </div>
 
-        <div style="margin-bottom:16px;">
-          <div style="display:flex; justify-content:space-between; font-size:13px; margin-bottom:6px;">
-            <span>ธาตุลม (Wind Element) — $C_{wind}$: <b>${d.C.wind.toFixed(3)}</b></span>
-            <span style="color:var(--muted)">สมดุลเป้าหมาย $C_0$: ${d.C0.wind.toFixed(2)}</span>
+        <div style="margin-bottom:18px;">
+          <div style="display:flex; justify-content:space-between; font-size:14px; margin-bottom:8px;">
+            <span>🍃 ธาตุลม: <b>${d.C.wind.toFixed(3)}</b></span>
+            <span style="color:var(--muted)">สมดุลเป้าหมาย: ${d.C0.wind.toFixed(2)}</span>
           </div>
-          <div style="height:10px; background:#ddd; border-radius:5px; overflow:hidden;">
+          <div style="height:12px; background:#e0e0e0; border-radius:6px; overflow:hidden; position:relative;">
             <div style="width:${d.C.wind * 100}%; background:var(--wind); height:100%;"></div>
+            <div style="position:absolute; top:0; bottom:0; left:${d.C0.wind * 100}%; width:3px; background:#000; z-index:2;"></div>
           </div>
         </div>
 
         <div style="margin-bottom:0;">
-          <div style="display:flex; justify-content:space-between; font-size:13px; margin-bottom:6px;">
-            <span>ธาตุไฟ (Fire Element) — $C_{fire}$: <b>${d.C.fire.toFixed(3)}</b></span>
-            <span style="color:var(--muted)">สมดุลเป้าหมาย $C_0$: ${d.C0.fire.toFixed(2)}</span>
+          <div style="display:flex; justify-content:space-between; font-size:14px; margin-bottom:8px;">
+            <span>🔥 ธาตุไฟ: <b>${d.C.fire.toFixed(3)}</b></span>
+            <span style="color:var(--muted)">สมดุลเป้าหมาย: ${d.C0.fire.toFixed(2)}</span>
           </div>
-          <div style="height:10px; background:#ddd; border-radius:5px; overflow:hidden;">
+          <div style="height:12px; background:#e0e0e0; border-radius:6px; overflow:hidden; position:relative;">
             <div style="width:${d.C.fire * 100}%; background:var(--fire); height:100%;"></div>
+            <div style="position:absolute; top:0; bottom:0; left:${d.C0.fire * 100}%; width:3px; background:#000; z-index:2;"></div>
           </div>
         </div>
+        <div style="font-size:11px; color:var(--muted); margin-top:12px; text-align:right;">*เส้นสีดำแนวตั้ง (|) คือระดับสมดุลเป้าหมาย</div>
       </div>
 
-      ${renderTTMRisk(d.C, d.C0)}
+      <div style="margin-top:12px; margin-bottom:24px; padding:18px; border-radius:var(--radius); box-shadow: 0 2px 8px rgba(0,0,0,0.04); ${riskStyle}">
+        <h4 style="color:var(--brand-ink); margin-bottom:10px; font-size:15px;">🔍 การประเมินจุดอ่อนสุขภาพตามธาตุเกิด</h4>
+        <div style="font-size:13.5px; margin-bottom:6px; color:var(--brand-ink);"><b>ธาตุเกิด:</b> ${riskTitle}</div>
+        <div style="font-size:13.5px; margin-bottom:10px;"><b>ระบบอวัยวะที่ต้องระวัง:</b> <span style="color:var(--danger); font-weight:600;">${riskVulnerability}</span></div>
+        <p style="font-size:13px; color:var(--ink); line-height:1.6; text-align:justify; margin:0; background:rgba(255,255,255,0.8); padding:12px; border-radius:var(--radius-sm);">
+          ${riskDetails}
+        </p>
+      </div>
       
-      <button class="btn" style="width:100%; padding:14px;" onclick="ASSESS_STEP=1;CURRENT_PATIENT=null;go('dashboard')">เสร็จสิ้น บันทึกประวัติและกลับสู่หน้าหลัก</button>
+      <button class="btn" style="width:100%; padding:14px;" onclick="ASSESS_STEP=1;CURRENT_PATIENT=null;go('dashboard')">เสร็จสิ้น บันทึกและกลับสู่หน้าหลัก</button>
     </div>
   `;
 }
@@ -723,7 +714,7 @@ function renderAssessStep3() {
 async function renderRecords() {
   const A = await DB.assessments();
   $('#view').innerHTML = `
-    <div class="page-head"><div><h1>ประวัติบันทึกการจำลองทางคณิตศาสตร์ทั้งหมด</h1></div></div>
+    <div class="page-head"><div><h1>ประวัติบันทึกการประเมิน</h1></div></div>
     <div class="table-wrapper">
       <table>
         <thead><tr><th>วันที่ประเมิน</th><th>ชื่อ-นามสกุล</th><th>RSI Index</th><th>สภาวะตามโมเดล</th></tr></thead>
@@ -756,12 +747,13 @@ window.addEventListener('DOMContentLoaded', initApp);
 <div id="login-screen">
   <div class="login-box">
     <div style="text-align:center; margin-bottom:28px;">
+      <img src="เเพท.png" alt="Logo" style="height: 65px; margin-bottom: 12px; object-fit: contain;">
       <h2>RTLE Platform</h2>
       <p style="color:var(--muted); font-size:13px; margin-top:4px;">Resonance of Thai Life Elements</p>
     </div>
     <div class="auth-tabs">
       <button class="auth-tab active" id="tab-login" onclick="setAuthMode('login')">เข้าสู่ระบบ</button>
-      <button class="auth-tab" id="tab-register" onclick="setAuthMode('register')">ลงทะเบียนบัญชีใหม่</button>
+      <button class="auth-tab" id="tab-register" onclick="setAuthMode('register')">ลงทะเบียน</button>
     </div>
     <form onsubmit="handleAuth(event)">
       <div class="form-group"><label>ชื่อผู้ใช้งาน (Username)</label><input type="text" id="login-user" required></div>
@@ -772,7 +764,10 @@ window.addEventListener('DOMContentLoaded', initApp);
 </div>
 
 <div id="app-bar">
-  <div class="brand-title" onclick="go('dashboard')"><span>RTLE Platform (HIS)</span></div>
+  <div class="brand-title" onclick="go('dashboard')" style="display:flex; align-items:center; gap:10px;">
+    <img src="เเพท.png" alt="Logo" style="height: 35px; object-fit: contain;">
+    <span>RTLE Platform (HIS)</span>
+  </div>
   <div class="user-badge">
     <div id="connection-status" class="status-pill offline"><div class="status-dot"></div> กำลังตรวจสอบ...</div>
     <span id="user-name-display" style="font-weight:600; color:var(--brand-ink);"></span>
